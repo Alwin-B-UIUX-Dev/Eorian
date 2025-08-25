@@ -1,6 +1,6 @@
 # E-Commerce API
 
-> API E-commerce Bookstore avec Node.js, Express et TypeScript
+> API E-commerce avec Node.js, Express et TypeScript
 
 ## 📋 Table des matières
 
