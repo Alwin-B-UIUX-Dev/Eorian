@@ -1,0 +1,26 @@
+{
+  "user_agent": "Mozilla/5.0 (Linux; Android 10; Pixel 9 Pro XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Mobile Safari/537.36",
+  "browser": {
+    "name": "Chrome",
+    "version": "91.0.4472.124"
+  },
+  "engine": {
+    "name": "Blink",
+    "version": "91.0.4472.124"
+  },
+  "os": {
+    "name": "Android",
+    "version": "10"
+  },
+  "device": {
+    "type": "mobile|tablet|desktop|unknown",
+    "vendor": "Google|Samsung|Apple",
+    "model": "Pixel 9 Pro XL|Galaxy Tab S10 Ultra|MacBook Pro (M4)"
+  },
+  "cpu": {
+    "architecture": "x86_64"
+  },
+  "is_touch": true,
+  "detected_at": "2024-01-15T10:30:00Z",
+  "detection_method": "client|server"
+}

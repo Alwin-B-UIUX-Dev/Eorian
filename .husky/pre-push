@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+# Vérifie seulement si c'est un checkout de branche
+
+if [ "$3" = "1" ]; then
+  branch=$(git rev-parse --abbrev-ref HEAD)
+
+  # Ignore les branches système
+  if [ "$branch" = "main" ] || [ "$branch" = "develop" ] || [ "$branch" = "HEAD" ]; then
+    exit 0
+  fi
+
+  # Vérifie le format
+  if ! echo "$branch" | grep -qE "^(feature|fix|setup|docs|style|refactor|test|chore|release|hotfix)\/[a-z0-9-]+$"; then
+    echo "❌ Nom de branche invalide: $branch"
+    echo "✅ Formats acceptés: feature/xxx, fix/xxx, docs/xxx, etc."
+    echo "💡 Renommez avec: git branch -m $branch feature/nouvelle-branche"
+    exit 1
+  fi
+
+  echo "✅ Nom de branche valide: $branch"
+fi
+
+
+echo "✅ Push autorisé pour: $branch"
+
+
+# Lance les tests avant le push
+npm run test
