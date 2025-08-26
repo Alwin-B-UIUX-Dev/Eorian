@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from 'express';
 export interface IBaseController {
   /**
    * lister toutes les lignes d'une entité (tous les utilisateurs)

@@ -1,1 +1,1 @@
-export { IAdressesRepository } from "@/interfaces/repositories/addresses/IAdressesRepository";
+export { IAdressesRepository } from '@/interfaces/repositories/addresses/IAdressesRepository';

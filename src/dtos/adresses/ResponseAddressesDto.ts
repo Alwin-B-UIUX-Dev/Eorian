@@ -1,8 +1,5 @@
-import {
-  AdressesConstants,
-  type ResponseAdressesSchemaType,
-} from "@/constants";
-import type { IAddresses } from "@/interfaces";
+import { AdressesConstants, type ResponseAdressesSchemaType } from '@/constants';
+import type { IAddresses } from '@/interfaces';
 
 /**
 contenus copier depuis entities
@@ -119,7 +116,7 @@ export class ResponseAddressesDto {
       postalCode: addresses.getPostalCode(),
       stateRegion: addresses.getStateRegion(),
       country: addresses.getCountry(),
-      isDefault: addresses.getIsDefault(),
+      isDefault: addresses.getIsDefault()
     });
   }
 }

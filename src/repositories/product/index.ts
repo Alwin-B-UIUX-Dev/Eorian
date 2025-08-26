@@ -1,1 +1,1 @@
-export * from '@/repositories/product/PostgresProductRepository'
+export * from '@/repositories/product/PostgresProductRepository';

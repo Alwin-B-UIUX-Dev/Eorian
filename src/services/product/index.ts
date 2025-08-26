@@ -1,1 +1,1 @@
-export * from "@/services/product/ProductService";
+export * from '@/services/product/ProductService';

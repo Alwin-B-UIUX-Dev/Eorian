@@ -13,30 +13,21 @@ export class AdressesController implements IAddressesControllers {
     throw new Error('Method not implemented.');
   }
 
-
-
-
   public async store(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const createAddressesDto = new CreateAdressesDto(req.body);
       const addresses: IAddresses = await this.addressesService.create(createAddressesDto);
       const addressesResponse: ResponseAddressesDto = ResponseAddressesDto.fromAddresses(addresses);
 
-
-      const response: IApiResponseData<{adresses: ResponseAddressesDto}> = ApiResponse.success(
-      'votre adresse a biuen été enregistré',
-      {adresses: addressesResponse}
-      )
+      const response: IApiResponseData<{ adresses: ResponseAddressesDto }> = ApiResponse.success(
+        'votre adresse a biuen été enregistré',
+        { adresses: addressesResponse }
+      );
 
       res.status(201).json(response);
-    } catch {
-
-    }
+    } catch {}
   }
 
-
-
-  
   public async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     throw new Error('Method not implemented.');
   }

@@ -1,7 +1,4 @@
-import {
-  type CreateProductSchemaType,
-  ProductConstants,
-} from "@/constants/zod/ProductConstants";
+import { type CreateProductSchemaType, ProductConstants } from '@/constants/zod/ProductConstants';
 
 export class CreateProductDto {
   public readonly name: string;
@@ -20,8 +17,7 @@ export class CreateProductDto {
   public readonly createdBy: string;
 
   constructor(data: unknown) {
-    const validated: CreateProductSchemaType =
-      ProductConstants.validationCreateProduct(data);
+    const validated: CreateProductSchemaType = ProductConstants.validationCreateProduct(data);
     this.name = validated.name;
     this.slug = validated.slug;
     this.sku = validated.sku;

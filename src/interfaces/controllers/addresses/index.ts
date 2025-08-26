@@ -1,1 +1,1 @@
-export {IAddressesControllers} from "@/interfaces/controllers/addresses/IAddressesControllers";
+export { IAddressesControllers } from '@/interfaces/controllers/addresses/IAddressesControllers';

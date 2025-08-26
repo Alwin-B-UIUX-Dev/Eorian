@@ -15,7 +15,11 @@ export class AddressesRoutes {
 
   private setupRoutes(): void {
     const protect = AuthMiddleware.authenticate(this.tokenManager);
-    this.router.post('/addresses', protect, this.addressesController.store.bind(this.addressesController));
+    this.router.post(
+      '/addresses',
+      protect,
+      this.addressesController.store.bind(this.addressesController)
+    );
   }
 
   public getRouter(): Router {

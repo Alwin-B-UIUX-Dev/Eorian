@@ -1,8 +1,8 @@
 import type {
   IBaseEntityData,
   PartialWithoutSystemFieldsType,
-  WithoutSystemFieldsType,
-} from "@/types";
+  WithoutSystemFieldsType
+} from '@/types';
 
 export interface IProductData extends IBaseEntityData {
   name: string;

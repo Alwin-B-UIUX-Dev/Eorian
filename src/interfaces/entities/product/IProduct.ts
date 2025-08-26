@@ -1,4 +1,4 @@
-import type { IEntity } from "@/interfaces";
+import type { IEntity } from '@/interfaces';
 
 export interface IProduct extends IEntity {
   // === GETTERS COMPLETS ===

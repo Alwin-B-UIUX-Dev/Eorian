@@ -1,1 +1,1 @@
-export { Product } from "@/entities/product/Product";
+export { Product } from '@/entities/product/Product';

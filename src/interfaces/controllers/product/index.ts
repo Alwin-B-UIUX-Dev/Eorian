@@ -1,1 +1,1 @@
-export { IProductControllers } from '@/interfaces/controllers/product/IProductControllers'
+export { IProductControllers } from '@/interfaces/controllers/product/IProductControllers';

@@ -1,1 +1,1 @@
-export type * from "@/types/entities/product/IProductData";
+export type * from '@/types/entities/product/IProductData';

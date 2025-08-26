@@ -18,8 +18,12 @@ export class ProductRoutes {
     this.router.post('/products', this.productController.store.bind(this.productController));
     // Routes protégées
     const protect = AuthMiddleware.authenticate(this.tokenManager);
-    this.router.post('/products', protect, this.productController.store.bind(this.productController));
-    }
+    this.router.post(
+      '/products',
+      protect,
+      this.productController.store.bind(this.productController)
+    );
+  }
   public getRouter(): Router {
     return this.router;
   }

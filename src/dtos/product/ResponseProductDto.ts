@@ -1,12 +1,9 @@
-import {
-  ProductConstants,
-  type ResponseProductSchemaType,
-} from "@/constants/zod/ProductConstants";
-import { IProduct } from "@/interfaces";
+import { ProductConstants, type ResponseProductSchemaType } from '@/constants/zod/ProductConstants';
+import type { IProduct } from '@/interfaces';
 
 export class ResponseProductDto {
   static fromProduct(Product: IProduct): ResponseProductDto {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
   public readonly id: string;
   public readonly name: string;
@@ -25,8 +22,7 @@ export class ResponseProductDto {
   public readonly createdBy: string;
 
   constructor(data: unknown) {
-    const validated: ResponseProductSchemaType =
-      ProductConstants.validationResponseProduct(data);
+    const validated: ResponseProductSchemaType = ProductConstants.validationResponseProduct(data);
     this.id = validated.id;
     this.name = validated.name;
     this.slug = validated.slug;
@@ -90,5 +86,4 @@ export class ResponseProductDto {
   public getCreatedBy(): string {
     return this.createdBy;
   }
-  
 }
