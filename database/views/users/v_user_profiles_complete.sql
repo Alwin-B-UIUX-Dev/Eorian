@@ -1,4 +1,4 @@
--- Active: 1753172326626@@127.0.0.1@5432@bookstore_fr_db@public
+-- Active: 1753172327999@@127.0.0.1@5432@eorian_fr_db
 -- =====================================================
 -- VUE : v_user_profiles_complete
 -- =====================================================
@@ -22,7 +22,6 @@ SELECT
     CONCAT (up.first_name, ' ', up.last_name) AS full_name, -- Pré-calculé pour affichage
     up.phone,
     up.birth_date,
-    up.newsletter_consent,
     up.avatar_url,
     -- === AUDIT ===
     u.created_at AS user_since,

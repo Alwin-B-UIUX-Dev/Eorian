@@ -1,3 +1,4 @@
+-- Active: 1753172327999@@127.0.0.1@5432@eorian_fr_db
 -- =====================================================
 -- JEU DE DONNÉES TEST E-COMMERCE CULINAIRE - BASÉ SUR DONNÉES JSON (products.json)
 -- =====================================================
@@ -101,7 +102,7 @@ INSERT INTO
     user_sessions (
         user_id,
         refresh_token,
-        device_type,
+        device_info,
         expires_at,
         is_active,
         created_at,
@@ -169,8 +170,6 @@ INSERT INTO
         last_name,
         phone,
         birth_date,
-        newsletter_consent,
-        newsletter_consent_date,
         avatar_url,
         created_at,
         updated_at
@@ -183,8 +182,6 @@ VALUES
         'Administrateur',
         '+33142868392', -- Format international sans espaces
         '1985-03-15', -- 40 ans
-        false, -- Admin ne veut pas de newsletter
-        NULL, -- Pas de consentement newsletter
         'https://avatar.example.com/admin_jean.jpg',
         '2025-07-28 08:00:00',
         '2025-07-28 08:00:00'
@@ -196,8 +193,6 @@ VALUES
         'Dupont',
         '0612345678', -- Mobile français sans espaces
         '1990-07-22', -- 35 ans
-        true, -- Accepte newsletter
-        '2025-07-28 09:15:00', -- Consentement donné à l'inscription
         NULL, -- Pas d'avatar
         '2025-07-28 09:15:00',
         '2025-07-28 09:15:00'
@@ -209,8 +204,6 @@ VALUES
         'Martin',
         '0798765432', -- Mobile français sans espaces
         '1988-11-03', -- 36 ans
-        true, -- Accepte newsletter
-        '2025-07-28 11:30:00', -- Consentement donné à l'inscription
         'https://avatar.example.com/marie_m.jpg',
         '2025-07-28 11:30:00',
         '2025-07-28 16:20:00' -- Profil mis à jour cet après-midi
@@ -222,8 +215,6 @@ VALUES
         'Durand',
         '+33467891234', -- Fixe professionnel sans espaces
         '1975-02-28', -- 50 ans
-        false, -- Refuse newsletter
-        NULL, -- Jamais consenti
         NULL, -- Pas d'avatar
         '2025-07-28 14:45:00',
         '2025-07-28 14:45:00'
@@ -235,8 +226,6 @@ VALUES
         'Bernard',
         NULL, -- Pas de téléphone fourni
         '1995-12-10', -- 29 ans
-        true, -- Accepte newsletter
-        '2025-07-28 18:20:00', -- Consentement récent
         'https://avatar.example.com/sophie_b.png',
         '2025-07-28 18:20:00',
         '2025-07-28 18:20:00'
@@ -344,234 +333,6 @@ VALUES
     );
 
 -- =====================================================
--- JEU DE DONNÉES : TABLE CATEGORIES
--- Basé sur la structure hiérarchique du products.json
--- =====================================================
-INSERT INTO
-    categories (
-        name,
-        slug,
-        description,
-        parent_id,
-        level,
-        sort_order,
-        meta_title,
-        meta_description,
-        is_active,
-        created_at,
-        updated_at
-    )
-VALUES
-    -- =====================================================
-    -- NIVEAU 0 : CATÉGORIES RACINES
-    -- =====================================================
-    -- Cuisine du Monde (catégorie principale)
-    (
-        'Cuisine du Monde',
-        'cuisine-du-monde',
-        'Découvrez les saveurs authentiques des cuisines du monde entier',
-        NULL, -- Racine
-        0, -- Niveau 0
-        1, -- Premier dans l''ordre
-        'Cuisine du Monde - Épices et Condiments Authentiques',
-        'Explorez notre sélection d''épices, condiments et spécialités culinaires du monde entier pour vos recettes authentiques.',
-        true,
-        '2025-07-28 08:00:00',
-        '2025-07-28 08:00:00'
-    ),
-    -- Ustensiles (catégorie secondaire)
-    (
-        'Ustensiles de Cuisine',
-        'ustensiles-cuisine',
-        'Équipements et accessoires pour cuisiner comme un chef',
-        NULL, -- Racine
-        0, -- Niveau 0
-        2, -- Deuxième dans l''ordre
-        'Ustensiles de Cuisine - Équipements Culinaires',
-        'Découvrez notre gamme d''ustensiles de cuisine professionnels et accessoires pour réussir toutes vos recettes.',
-        true,
-        '2025-07-28 08:05:00',
-        '2025-07-28 08:05:00'
-    ),
-    -- =====================================================
-    -- NIVEAU 1 : RÉGIONS CULINAIRES (sous Cuisine du Monde)
-    -- =====================================================
-    -- Cuisine Asiatique
-    (
-        'Cuisine Asiatique',
-        'cuisine-asiatique',
-        'Épices, sauces et condiments d''Asie : Chine, Japon, Thaïlande, Inde...',
-        1, -- parent_id = Cuisine du Monde
-        1, -- Niveau 1
-        1,
-        'Cuisine Asiatique - Épices et Condiments d''Asie',
-        'Saveurs authentiques d''Asie : épices indiennes, sauces japonaises, condiments thaïlandais et chinois.',
-        true,
-        '2025-07-28 08:10:00',
-        '2025-07-28 08:10:00'
-    ),
-    -- Cuisine Européenne
-    (
-        'Cuisine Européenne',
-        'cuisine-europeenne',
-        'Spécialités culinaires d''Europe : France, Italie, Espagne, Grèce...',
-        1, -- parent_id = Cuisine du Monde
-        1, -- Niveau 1
-        2,
-        'Cuisine Européenne - Spécialités Culinaires',
-        'Découvrez les trésors gastronomiques européens : herbes de Provence, huiles d''olive, vinaigres balsamiques.',
-        true,
-        '2025-07-28 08:15:00',
-        '2025-07-28 08:15:00'
-    ),
-    -- Cuisine des Amériques
-    (
-        'Cuisine des Amériques',
-        'cuisine-ameriques',
-        'Saveurs du Nouveau Monde : Mexique, Pérou, États-Unis, Brésil...',
-        1, -- parent_id = Cuisine du Monde
-        1, -- Niveau 1
-        3,
-        'Cuisine des Amériques - Saveurs du Nouveau Monde',
-        'Épices mexicaines, condiments péruviens, sauces américaines : explorez les saveurs des Amériques.',
-        true,
-        '2025-07-28 08:20:00',
-        '2025-07-28 08:20:00'
-    ),
-    -- Cuisine du Moyen-Orient et Afrique
-    (
-        'Moyen-Orient & Afrique',
-        'moyen-orient-afrique',
-        'Épices et mélanges traditionnels du Moyen-Orient et d''Afrique',
-        1, -- parent_id = Cuisine du Monde
-        1, -- Niveau 1
-        4,
-        'Cuisine Moyen-Orient Afrique - Épices Traditionnelles',
-        'Ras el hanout, za''atar, épices berbères : découvrez les mélanges authentiques du Moyen-Orient et d''Afrique.',
-        true,
-        '2025-07-28 08:25:00',
-        '2025-07-28 08:25:00'
-    ),
-    -- =====================================================
-    -- NIVEAU 2 : SOUS-RÉGIONS SPÉCIFIQUES
-    -- =====================================================
-    -- Cuisine Indienne (sous Asiatique)
-    (
-        'Cuisine Indienne',
-        'cuisine-indienne',
-        'Épices et mélanges traditionnnels de l''Inde : garam masala, curcuma, cardamome...',
-        3, -- parent_id = Cuisine Asiatique
-        2, -- Niveau 2
-        1,
-        'Épices Indiennes - Garam Masala, Curcuma, Curry',
-        'Authentiques épices indiennes : garam masala, curcuma bio, cardamome, coriandre pour vos curry maison.',
-        true,
-        '2025-07-28 08:30:00',
-        '2025-07-28 08:30:00'
-    ),
-    -- Cuisine Japonaise (sous Asiatique)
-    (
-        'Cuisine Japonaise',
-        'cuisine-japonaise',
-        'Condiments japonais : sauce soja, miso, wasabi, vinaigre de riz...',
-        3, -- parent_id = Cuisine Asiatique
-        2, -- Niveau 2
-        2,
-        'Condiments Japonais - Sauce Soja, Miso, Wasabi',
-        'Condiments japonais authentiques : sauce soja premium, pâte miso, wasabi frais pour cuisine nippone.',
-        true,
-        '2025-07-28 08:35:00',
-        '2025-07-28 08:35:00'
-    ),
-    -- Cuisine Thaïlandaise (sous Asiatique)
-    (
-        'Cuisine Thaïlandaise',
-        'cuisine-thailandaise',
-        'Épices et pâtes thaïlandaises : pâte de curry, citronnelle, galanga...',
-        3, -- parent_id = Cuisine Asiatique
-        2, -- Niveau 2
-        3,
-        'Épices Thaïlandaises - Pâtes de Curry, Citronnelle',
-        'Épices thaï authentiques : pâtes de curry rouge et vert, citronnelle, feuilles de combava.',
-        true,
-        '2025-07-28 08:40:00',
-        '2025-07-28 08:40:00'
-    ),
-    -- Cuisine Française (sous Européenne)
-    (
-        'Cuisine Française',
-        'cuisine-francaise',
-        'Herbes et épices de France : herbes de Provence, fleur de sel, moutarde...',
-        4, -- parent_id = Cuisine Européenne
-        2, -- Niveau 2
-        1,
-        'Épices Françaises - Herbes de Provence, Fleur de Sel',
-        'Saveurs françaises traditionnelles : herbes de Provence, fleur de sel de Guérande, moutarde de Dijon.',
-        true,
-        '2025-07-28 08:45:00',
-        '2025-07-28 08:45:00'
-    ),
-    -- Cuisine Italienne (sous Européenne)
-    (
-        'Cuisine Italienne',
-        'cuisine-italienne',
-        'Condiments italiens : huiles d''olive, vinaigres, herbes méditerranéennes...',
-        4, -- parent_id = Cuisine Européenne
-        2, -- Niveau 2
-        2,
-        'Condiments Italiens - Huiles d''Olive, Vinaigres',
-        'Condiments italiens premium : huiles d''olive extra vierge, vinaigres balsamiques, herbes de Sicile.',
-        true,
-        '2025-07-28 08:50:00',
-        '2025-07-28 08:50:00'
-    ),
-    -- Cuisine Mexicaine (sous Amériques)
-    (
-        'Cuisine Mexicaine',
-        'cuisine-mexicaine',
-        'Épices mexicaines : piments, cumin, paprika fumé, mélanges tex-mex...',
-        5, -- parent_id = Cuisine des Amériques
-        2, -- Niveau 2
-        1,
-        'Épices Mexicaines - Piments, Cumin, Paprika Fumé',
-        'Épices mexicaines authentiques : piments chipotle, cumin grillé, paprika fumé pour tacos et fajitas.',
-        true,
-        '2025-07-28 08:55:00',
-        '2025-07-28 08:55:00'
-    ),
-    -- =====================================================
-    -- NIVEAU 1 : TYPES D'USTENSILES (sous Ustensiles)
-    -- =====================================================
-    -- Cuisson
-    (
-        'Ustensiles de Cuisson',
-        'ustensiles-cuisson',
-        'Poêles, casseroles, woks et matériel de cuisson professionnel',
-        2, -- parent_id = Ustensiles de Cuisine
-        1, -- Niveau 1
-        1,
-        'Ustensiles de Cuisson - Poêles, Casseroles, Woks',
-        'Matériel de cuisson professionnel : poêles anti-adhésives, woks en acier, casseroles en inox.',
-        true,
-        '2025-07-28 09:00:00',
-        '2025-07-28 09:00:00'
-    ),
-    -- Préparation
-    (
-        'Ustensiles de Préparation',
-        'ustensiles-preparation',
-        'Couteaux, planches à découper, râpes et accessoires de préparation',
-        2, -- parent_id = Ustensiles de Cuisine
-        1, -- Niveau 1
-        2,
-        'Ustensiles de Préparation - Couteaux, Planches',
-        'Outils de préparation culinaire : couteaux japonais, planches en bambou, mandolines professionnelles.',
-        true,
-        '2025-07-28 09:05:00',
-        '2025-07-28 09:05:00'
-    );
-
--- =====================================================
 -- JEU DE DONNÉES : TABLE PRODUCTS
 -- Basé sur products.json
 -- =====================================================
@@ -580,12 +341,6 @@ INSERT INTO
         name,
         slug,
         sku,
-        author,
-        isbn,
-        page_count,
-        publication_year,
-        language,
-        publisher,
         short_description,
         description,
         price_cents,
@@ -596,403 +351,108 @@ INSERT INTO
         meta_title,
         meta_description,
         is_active,
-        is_featured,
         created_by,
         created_at,
         updated_at
     )
 VALUES
-    -- LIVRE 1
-    (
-        'Les Secrets de la Cuisine Française',
-        'les-secrets-de-la-cuisine-francaise', -- Slug valide (a-z0-9-)
-        'COOK-FR-001', -- SKU unique
-        'Marie Dubois',
-        '978-2-123456-78-9', -- ISBN-13 format valide
-        320, -- > 0
-        2023, -- Entre 1900 et 2026
-        'fr', -- Langue valide
-        'Éditions Culinaires',
-        'Guide traditionnel de la gastronomie française avec 200+ recettes authentiques.',
-        'Découvrez les techniques traditionnelles et les recettes authentiques de la gastronomie française. Un voyage culinaire à travers les régions de France avec plus de 200 recettes détaillées.',
-        2990, -- 29.90€ = 2990 centimes
-        3, -- TVA Super Réduite 5.5%
-        15, -- >= 0
-        5, -- Seuil bas stock
-        TRUE,
-        'Les Secrets de la Cuisine Française - Livre de recettes traditionnelles',
-        'Découvrez la gastronomie française authentique avec ce guide complet de 320 pages par Marie Dubois.',
-        TRUE,
-        FALSE,
-        1, -- admin_system
-        '2024-12-15 10:00:00',
-        '2024-12-15 10:00:00'
+    ('Affiche A3 – Montagnes au lever du soleil',
+     'affiche-a3-montagnes-lever-soleil',
+     'ILL-A3-001',
+     'Affiche artistique A3, papier satiné 200 g.',
+     'Illustration originale de montagnes baignée de lumière dorée. Impression haute qualité A3 (29,7×42 cm).',
+     1990, 1, 45, 5, TRUE,
+     'Affiche A3 Montagnes', 'Affiche A3 paysages de montagnes au lever du soleil.', TRUE, 1, NOW(), NOW()
     ),
-    -- LIVRE 2
-    (
-        'Cuisine Italienne Moderne',
-        'cuisine-italienne-moderne',
-        'COOK-IT-002',
-        'Giovanni Rossi',
-        '978-2-987654-32-1',
-        280,
-        2023,
-        'fr',
-        'Bella Vista Publishing',
-        'Cuisine italienne contemporaine par un chef étoilé, tradition et innovation.',
-        'Une approche contemporaine de la cuisine italienne, alliant tradition et innovation. Des recettes revisitées par un chef étoilé pour sublimer les saveurs méditerranéennes.',
-        3495, -- 34.95€ = 3495 centimes
-        3,
-        8,
-        3,
-        TRUE,
-        'Cuisine Italienne Moderne - Recettes contemporaines par Giovanni Rossi',
-        'Cuisine italienne revisitée par un chef étoilé. 280 pages de recettes modernes et traditionnelles.',
-        TRUE,
-        TRUE, -- Produit mis en avant
-        1,
-        '2024-12-15 10:30:00',
-        '2024-12-15 10:30:00'
+    ('Affiche A2 – Forêt brumeuse',
+     'affiche-a2-foret-brumeuse',
+     'ILL-A2-002',
+     'Affiche A2 ambiance brume.',
+     'Forêt minimaliste dans la brume, couleurs froides. Format A2 (42×59,4 cm), papier 200 g.',
+     2990, 1, 30, 5, TRUE,
+     'Affiche A2 Forêt', 'Affiche A2 forêt brumeuse style minimal.', TRUE, 1, NOW(), NOW()
     ),
-    -- LIVRE 3
-    (
-        'Pâtisserie Artisanale',
-        'patisserie-artisanale',
-        'COOK-PA-003',
-        'Sophie Laurent',
-        '978-3-456789-01-2',
-        450,
-        2024,
-        'fr',
-        'Sucré Salé Éditions',
-        'Guide complet de la pâtisserie française, techniques et créations modernes.',
-        'Maîtrisez l''art de la pâtisserie française avec ce guide complet. Techniques de base, recettes classiques et créations modernes expliquées pas à pas.',
-        4250, -- 42.50€ = 4250 centimes
-        3,
-        12,
-        5,
-        TRUE,
-        'Pâtisserie Artisanale - Guide complet par Sophie Laurent',
-        'Apprenez la pâtisserie française avec 450 pages de techniques et recettes par Sophie Laurent.',
-        TRUE,
-        TRUE, -- Produit mis en avant
-        1,
-        '2024-12-15 11:00:00',
-        '2024-12-15 11:00:00'
+    ('Poster XXL 70×100 – Carte de Paris',
+     'poster-xxl-carte-de-paris',
+     'ILL-XXL-003',
+     'Poster XXL carte stylisée de Paris.',
+     'Carte illustrée de Paris, lignes fines et repères iconiques. Format 70×100 cm.',
+     3990, 1, 20, 3, TRUE,
+     'Poster XXL Paris', 'Poster 70×100 carte de Paris stylisée.', TRUE, 1, NOW(), NOW()
     ),
-    -- LIVRE 4
-    (
-        'Cuisine Asiatique Fusion',
-        'cuisine-asiatique-fusion',
-        'COOK-AS-004',
-        'Kenji Tanaka',
-        '978-4-567890-12-3',
-        350,
-        2023,
-        'fr',
-        'Orient Express Books',
-        'Saveurs d''Asie moderne, fusion des traditions culinaires asiatiques et occidentales.',
-        'Explorez les saveurs d''Asie avec une touche moderne. Recettes fusion qui marient les traditions culinaires asiatiques avec des techniques occidentales contemporaines.',
-        3120, -- 31.20€ = 3120 centimes
-        3,
-        20,
-        8,
-        TRUE,
-        'Cuisine Asiatique Fusion - Recettes modernes par Kenji Tanaka',
-        'Cuisine asiatique fusion par Kenji Tanaka. 350 pages de recettes modernes mêlant Orient et Occident.',
-        TRUE,
-        FALSE,
-        1,
-        '2024-12-15 11:30:00',
-        '2024-12-15 11:30:00'
+    ('Série A3 – Animaux géométriques (Renard)',
+     'serie-a3-animaux-geometriques-renard',
+     'ILL-A3-004',
+     'Affiche A3 renard géométrique.',
+     'Illustration polygonale d’un renard, palette orange. A3, papier premium 220 g.',
+     2190, 1, 60, 10, TRUE,
+     'Affiche Renard géométrique', 'Affiche A3 renard style géométrique.', TRUE, 2, NOW(), NOW()
     ),
-    -- LIVRE 5
-    (
-        'Barbecue et Grillades',
-        'barbecue-et-grillades',
-        'COOK-BB-005',
-        'Jack Thompson',
-        '978-5-678901-23-4',
-        240,
-        2024,
-        'fr',
-        'Grill Master Publishing',
-        'Guide ultime du barbecue, techniques de cuisson et marinades pour maître du grill.',
-        'Le guide ultime du barbecue et des grillades. Techniques de cuisson, marinades, accompagnements et recettes pour devenir un maître du grill.',
-        2580, -- 25.80€ = 2580 centimes
-        3,
-        18,
-        7,
-        TRUE,
-        'Barbecue et Grillades - Guide du maître grill par Jack Thompson',
-        'Devenez maître du barbecue avec ce guide de 240 pages par Jack Thompson. Techniques et recettes.',
-        TRUE,
-        FALSE,
-        1,
-        '2024-12-15 12:00:00',
-        '2024-12-15 12:00:00'
+    ('Série A3 – Animaux géométriques (Loup)',
+     'serie-a3-animaux-geometriques-loup',
+     'ILL-A3-005',
+     'Affiche A3 loup géométrique.',
+     'Illustration polygonale d’un loup, tons bleus. A3, papier premium 220 g.',
+     2190, 1, 55, 10, TRUE,
+     'Affiche Loup géométrique', 'Affiche A3 loup style géométrique.', TRUE, 2, NOW(), NOW()
+    ),
+    ('Affiche A3 – Plantes tropicales',
+     'affiche-a3-plantes-tropicales',
+     'ILL-A3-006',
+     'Affiche A3 botanique.',
+     'Composition botanique de feuilles tropicales, verts profonds. A3 sur papier texturé 240 g.',
+     2090, 1, 70, 8, TRUE,
+     'Affiche Plantes tropicales', 'Affiche A3 botanique tropicale.', TRUE, 1, NOW(), NOW()
+    ),
+    ('Affiche A2 – Lignes abstraites or',
+     'affiche-a2-lignes-abstraites-or',
+     'ILL-A2-007',
+     'Affiche A2 abstraite dorée.',
+     'Formes abstraites et lignes dorées (impression effet or). A2 papier 200 g.',
+     3290, 1, 25, 5, TRUE,
+     'Affiche Lignes abstraites', 'Affiche A2 abstraite lignes or.', TRUE, 3, NOW(), NOW()
+    ),
+    ('Affiche 50×70 – Vagues japonaises',
+     'affiche-50x70-vagues-japonaises',
+     'ILL-5070-008',
+     'Affiche 50×70 inspirée ukiyo-e.',
+     'Motif de vagues stylisées, bleu indigo, format 50×70 cm.',
+     2790, 1, 40, 6, TRUE,
+     'Affiche Vagues japonaises', 'Affiche 50×70 motif vagues style japonais.', TRUE, 1, NOW(), NOW()
+    ),
+    ('Affiche A3 – Skyline nocturne',
+     'affiche-a3-skyline-nocturne',
+     'ILL-A3-009',
+     'Affiche A3 ville de nuit.',
+     'Silhouette de skyline avec néons, A3, papier satiné 200 g.',
+     1990, 1, 65, 10, TRUE,
+     'Affiche Skyline nocturne', 'Affiche A3 skyline urbaine de nuit.', TRUE, 2, NOW(), NOW()
+    ),
+    ('Affiche A3 – Constellations hémisphère nord',
+     'affiche-a3-constellations-hemisphere-nord',
+     'ILL-A3-010',
+     'Affiche A3 cartes stellaires.',
+     'Carte des constellations de l’hémisphère nord, A3, fond bleu nuit.',
+     2190, 1, 50, 8, TRUE,
+     'Affiche Constellations', 'Affiche A3 constellations ciel étoilé.', TRUE, 1, NOW(), NOW()
+    ),
+    ('Affiche 30×40 – Fleur de pavot',
+     'affiche-30x40-fleur-de-pavot',
+     'ILL-3040-011',
+     'Affiche 30×40 florale.',
+     'Illustration florale minimaliste, pavot rouge, format 30×40 cm.',
+     1690, 1, 80, 12, TRUE,
+     'Affiche Pavot', 'Affiche 30×40 fleur de pavot minimaliste.', TRUE, 3, NOW(), NOW()
+    ),
+    ('Affiche A2 – Architecture brutaliste',
+     'affiche-a2-architecture-brutaliste',
+     'ILL-A2-012',
+     'Affiche A2 archi brutaliste.',
+     'Volumes béton, contrastes forts, tirage A2 sur papier 200 g.',
+     3190, 1, 22, 4, TRUE,
+     'Affiche Brutaliste', 'Affiche A2 architecture brutaliste minimaliste.', TRUE, 2, NOW(), NOW()
     );
 
--- =====================================================
--- PRODUCT_CATEGORIES - BASÉ SUR NOS 5 LIVRES RÉELS
--- =====================================================
-INSERT INTO
-    product_categories (
-        product_id,
-        category_id,
-        is_primary,
-        sort_order,
-        created_at,
-        updated_at
-    )
-VALUES
-    -- LIVRE 1: Les Secrets de la Cuisine Française
-    (1, 10, true, 1, '2024-12-15 10:00:00', '2024-12-15 10:00:00'), -- Cuisine Française (PRIMARY)
-    (1, 4, false, 2, '2024-12-15 10:00:00', '2024-12-15 10:00:00'), -- Cuisine Européenne
-    (1, 1, false, 3, '2024-12-15 10:00:00', '2024-12-15 10:00:00'), -- Cuisine du Monde
-    -- LIVRE 2: Cuisine Italienne Moderne
-    (2, 11, true, 1, '2024-12-15 10:30:00', '2024-12-15 10:30:00'), -- Cuisine Italienne (PRIMARY)
-    (2, 4, false, 2, '2024-12-15 10:30:00', '2024-12-15 10:30:00'), -- Cuisine Européenne
-    (2, 1, false, 3, '2024-12-15 10:30:00', '2024-12-15 10:30:00'), -- Cuisine du Monde
-    -- LIVRE 3: Pâtisserie Artisanale
-    (3, 10, true, 1, '2024-12-15 11:00:00', '2024-12-15 11:00:00'), -- Cuisine Française (PRIMARY - pâtisserie française)
-    (3, 4, false, 2, '2024-12-15 11:00:00', '2024-12-15 11:00:00'), -- Cuisine Européenne
-    (3, 1, false, 3, '2024-12-15 11:00:00', '2024-12-15 11:00:00'), -- Cuisine du Monde
-    -- LIVRE 4: Cuisine Asiatique Fusion
-    (4, 3, true, 1, '2024-12-15 11:30:00', '2024-12-15 11:30:00'), -- Cuisine Asiatique (PRIMARY)
-    (4, 1, false, 2, '2024-12-15 11:30:00', '2024-12-15 11:30:00'), -- Cuisine du Monde
-    -- LIVRE 5: Barbecue et Grillades
-    (5, 1, true, 1, '2024-12-15 12:00:00', '2024-12-15 12:00:00'); -- Cuisine du Monde (PRIMARY)
-
--- Cuisine du Monde (PRIMARY - techniques universelles)
--- =====================================================
--- JEU DE DONNÉES : TABLE PRODUCT_REVIEWS
--- Avis clients réalistes pour nos 5 livres de cuisine
--- =====================================================
-INSERT INTO
-    product_reviews (
-        product_id,
-        user_id,
-        anonymous_name,
-        rating,
-        title,
-        comment,
-        is_verified_purchase,
-        is_moderated,
-        is_published,
-        is_anonymous,
-        created_at,
-        updated_at,
-        anonymized_at
-    )
-VALUES
-    -- =====================================================
-    -- LIVRE 1 : Les Secrets de la Cuisine Française
-    -- =====================================================
-    -- Avis utilisateur connecté - très positif
-    (
-        1,
-        2,
-        NULL,
-        5,
-        'Un livre exceptionnel !',
-        'Ce livre est une véritable bible de la cuisine française. Les explications sont claires, les recettes authentiques et les photos magnifiques. J''ai déjà testé 5 recettes et c''est un régal à chaque fois !',
-        TRUE,
-        TRUE,
-        TRUE,
-        FALSE,
-        '2024-12-16 14:30:00',
-        '2024-12-16 14:30:00',
-        NULL
-    ),
-    -- Avis utilisateur anonymisé - positif
-    (
-        1,
-        NULL,
-        'Claire M.',
-        4,
-        'Très bon guide culinaire',
-        'Les techniques sont bien expliquées. Parfait pour débuter dans la cuisine traditionnelle française. Quelques recettes un peu complexes pour les débutants mais globalement excellent.',
-        TRUE,
-        TRUE,
-        TRUE,
-        TRUE,
-        '2024-12-17 09:15:00',
-        '2024-12-17 09:15:00',
-        '2024-12-20 10:00:00'
-    ),
-    -- Avis récent utilisateur connecté - très positif
-    (
-        1,
-        3,
-        NULL,
-        5,
-        'Références gastronomiques parfaites',
-        'Marie Dubois maîtrise son sujet. Les 200+ recettes sont un trésor. Mon livre de chevet maintenant !',
-        TRUE,
-        FALSE,
-        TRUE,
-        FALSE,
-        '2024-12-20 16:45:00',
-        '2024-12-20 16:45:00',
-        NULL
-    ),
-    -- =====================================================
-    -- LIVRE 2 : Cuisine Italienne Moderne
-    -- =====================================================
-    -- Avis mitigé - utilisateur connecté
-    (
-        2,
-        4,
-        NULL,
-        3,
-        'Moyennement convaincu',
-        'Les recettes sont intéressantes mais certaines manquent de précision dans les quantités. Les photos sont belles mais j''attendais plus de modernité dans les approches.',
-        FALSE,
-        TRUE,
-        TRUE,
-        FALSE,
-        '2024-12-18 11:20:00',
-        '2024-12-18 11:20:00',
-        NULL
-    ),
-    -- Avis très positif - utilisateur anonymisé
-    (
-        2,
-        NULL,
-        'Marco R.',
-        5,
-        'Bellissimo !',
-        'En tant qu''Italien, je valide complètement ! Giovanni Rossi a su moderniser nos classiques sans les dénaturer. Bravo !',
-        TRUE,
-        TRUE,
-        TRUE,
-        TRUE,
-        '2024-12-19 19:30:00',
-        '2024-12-19 19:30:00',
-        '2024-12-22 8:00:00'
-    ),
-    -- =====================================================
-    -- LIVRE 3 : Pâtisserie Artisanale
-    -- =====================================================
-    -- Avis enthousiaste - produit mis en avant
-    (
-        3,
-        2,
-        NULL,
-        5,
-        'LA référence en pâtisserie !',
-        'Sophie Laurent est une magicienne ! Ses explications sont d''une précision chirurgicale. Mes premiers macarons ont été parfaits du premier coup grâce à ses conseils. 450 pages de pur bonheur !',
-        TRUE,
-        TRUE,
-        TRUE,
-        FALSE,
-        '2024-12-19 15:10:00',
-        '2024-12-19 15:10:00',
-        NULL
-    ),
-    -- Avis débutant satisfait
-    (
-        3,
-        5,
-        NULL,
-        4,
-        'Accessible même aux débutants',
-        'J''avais peur que ce soit trop technique mais les bases sont très bien expliquées. J''ai réussi mes premiers éclairs ! Manque juste quelques vidéos en complément.',
-        TRUE,
-        FALSE,
-        TRUE,
-        FALSE,
-        '2024-12-21 10:25:00',
-        '2024-12-21 10:25:00',
-        NULL
-    ),
-    -- =====================================================
-    -- LIVRE 4 : Cuisine Asiatique Fusion
-    -- =====================================================
-    -- Avis original et positif
-    (
-        4,
-        3,
-        NULL,
-        4,
-        'Fusion réussie !',
-        'Kenji Tanaka réussit parfaitement le mélange Orient-Occident. Les saveurs sont authentiques tout en restant accessibles. Mon ramen-burger maison a fait sensation !',
-        TRUE,
-        TRUE,
-        TRUE,
-        FALSE,
-        '2024-12-20 13:40:00',
-        '2024-12-20 13:40:00',
-        NULL
-    ),
-    -- Avis anonyme critique constructive
-    (
-        4,
-        NULL,
-        'SushiLover99',
-        3,
-        'Bon mais pas révolutionnaire',
-        'Les recettes sont correctes mais j''espérais plus d''innovation. Certaines associations sont un peu forcées. Reste un bon livre pour découvrir la fusion asiatique.',
-        FALSE,
-        TRUE,
-        TRUE,
-        TRUE,
-        '2024-12-21 20:15:00',
-        '2024-12-21 20:15:00',
-        '2024-12-23 14:30:00'
-    ),
-    -- =====================================================
-    -- LIVRE 5 : Barbecue et Grillades
-    -- =====================================================
-    -- Avis passionné utilisateur connecté
-    (
-        5,
-        4,
-        NULL,
-        5,
-        'Le guide ultime du BBQ !',
-        'Jack Thompson connaît son affaire ! Ses techniques de marinade ont révolutionné mes barbecues. Mes invités me demandent maintenant mes secrets. Merci pour ce guide complet !',
-        TRUE,
-        TRUE,
-        TRUE,
-        FALSE,
-        '2024-12-22 12:00:00',
-        '2024-12-22 12:00:00',
-        NULL
-    ),
-    -- Avis saisonnier positif
-    (
-        5,
-        5,
-        NULL,
-        4,
-        'Parfait pour l''été prochain',
-        'Acheté en prévision de la saison BBQ. Les 240 pages regorgent de conseils pratiques. Hâte de tester les recettes fumage !',
-        TRUE,
-        FALSE,
-        TRUE,
-        FALSE,
-        '2024-12-23 16:25:00',
-        '2024-12-23 16:25:00',
-        NULL
-    ),
-    -- Avis technique anonymisé
-    (
-        5,
-        NULL,
-        'GrillMaster',
-        5,
-        'Techniques de pro !',
-        'Enfin un guide qui va au-delà des basiques ! Les techniques de fumage à froid et les marinades 24h changent tout. Indispensable pour tout amateur de grillades.',
-        TRUE,
-        TRUE,
-        TRUE,
-        TRUE,
-        '2024-12-24 11:45:00',
-        '2024-12-24 11:45:00',
-        '2024-12-26 9:20:00'
-    );
 
 -- =====================================================
 -- JEU DE DONNÉES : TABLE PRODUCT_IMAGES
@@ -1011,147 +471,17 @@ INSERT INTO
         updated_at
     )
 VALUES
-    -- =====================================================
-    -- LIVRE 1 : Les Secrets de la Cuisine Française (Marie Dubois)
-    -- ID: 1, ISBN: 978-2-123456-78-9
-    -- =====================================================
-    (
-        1,
-        'https://images.example.com/les-secrets-cuisine-francaise-cover.jpg',
-        'Couverture du livre ''Les Secrets de la Cuisine Française'' par Marie Dubois.',
-        TRUE,
-        0,
-        1,
-        '2024-11-15 09:00:00',
-        '2024-11-15 09:00:00',
-        '2024-11-15 09:00:00'
-    ),
-    (
-        1,
-        'https://images.example.com/les-secrets-cuisine-francaise-pages.jpg',
-        'Aperçu des 320 pages avec plus de 200 recettes françaises traditionnelles.',
-        FALSE,
-        1,
-        1,
-        '2024-11-15 09:15:00',
-        '2024-11-15 09:15:00',
-        '2024-11-15 09:15:00'
-    ),
-    -- =====================================================
-    -- LIVRE 2 : Cuisine Italienne Moderne (Giovanni Rossi)
-    -- ID: 2, ISBN: 978-88-123456-78-9
-    -- =====================================================
-    (
-        2,
-        'https://images.example.com/cuisine-italienne-moderne-cover.jpg',
-        'Couverture du livre ''Cuisine Italienne Moderne'' par Giovanni Rossi.',
-        TRUE,
-        0,
-        1,
-        '2024-11-16 10:30:00',
-        '2024-11-16 10:30:00',
-        '2024-11-16 10:30:00'
-    ),
-    (
-        2,
-        'https://images.example.com/cuisine-italienne-moderne-recettes.jpg',
-        'Recettes italiennes revisitées, 280 pages de saveurs modernes.',
-        FALSE,
-        1,
-        1,
-        '2024-11-16 10:45:00',
-        '2024-11-16 10:45:00',
-        '2024-11-16 10:45:00'
-    ),
-    -- =====================================================
-    -- LIVRE 3 : Pâtisserie Artisanale (Sophie Laurent)
-    -- ID: 3, ISBN: 978-2-987654-32-1
-    -- =====================================================
-    (
-        3,
-        'https://images.example.com/patisserie-artisanale-cover.jpg',
-        'Couverture du livre ''Pâtisserie Artisanale'' par Sophie Laurent.',
-        TRUE,
-        0,
-        1,
-        '2024-11-17 14:00:00',
-        '2024-11-17 14:00:00',
-        '2024-11-17 14:00:00'
-    ),
-    (
-        3,
-        'https://images.example.com/patisserie-artisanale-techniques.jpg',
-        'Techniques de pâtisserie professionnelle présentées en 350 pages.',
-        FALSE,
-        1,
-        1,
-        '2024-11-17 14:20:00',
-        '2024-11-17 14:20:00',
-        '2024-11-17 14:20:00'
-    ),
-    (
-        3,
-        'https://images.example.com/patisserie-artisanale-desserts.jpg',
-        'Créations pâtissières illustrées dans le livre ''Pâtisserie Artisanale''.',
-        FALSE,
-        2,
-        1,
-        '2024-11-17 14:40:00',
-        '2024-11-17 14:40:00',
-        '2024-11-17 14:40:00'
-    ),
-    -- =====================================================
-    -- LIVRE 4 : Cuisine Asiatique Fusion (Kenji Tanaka)
-    -- ID: 4, ISBN: 978-4-123456-78-9
-    -- =====================================================
-    (
-        4,
-        'https://images.example.com/cuisine-asiatique-fusion-cover.jpg',
-        'Couverture du livre ''Cuisine Asiatique Fusion'' par Kenji Tanaka.',
-        TRUE,
-        0,
-        1,
-        '2024-11-18 11:30:00',
-        '2024-11-18 11:30:00',
-        '2024-11-18 11:30:00'
-    ),
-    (
-        4,
-        'https://images.example.com/cuisine-asiatique-fusion-plats.jpg',
-        'Plats de fusion asiatique-occidentale : 300 pages d''innovation.',
-        FALSE,
-        1,
-        1,
-        '2024-11-18 11:50:00',
-        '2024-11-18 11:50:00',
-        '2024-11-18 11:50:00'
-    ),
-    -- =====================================================
-    -- LIVRE 5 : Barbecue et Grillades (Jack Thompson)
-    -- ID: 5, ISBN: 978-1-234567-89-0
-    -- =====================================================
-    (
-        5,
-        'https://images.example.com/barbecue-grillades-cover.jpg',
-        'Couverture du livre ''Barbecue et Grillades'' de Jack Thompson.',
-        TRUE,
-        0,
-        1,
-        '2024-11-19 16:00:00',
-        '2024-11-19 16:00:00',
-        '2024-11-19 16:00:00'
-    ),
-    (
-        5,
-        'https://images.example.com/barbecue-grillades-techniques.jpg',
-        'Techniques de barbecue et grillades présentées en 240 pages.',
-        FALSE,
-        1,
-        1,
-        '2024-11-19 16:20:00',
-        '2024-11-19 16:20:00',
-        '2024-11-19 16:20:00'
-    );
+  (1,  'https://source.unsplash.com/_HRcPmzjDPc/1600x1200', 'Illustration florale colorée (motif végétal)', TRUE, 1, 1,  '2025-08-26 10:00:00', '2025-08-26 10:00:00', '2025-08-26 10:00:00'),
+  (2,  'https://source.unsplash.com/RmkQiUzufc0/1600x1200', 'Illustration d’un phare en bord de mer',       TRUE, 1, 1,    '2025-08-26 10:02:00', '2025-08-26 10:02:00', '2025-08-26 10:02:00'),
+  (3,  'https://source.unsplash.com/E_R80zTvTjI/1600x1200', 'Renard stylisé se reposant dans un paysage',     TRUE, 1, 1, '2025-08-26 10:04:00', '2025-08-26 10:04:00', '2025-08-26 10:04:00'),
+  (4,  'https://source.unsplash.com/j-oNlEbFrpU/1600x1200', 'Paysage de montagne au coucher de soleil (flat)',TRUE, 1, 1,  '2025-08-26 10:06:00', '2025-08-26 10:06:00', '2025-08-26 10:06:00'),
+  (5,  'https://source.unsplash.com/Or7LlCdYbGE/1600x1200', 'Espace: planètes et étoiles (fond violet)',       TRUE, 1, 1,   '2025-08-26 10:08:00', '2025-08-26 10:08:00', '2025-08-26 10:08:00'),
+  (6,  'https://source.unsplash.com/YkF8gHkBokc/1600x1200', 'Système solaire stylisé (planètes en orbite)',   TRUE, 1, 1,  '2025-08-26 10:10:00', '2025-08-26 10:10:00', '2025-08-26 10:10:00'),
+  (7,  'https://source.unsplash.com/xtuUAdAFvDU/1600x1200', 'Illustration florale aux couleurs vives',         TRUE, 1, 1,    '2025-08-26 10:12:00', '2025-08-26 10:12:00', '2025-08-26 10:12:00'),
+  (8,  'https://source.unsplash.com/Z4mCfthBpfE/1600x1200', 'Motif floral stylisé (design ornemental)',        TRUE, 1, 1, '2025-08-26 10:14:00', '2025-08-26 10:14:00', '2025-08-26 10:14:00'),
+  (9,  'https://source.unsplash.com/j2baPOGjRg4/1600x1200', 'Motif floral répétitif (pattern seamless)',       TRUE, 1, 1,  '2025-08-26 10:16:00', '2025-08-26 10:16:00', '2025-08-26 10:16:00'),
+  (10, 'https://source.unsplash.com/_-yJ1OV9GYc/1600x1200', 'Abstrait géométrique (inspiration Bauhaus)',      TRUE, 1, 1,   '2025-08-26 10:18:00', '2025-08-26 10:18:00', '2025-08-26 10:18:00');
+
 
 -- =====================================================
 -- JEU DE DONNÉES : TABLE ADDRESSES

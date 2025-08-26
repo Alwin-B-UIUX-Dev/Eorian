@@ -22,8 +22,6 @@ SELECT
     p.name AS product_name,
     p.slug AS product_slug,
     p.sku AS product_sku,
-    p.author,
-    p.isbn,
     p.price_cents AS current_price_cents, -- Prix actuel (peut avoir changé)
     p.stock_quantity AS available_stock,
     p.is_active AS product_active,

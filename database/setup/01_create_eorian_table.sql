@@ -1,14 +1,3 @@
--- Active: 1753172326626@@127.0.0.1@5432@bookstore_fr_db
--- =====================================================
--- E-COMMERCE TABLES - PostgreSQL 17 - VERSION COMPLÈTE
--- PRINCIPE : Séparation claire des responsabilités
--- - USERS : Authentification pure (customers + admins)
--- - USER_PROFILES : Données personnelles étendues
--- - ADMIN crée et gère les PRODUCTS
--- - CUSTOMERS naviguent et achètent
--- =====================================================
-
-
 -- =====================================================
 -- EXTENSIONS ESSENTIELLES
 -- =====================================================
@@ -23,43 +12,35 @@ COMMENT ON EXTENSION "uuid-ossp" IS
 -- =====================================================
 -- CRÉATION DES RÔLES DE SÉCURITÉ (RÔLES DATABASE)
 -- =====================================================
--- JUSTIFICATION : Séparation des permissions pour RLS, Pattern utilisé par 90%+ des entreprises tech
--- USAGE : Rôles PostgreSQL (connexion DB)
--- EXEMPLES : Supabase, PostgREST, Hasura, Stripe, Shopify
-
--- RÔLE MÉTIER : Authentification pure et gestion des rôles
-CREATE ROLE api_service_bookstore WITH LOGIN PASSWORD 'secure_password';
-COMMENT ON ROLE api_service_bookstore IS 'Rôle de service backend Node.js';
-CREATE ROLE customer_bookstore WITH NOLOGIN;
-COMMENT ON ROLE customer_bookstore IS 'Rôle de client';
-CREATE ROLE admin_bookstore WITH NOLOGIN;
-COMMENT ON ROLE admin_bookstore IS 'Rôle d''admin';
+-- CREATE ROLE api_service_eorian WITH LOGIN PASSWORD 'secure_password';
+-- COMMENT ON ROLE api_service_eorian IS 'Rôle de service backend Node.js';
+-- CREATE ROLE customer_eorian WITH NOLOGIN;
+-- COMMENT ON ROLE customer_eorian IS 'Rôle de client';
+-- CREATE ROLE admin_eorian WITH NOLOGIN;
+-- COMMENT ON ROLE admin_eorian IS 'Rôle d''admin';
 
 -- =====================================================
--- SETUP COMPLET GLOBAL BOOKSTORE DES PRIVILEGES
+-- SETUP COMPLET GLOBAL eorian DES PRIVILEGES
 -- =====================================================
--- JUSTIFICATION : Une fois les rôles crées, on doit attribuer les permissions CRUD
--- USAGE : Sécurisé les manipulations des tables selon les rôles
-
 -- Schema access
-GRANT USAGE ON SCHEMA public TO api_service_bookstore, admin_bookstore, customer_bookstore;
+GRANT USAGE ON SCHEMA public TO api_service_eorian, admin_eorian, customer_eorian;
 
 -- Tables/vues ACTUELLES
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO api_service_bookstore;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO api_service_bookstore;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO admin_bookstore;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO admin_bookstore;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO customer_bookstore;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO api_service_eorian;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO api_service_eorian;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO admin_eorian;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO admin_eorian;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO customer_eorian;
 
 -- Tables/vues FUTURES
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO api_service_bookstore;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO api_service_bookstore;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO admin_bookstore;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO admin_bookstore;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO customer_bookstore;
-COMMENT ON ROLE api_service_bookstore IS 'All privileges - Backend API service';
-COMMENT ON ROLE admin_bookstore IS 'CRUD privileges - Admin operations';
-COMMENT ON ROLE customer_bookstore IS 'Read-only - Customer frontend';
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO api_service_eorian;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO api_service_eorian;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO admin_eorian;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO admin_eorian;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO customer_eorian;
+COMMENT ON ROLE api_service_eorian IS 'All privileges - Backend API service';
+COMMENT ON ROLE admin_eorian IS 'CRUD privileges - Admin operations';
+COMMENT ON ROLE customer_eorian IS 'Read-only - Customer frontend';
 
 -- =====================================================
 -- THÈME : AUTHENTIFICATION & PROFILS
@@ -138,19 +119,19 @@ USING (true);                                        -- Lecture libre pour tous 
 -- JUSTIFICATION : Seuls les admins peuvent modifier les rôles
 -- USAGE : Panel admin pour créer/modifier des rôles personnalisés
 CREATE POLICY user_roles_admin_write ON user_roles
-FOR ALL TO admin_bookstore
+FOR ALL TO admin_eorian
 USING (true);
 
 -- JUSTIFICATION : API service a accès complet pour gestion backend
 -- USAGE : Node.js API peut gérer les rôles sans restriction
 CREATE POLICY user_roles_api_service ON user_roles
-FOR ALL TO api_service_bookstore
+FOR ALL TO api_service_eorian
 USING (true);
 
 -- =====================================================
 -- !ATTENTION : DISTINCTION IMPORTANTE
 -- =====================================================
--- • customer_bookstore = Rôle PostgreSQL (connexion DB)
+-- • customer_eorian = Rôle PostgreSQL (connexion DB)
 -- • 'customer' = Rôle métier application (données)
 -- Ces deux concepts sont DIFFÉRENTS et ne se mélangent pas
 
@@ -252,17 +233,17 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
 -- Customers : accès uniquement à leurs propres données
 CREATE POLICY users_customer_access ON users
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);  -- Node.js fait WHERE id = $1
 
 -- Admins : accès complet
 CREATE POLICY admin_full_users ON users
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);
 
 -- API Service : accès complet pour backend Node.js
 CREATE POLICY api_service_full_access ON users
-    FOR ALL TO api_service_bookstore
+    FOR ALL TO api_service_eorian
     USING (true);
 
 -- =====================================================
@@ -278,7 +259,7 @@ CREATE TABLE IF NOT EXISTS user_sessions (
     user_id INTEGER NOT NULL,
     refresh_token TEXT NOT NULL UNIQUE,
     -- === IDENTIFICATION DEVICE ===
-    device_info JSONB,                                     -- Infos device complètes et flexibles
+    device_info TEXT,                                     -- Infos device complètes et flexibles
     ip_address INET,                                       -- IP pour sécurité/audit
     -- === GESTION SESSION ===
     expires_at TIMESTAMP NOT NULL,
@@ -348,15 +329,15 @@ COMMENT ON COLUMN user_sessions.device_info IS 'Infos device en JSONB: type, nam
 ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY sessions_customer_access ON user_sessions
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);  -- Node.js filtre avec WHERE user_id = $1
 
 CREATE POLICY sessions_admin_all ON user_sessions
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);  -- Admin accès complet
 
 CREATE POLICY sessions_api_service_full ON user_sessions
-    FOR ALL TO api_service_bookstore
+    FOR ALL TO api_service_eorian
     USING (true);
 
 -- TABLE : user_profiles
@@ -372,8 +353,6 @@ CREATE TABLE IF NOT EXISTS user_profiles (
     last_name VARCHAR(100),
     phone VARCHAR(20),
     birth_date DATE,
-    newsletter_consent BOOLEAN DEFAULT FALSE,
-    newsletter_consent_date TIMESTAMP,
     avatar_url VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -386,14 +365,14 @@ CREATE TABLE IF NOT EXISTS user_profiles (
 ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY profiles_customer_access ON user_profiles
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);  -- Node.js fait WHERE user_id = $1
 
 CREATE POLICY admin_full_profiles ON user_profiles
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);
 CREATE POLICY api_service_full_profiles ON user_profiles
-    FOR ALL TO api_service_bookstore
+    FOR ALL TO api_service_eorian
     USING (true);
 
 -- =====================================================
@@ -481,17 +460,17 @@ ALTER TABLE user_payment_methods ENABLE ROW LEVEL SECURITY;
 
 -- Policy utilisateur : voit seulement ses cartes
 CREATE POLICY payment_methods_customer_access ON user_payment_methods
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);  -- Node.js fait WHERE user_id = $1
 
 -- Policy admin : accès complet pour support client
 CREATE POLICY admin_full_payment_methods ON user_payment_methods
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);
 
 -- Policy service API : accès technique complet
 CREATE POLICY api_service_full_payment_methods ON user_payment_methods
-    FOR ALL TO api_service_bookstore
+    FOR ALL TO api_service_eorian
     USING (true);
 
 -- =====================================================
@@ -537,7 +516,7 @@ ALTER TABLE tax_rates ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tax_rates_read_all ON tax_rates FOR
 SELECT USING (is_active = true);
 
-CREATE POLICY admin_manage_tax_rates ON tax_rates FOR ALL TO admin_bookstore USING (true);
+CREATE POLICY admin_manage_tax_rates ON tax_rates FOR ALL TO admin_eorian USING (true);
 
 -- DONNÉES RÉFÉRENCE FRANCE 2025
 INSERT INTO
@@ -564,60 +543,6 @@ VALUES (
     );
 
 -- -----------------------------------------------------
--- TABLE : categories pattern "Adjacency List"
--- -----------------------------------------------------
--- RÔLE MÉTIER : Organisation hiérarchique du catalogue produits
--- RELATIONS :
--- └─ categories 1:N categories (hiérarchie parent/enfant)
--- └─ categories 1:N products (classification)
-
-CREATE TABLE IF NOT EXISTS categories (
-    id SERIAL PRIMARY KEY,
-    name CITEXT NOT NULL,
-    slug CITEXT UNIQUE NOT NULL,
-    description TEXT,
-    parent_id INTEGER,
-    level INTEGER DEFAULT 0,
-    sort_order INTEGER DEFAULT 0,
-    meta_title VARCHAR(200),
-    meta_description VARCHAR(300),
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_categories_parent FOREIGN KEY (parent_id)
-    REFERENCES categories (id),
-    CONSTRAINT no_self_parent CHECK (parent_id != id),
-    CONSTRAINT valid_slug CHECK (slug ~ '^[a-z0-9\-]+$'),
-    CONSTRAINT valid_level CHECK (level >= 0 AND level <= 5),
-    CONSTRAINT name_length CHECK (char_length(name) <= 100),
-    CONSTRAINT slug_length CHECK (char_length(slug) <= 100),
-    CONSTRAINT slug_not_empty CHECK (char_length(slug) >= 2)
-);
-
--- INDEX JUSTIFICATION : Navigation catalogue hiérarchique
-CREATE INDEX IF NOT EXISTS idx_categories_parent ON categories (parent_id)
-WHERE
-    is_active = true;
--- INDEX JUSTIFICATION : Recherche catégories actives (endpoint fréquent)
-CREATE INDEX IF NOT EXISTS idx_categories_active ON categories (is_active, sort_order);
--- INDEX JUSTIFICATION : Pages catégories SEO
-CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories (slug)
-WHERE
-    is_active = true;
--- INDEX JUSTIFICATION : Recherche par nom (admin interface)
-CREATE INDEX IF NOT EXISTS idx_categories_name ON categories (name)
-WHERE
-    is_active = true;
-
--- RLS JUSTIFICATION : Lecture publique des catégories actives
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY categories_read_active ON categories FOR
-SELECT USING (is_active = true);
-
-CREATE POLICY admin_manage_categories ON categories FOR ALL TO admin_bookstore USING (true);
-
--- -----------------------------------------------------
 -- TABLE : products (MISE À JOUR AVEC CITEXT + MÉTADONNÉES LIVRES)
 -- -----------------------------------------------------
 -- RÔLE MÉTIER : Catalogue produits avec recherche insensible à la casse
@@ -634,12 +559,6 @@ CREATE TABLE IF NOT EXISTS products (
     name CITEXT NOT NULL,
     slug CITEXT UNIQUE NOT NULL,
     sku VARCHAR(100) UNIQUE,
-    author CITEXT,
-    isbn VARCHAR(17) UNIQUE,
-    page_count INTEGER,
-    publication_year INTEGER,
-    language VARCHAR(10) DEFAULT 'fr',
-    publisher CITEXT,
     short_description TEXT,
     description TEXT,
     price_cents INTEGER NOT NULL,
@@ -650,73 +569,20 @@ CREATE TABLE IF NOT EXISTS products (
     meta_title CITEXT,
     meta_description TEXT,
     is_active BOOLEAN DEFAULT TRUE,
-    is_featured BOOLEAN DEFAULT FALSE,
     created_by INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT products_price_positive CHECK (price_cents > 0),
     CONSTRAINT products_stock_positive CHECK (stock_quantity >= 0),
-    CONSTRAINT products_page_count_positive CHECK (page_count IS NULL OR page_count > 0),
-    CONSTRAINT products_valid_year CHECK (
-        publication_year IS NULL OR
-        (publication_year >= 1900 AND publication_year <= EXTRACT(YEAR FROM CURRENT_DATE) + 2)
-    ),
-    CONSTRAINT products_valid_language CHECK (
-        language IN ('fr', 'en', 'es', 'it', 'de', 'pt', 'zh', 'ja', 'ar', 'other')
-    ),
     CONSTRAINT products_valid_slug CHECK (
         slug ~ '^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$'
         AND char_length(slug) BETWEEN 3 AND 200
-    ),
-    CONSTRAINT products_valid_isbn CHECK (
-        isbn IS NULL OR isbn ~ '^97[89]-\d{1,5}-\d{1,7}-\d{1,7}-\d$'  -- Format ISBN-13
     ),
     CONSTRAINT fk_products_tax_rate FOREIGN KEY (tax_rate_id)
         REFERENCES tax_rates (id),
     CONSTRAINT fk_products_created_by FOREIGN KEY (created_by)
         REFERENCES users (id)
 );
-
--- =====================================================
--- INDEX OPTIMISÉS POUR RECHERCHE E-COMMERCE
--- =====================================================
-
--- JUSTIFICATION : Recherche produits par nom (barre de recherche principale)
-CREATE INDEX idx_products_name_search ON products USING gin (name gin_trgm_ops)
-    WHERE is_active = true;
-
--- JUSTIFICATION : Recherche par auteur (filtre fréquent livres culinaires)
-CREATE INDEX idx_products_author_search ON products USING gin (author gin_trgm_ops)
-    WHERE is_active = true AND author IS NOT NULL;
-
--- JUSTIFICATION : Recherche par éditeur (navigation par maison d'édition)
-CREATE INDEX idx_products_publisher_search ON products USING gin (publisher gin_trgm_ops)
-    WHERE is_active = true AND publisher IS NOT NULL;
-
--- JUSTIFICATION : Index fonctionnels standards pour API
-CREATE INDEX idx_products_tax_rate ON products (tax_rate_id);           -- Calculs TVA
-CREATE INDEX idx_products_active ON products (is_active);               -- Produits visibles
-CREATE INDEX idx_products_slug ON products (slug);                      -- Page produit SEO
-CREATE INDEX idx_products_created_by ON products (created_by);          -- Produits par admin
-CREATE INDEX idx_products_featured ON products (is_featured);           -- Produits vedettes
-CREATE INDEX idx_products_stock ON products (stock_quantity);           -- Gestion stock
-
--- JUSTIFICATION : Index composites pour filtres e-commerce fréquents
-CREATE INDEX idx_products_active_price ON products (is_active, price_cents)
-    WHERE is_active = true;                                             -- Tri prix sur actifs
-
-CREATE INDEX idx_products_featured_active ON products (is_featured, is_active)
-    WHERE is_featured = true AND is_active = true;                      -- Produits vedettes
-
-CREATE INDEX idx_products_year_active ON products (publication_year DESC, is_active)
-    WHERE is_active = true AND publication_year IS NOT NULL;            -- Nouveautés par année
-
-CREATE INDEX idx_products_language_active ON products (language, is_active)
-    WHERE is_active = true;                                             -- Filtres par langue
-
--- JUSTIFICATION : Recherche ISBN (validation unicité + recherche exacte)
-CREATE UNIQUE INDEX idx_products_isbn ON products (isbn)
-    WHERE isbn IS NOT NULL;
 
 -- =====================================================
 -- RLS : ROW LEVEL SECURITY
@@ -728,133 +594,13 @@ CREATE POLICY products_read_active ON products FOR SELECT
     USING (is_active = true);
 
 -- JUSTIFICATION : Admins gèrent tous les produits
-CREATE POLICY admin_manage_products ON products FOR ALL TO admin_bookstore
+CREATE POLICY admin_manage_products ON products FOR ALL TO admin_eorian
     USING (true);
 
 -- JUSTIFICATION : Service API accès technique complet
-CREATE POLICY api_service_full_products ON products FOR ALL TO api_service_bookstore
+CREATE POLICY api_service_full_products ON products FOR ALL TO api_service_eorian
     USING (true);
 
--- -----------------------------------------------------
--- TABLE : product_categories (PIVOT N:M)
--- -----------------------------------------------------
--- RÔLE MÉTIER : Relation many-to-many entre produits et catégories
---               Permet classification multiple (région + type + marketing)
--- RELATIONS :
---   └─ products 1:N product_categories (un produit dans plusieurs catégories)
---   └─ categories 1:N product_categories (une catégorie contient plusieurs produits)
---   └─ products N:M categories (via cette table pivot)
-
-CREATE TABLE product_categories (
-    product_id INTEGER NOT NULL,
-    category_id INTEGER NOT NULL,
-    is_primary BOOLEAN DEFAULT FALSE,
-    sort_order INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT product_categories_sort_positive CHECK (sort_order >= 0),
-    CONSTRAINT fk_product_categories_product
-        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    CONSTRAINT fk_product_categories_category
-        FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
-    PRIMARY KEY (product_id, category_id)
-);
-
--- JUSTIFICATION INDEX : Une seule catégorie principale par produit (règle métier critique)
--- Exemple : "Guide Thaï" peut être dans [Asie(PRIMARY), Guides, Nouveautés] mais une seule PRIMARY
-CREATE UNIQUE INDEX idx_one_primary_per_product
-    ON product_categories (product_id)
-    WHERE is_primary = TRUE;
-
--- JUSTIFICATION INDEX : Recherche catégories d'un produit (page produit, breadcrumbs)
-CREATE INDEX idx_product_categories_product
-    ON product_categories (product_id, sort_order);
-
--- JUSTIFICATION INDEX : Recherche produits d'une catégorie (pages catégories, filtres)
-CREATE INDEX idx_product_categories_category
-    ON product_categories (category_id);
-
--- JUSTIFICATION INDEX : Recherche catégories principales uniquement (navigation principale)
-CREATE INDEX idx_product_categories_primary
-    ON product_categories (category_id)
-    WHERE is_primary = TRUE;
-
--- RLS JUSTIFICATION : Classifications visibles publiquement, gestion admin uniquement
-ALTER TABLE product_categories ENABLE ROW LEVEL SECURITY;
-
--- Politique lecture : Toutes les classifications visibles (pour navigation/filtres)
-CREATE POLICY product_categories_read_all ON product_categories
-    FOR SELECT USING (true);
-
--- Politique gestion : Seuls admins peuvent modifier classifications
-CREATE POLICY admin_manage_classifications ON product_categories
-    FOR ALL TO admin_bookstore USING (true);
-
--- EXPLICATION CHOIX TECHNIQUES :
--- 1. CASCADE DELETE : Si produit/catégorie supprimé, classifications automatiquement nettoyées
--- 2. is_primary : Détermine catégorie pour URL SEO (/categories/{primary_category}/{product_slug})
--- 3. sort_order : Contrôle ordre affichage tags catégories sur fiche produit
--- 4. Clé composite : Évite qu'un produit soit deux fois dans même catégorie
--- 5. Index partiel WHERE : Optimise recherches catégories principales uniquement
-
-
--- -----------------------------------------------------
--- TABLE : product_reviews (VERSION ANONYMISATION)
--- -----------------------------------------------------
--- RÔLE MÉTIER : Stockage des avis clients avec préservation anonyme
--- RELATIONS :
---   └─ products 1:N product_reviews (un produit a plusieurs avis)
---   └─ users 1:N product_reviews (relation nullable pour anonymisation)
-
-CREATE TABLE product_reviews (
-    id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL ,
-    user_id INTEGER,
-    anonymous_name VARCHAR(100),
-    rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
-    title VARCHAR(200),
-    comment TEXT,
-    is_verified_purchase BOOLEAN DEFAULT FALSE,
-    is_moderated BOOLEAN DEFAULT FALSE,
-    is_published BOOLEAN DEFAULT TRUE,
-    is_anonymous BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    anonymized_at TIMESTAMP,
-    CONSTRAINT reviews_user_or_anonymous CHECK (
-        (user_id IS NOT NULL AND is_anonymous = FALSE) OR
-        (user_id IS NULL AND is_anonymous = TRUE AND anonymous_name IS NOT NULL)
-    ),
-    CONSTRAINT fk_reviews_product FOREIGN KEY (product_id)
-    REFERENCES products(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reviews_user FOREIGN KEY (user_id)
-    REFERENCES users(id) ON DELETE SET NULL
-);
-
--- JUSTIFICATION INDEX :
-CREATE INDEX idx_reviews_product_id ON product_reviews(product_id);        -- Récupération rapide avis d'un produit
-CREATE INDEX idx_reviews_user_id ON product_reviews(user_id) WHERE user_id IS NOT NULL; -- Historique utilisateur actif
-CREATE INDEX idx_reviews_rating ON product_reviews(rating);                -- Filtrage par note
-CREATE INDEX idx_reviews_created_at ON product_reviews(created_at DESC);   -- Tri chronologique récent
-CREATE INDEX idx_reviews_published ON product_reviews(is_published) WHERE is_published = TRUE; -- Avis visibles
-
--- JUSTIFICATION RLS :
-ALTER TABLE product_reviews ENABLE ROW LEVEL SECURITY;
-
--- Lecture publique des avis publiés
-CREATE POLICY reviews_read_published ON product_reviews
-    FOR SELECT
-    USING (is_published = true);  -- ← Seuls avis publiés visibles
-
--- Admin gère tout
-CREATE POLICY admin_manage_reviews ON product_reviews
-    FOR ALL TO admin_bookstore
-    USING (true);
-
--- Customers peuvent créer/modifier leurs avis
-CREATE POLICY customers_manage_reviews ON product_reviews
-    FOR ALL TO customer_bookstore
-    USING (true);
 
 -- -----------------------------------------------------
 -- TABLE : product_images
@@ -899,7 +645,7 @@ ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
 CREATE POLICY images_read_all ON product_images FOR SELECT
     USING (true);
 
-CREATE POLICY admin_manage_images ON product_images FOR ALL TO admin_bookstore
+CREATE POLICY admin_manage_images ON product_images FOR ALL TO admin_eorian
     USING (true);
 
 
@@ -972,12 +718,12 @@ ALTER TABLE addresses ENABLE ROW LEVEL SECURITY;
 
 -- Customers peuvent gérer leurs adresses
 CREATE POLICY customers_manage_addresses ON addresses
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);  -- ← RLS simple
 
 -- Admin voit toutes les adresses
 CREATE POLICY admin_view_addresses ON addresses
-    FOR SELECT TO admin_bookstore
+    FOR SELECT TO admin_eorian
     USING (true);
 
 
@@ -1016,12 +762,12 @@ ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
 
 -- Customers gèrent leurs paniers
 CREATE POLICY customers_manage_cart ON cart_items
-    FOR ALL TO customer_bookstore
+    FOR ALL TO customer_eorian
     USING (true);
 
 -- Admin voit tous les paniers
 CREATE POLICY admin_view_cart ON cart_items
-    FOR SELECT TO admin_bookstore
+    FOR SELECT TO admin_eorian
     USING (true);
 
 -- -----------------------------------------------------
@@ -1104,12 +850,12 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 
 -- Customers peuvent consulter leurs commandes
 CREATE POLICY customers_view_orders ON orders
-    FOR SELECT TO customer_bookstore
+    FOR SELECT TO customer_eorian
     USING (true);
 
 -- Admin gère toutes les commandes
 CREATE POLICY admin_manage_orders ON orders
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);
 
 -- -----------------------------------------------------
@@ -1164,10 +910,10 @@ ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 
 -- Customers peuvent consulter leurs items de commande
 CREATE POLICY customers_view_order_items ON order_items
-    FOR SELECT TO customer_bookstore
+    FOR SELECT TO customer_eorian
     USING (true);
 
 -- Admin gère tous les items
 CREATE POLICY admin_manage_order_items ON order_items
-    FOR ALL TO admin_bookstore
+    FOR ALL TO admin_eorian
     USING (true);

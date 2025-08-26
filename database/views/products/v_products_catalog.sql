@@ -15,12 +15,6 @@ SELECT
     p.name,
     p.slug,
     p.sku,
-    p.author,
-    p.isbn,
-    p.page_count,
-    p.publication_year,
-    p.language,
-    p.publisher,
     p.description,
     p.short_description,
     p.price_cents,
@@ -29,7 +23,6 @@ SELECT
     pi.image_url AS primary_image_url,
     pi.alt_text AS primary_image_alt,
     p.is_active,
-    p.is_featured,
     -- === SEO ===
     p.meta_title,
     p.meta_description,
@@ -42,5 +35,4 @@ LEFT JOIN product_images pi on p.id = pi.product_id AND pi.is_primary = TRUE
 WHERE
     p.is_active = TRUE
 ORDER BY
-    p.is_featured DESC,
     p.created_at DESC;

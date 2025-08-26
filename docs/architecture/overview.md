@@ -1,7 +1,7 @@
 # Architecture MVC avec couche service, repository, dtos
 
 ```
-bookstore-api
+eorian-api
 ├─ LICENSE
 ├─ README.md
 ├─ .editorconfig

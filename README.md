@@ -113,8 +113,8 @@ L'API suit une architecture en couches :
 
 Les scripts de configuration se trouvent dans `database/setup/` :
 
-- `00_create_bookstore_database.sql` - Création de la base
-- `01_create_bookstore_table.sql` - Création des tables
+- `00_create_eorian_database.sql` - Création de la base
+- `01_create_eorian_table.sql` - Création des tables
 
 ### Vues disponibles
 
