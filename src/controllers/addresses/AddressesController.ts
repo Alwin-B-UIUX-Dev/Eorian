@@ -12,6 +12,10 @@ export class AdressesController implements IAddressesControllers {
   public async show(req: Request, res: Response, next: NextFunction): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+
+
+
   public async store(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const createAddressesDto = new CreateAdressesDto(req.body);
@@ -29,6 +33,10 @@ export class AdressesController implements IAddressesControllers {
 
     }
   }
+
+
+
+  
   public async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     throw new Error('Method not implemented.');
   }
