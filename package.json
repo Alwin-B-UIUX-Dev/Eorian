@@ -1,5 +1,5 @@
 {
-  "name": "bookstore-api",
+  "name": "eorian",
   "version": "1.0.0",
   "description": "Api E-commerce Bookstore with Node.js, Express and TypeScript",
   "main": "dist/server.js",
@@ -32,7 +32,7 @@
     "express",
     "typescript"
   ],
-  "author": "Wisepanda.fr",
+  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
