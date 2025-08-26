@@ -1,0 +1,1 @@
+export { IProductControllers } from '@/interfaces/controllers/product/IProductControllers'
