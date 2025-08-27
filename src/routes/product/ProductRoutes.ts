@@ -7,7 +7,7 @@ export class ProductRoutes {
 
   constructor(
     private readonly productController: IProductControllers,
-    private readonly tokenManager: ITokenManager
+    // private readonly tokenManager: ITokenManager
   ) {
     this.router = Router();
     this.setupRoutes();
@@ -15,14 +15,14 @@ export class ProductRoutes {
 
   private setupRoutes(): void {
     // Routes publiques
-    this.router.post('/products', this.productController.store.bind(this.productController));
+    this.router.post('/product', this.productController.store.bind(this.productController));
     // Routes protégées
-    const protect = AuthMiddleware.authenticate(this.tokenManager);
-    this.router.post(
-      '/products',
-      protect,
-      this.productController.store.bind(this.productController)
-    );
+    // const protect = AuthMiddleware.authenticate(this.tokenManager);
+    // this.router.post(
+    //   '/product',
+    //   protect,
+    //   this.productController.store.bind(this.productController)
+    // );
   }
   public getRouter(): Router {
     return this.router;

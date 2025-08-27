@@ -23,11 +23,11 @@ export class ProductService implements IProductService {
         isActive: CreateProductDto.getIsActive(),
         createdBy: CreateProductDto.getCreatedBy()
       };
-
       return await this.productRepository.create(productData);
     } catch (error) {
       console.error('🚨 ERREUR TECHNIQUE DANS product create():', error);
     }
+    throw new Error("bug")
   }
 
   public async findAll(limit?: number, offset?: number): Promise<IProduct[]> {
