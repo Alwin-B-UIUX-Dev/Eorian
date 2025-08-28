@@ -1,6 +1,6 @@
 import type { IEntity } from '@/interfaces';
 
-export interface ICartItem extends IEntity {
+export interface ICartItems extends IEntity {
     // === GETTERS COMPLETS ===
   getUserId(): string;
   getProductId(): string;
