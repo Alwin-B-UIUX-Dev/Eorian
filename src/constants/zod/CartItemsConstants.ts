@@ -34,11 +34,11 @@ export class CartItemsConstants {
   });
 
   // Méthodes de validation
-  public static validateCreate(data: unknown) {
+  public static validateCreateCartItems(data: unknown) {
     return CartItemsConstants.CREATE_CART_ITEM_SCHEMA.parse(data);
   }
 
-  public static validateResponse(data: unknown) {
+  public static validateResponseCartItems(data: unknown) {
     return CartItemsConstants.RESPONSE_CART_ITEM_SCHEMA.parse(data);
   }
 }

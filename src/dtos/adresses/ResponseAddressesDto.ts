@@ -1,4 +1,5 @@
-import { AdressesConstants, type ResponseAdressesSchemaType } from '@/constants';
+import { AdressesConstants } from '@/constants';
+import type { ResponseAdressesSchemaType } from '@/constants/zod/AdressesConstants';
 import type { IAddresses } from '@/interfaces';
 
 /**
@@ -101,8 +102,8 @@ export class ResponseAddressesDto {
     return this.isDefault;
   }
 
-  public static from(addresses: IAddresses): ResponseAdressesDto {
-    return new ResponseAdressesDto({
+  public static from(addresses: IAddresses): ResponseAddressesDto {
+    return new ResponseAddressesDto({
       id: addresses.getId().toString(),
       userId: addresses.getUserId(),
       type: addresses.getType(),
