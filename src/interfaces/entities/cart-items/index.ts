@@ -1,1 +1,1 @@
-export * from "@/interfaces/entities/cart-items/ICartItem";
+export * from "@/interfaces/entities/cart-items/ICartItems";
