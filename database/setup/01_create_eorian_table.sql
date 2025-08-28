@@ -1,3 +1,4 @@
+-- Active: 1753172326626@@127.0.0.1@5432@eorian_fr_db
 -- =====================================================
 -- EXTENSIONS ESSENTIELLES
 -- =====================================================
@@ -259,7 +260,7 @@ CREATE TABLE IF NOT EXISTS user_sessions (
     user_id INTEGER NOT NULL,
     refresh_token TEXT NOT NULL UNIQUE,
     -- === IDENTIFICATION DEVICE ===
-    device_info TEXT,                                     -- Infos device complètes et flexibles
+    device_info JSONB,                                     -- Infos device complètes et flexibles
     ip_address INET,                                       -- IP pour sécurité/audit
     -- === GESTION SESSION ===
     expires_at TIMESTAMP NOT NULL,
