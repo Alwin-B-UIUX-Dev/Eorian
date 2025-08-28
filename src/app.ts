@@ -1,3 +1,17 @@
+/**
+ * Fichier: src/app.ts
+ * Rôle: Configurer et préparer l’application Express (sans la démarrer).
+ *
+ * En clair, ce fichier :
+ * - crée une instance d’Express ;
+ * - installe les middlewares utiles (sécurité avec helmet, cookies, JSON/urlencoded, CORS) ;
+ * - ajoute toutes les routes de l’application via RouteFactory ;
+ * - met en place la gestion globale des erreurs (ErrorHandler) ;
+ * - journalise l’environnement actif (NODE_ENV) ;
+ * - expose l’instance Express (getApp) pour qu’un autre fichier (ex: server.ts) puisse lancer l’écoute du port.
+ */
+
+
 // src/app.ts
 import cookieParser from 'cookie-parser';
 import cors from 'cors';

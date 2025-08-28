@@ -1,3 +1,17 @@
+/**
+ * Fichier: src/server.ts
+ * Rôle: Démarrer le serveur HTTP et gérer son cycle de vie.
+ *
+ * Ce que fait ce fichier :
+ * - charge les variables d’environnement via dotenv (en fonction de NODE_ENV -> .env.{environnement}) ;
+ * - lit la config de base (PORT, HOST, TIMEZONE, NODE_ENV) ;
+ * - crée l’application Express à partir de App (déjà configurée dans app.ts) ;
+ * - lance l’écoute HTTP (app.listen) avec un logging clair des infos utiles (URL, port, env, horodatage) ;
+ * - adapte le démarrage selon l’environnement (dev: liens rapides en console, prod: logs propres) ;
+ * - gère l’arrêt propre du processus (SIGINT/SIGTERM) avec des logs de fermeture.
+ */
+
+
 // src/server.ts
 import dotenv from 'dotenv';
 import { App } from '@/app';

@@ -196,3 +196,5 @@ ISC License - voir le fichier LICENSE pour plus de détails.
 **Développé par Wisepanda.fr**
 
 Pour plus d'informations, consultez la documentation complète.
+
+```
