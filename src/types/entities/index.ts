@@ -7,6 +7,9 @@ export type * from '@/types/entities/user/index';
 export * from '@/types/entities/orders/index'
 export * from '@/types/entities/product-images/index'
 export * from '@/types/entities/tax-rates/index'
+export * from '@/types/entities/user-payment-methods/index'
+export * from '@/types/entities/user-profiles/index'
+export * from '@/types/entities/user-roles/index'
 
 // exemple
 export * from '@/types/entities/'
