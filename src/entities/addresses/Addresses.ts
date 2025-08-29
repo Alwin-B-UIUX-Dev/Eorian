@@ -3,24 +3,22 @@ import type { IAddressesData } from '@/types';
 import { BaseEntity } from '../BaseEntity';
 
 export class Addresses extends BaseEntity implements IAddresses {
-  private userId: string;
-  private type: string;
+  private userId: number;
   private firstName: string;
   private lastName: string;
-  private company: string;
+  private company: string | null;
   private phone: string;
   private addressLine1: string;
-  private addressLine2: string;
+  private addressLine2: string | null;
   private city: string;
   private postalCode: string;
-  private stateRegion: string;
+  private stateRegion: string | null;
   private country: string;
   private isDefault: boolean;
 
   constructor(data: IAddressesData) {
-    super(data, 'userId');
+    super(data, 'addressId');
     this.userId = data.userId;
-    this.type = data.type;
     this.firstName = data.firstName;
     this.lastName = data.lastName;
     this.company = data.company;
@@ -34,143 +32,108 @@ export class Addresses extends BaseEntity implements IAddresses {
     this.isDefault = data.isDefault;
   }
 
-  // === GETTERS COMPLETS ===
-  public getUserId(): string {
+  // === GETTERS ===
+  public getUserId(): number {
     return this.userId;
   }
-
-  public getType(): string {
-    return this.type;
-  }
-
   public getFirstName(): string {
     return this.firstName;
   }
-
   public getLastName(): string {
     return this.lastName;
   }
-
-  public getCompany(): string {
+  public getCompany(): string | null {
     return this.company;
   }
-
   public getPhone(): string {
     return this.phone;
   }
-
   public getAddressLine1(): string {
     return this.addressLine1;
   }
-
-  public getAddressLine2(): string {
+  public getAddressLine2(): string | null {
     return this.addressLine2;
   }
-
   public getCity(): string {
     return this.city;
   }
-
   public getPostalCode(): string {
     return this.postalCode;
   }
-
-  public getStateRegion(): string {
+  public getStateRegion(): string | null {
     return this.stateRegion;
   }
-
   public getCountry(): string {
     return this.country;
   }
-
   public getIsDefault(): boolean {
     return this.isDefault;
   }
 
-  // === SETTERS COMPLETS ===
-
-  public setUserId(userId: string): this {
+  // === SETTERS ===
+  public setUserId(userId: number): this {
     this.userId = userId;
     this.updateTimestamp();
     return this;
   }
-
-  public setType(type: string): this {
-    this.type = type;
-    this.updateTimestamp();
-    return this;
-  }
-
   public setFirstName(firstName: string): this {
     this.firstName = firstName;
     this.updateTimestamp();
     return this;
   }
-
   public setLastName(lastName: string): this {
     this.lastName = lastName;
     this.updateTimestamp();
     return this;
   }
-
-  public setCompany(company: string): this {
+  public setCompany(company: string | null): this {
     this.company = company;
     this.updateTimestamp();
     return this;
   }
-
   public setPhone(phone: string): this {
     this.phone = phone;
     this.updateTimestamp();
     return this;
   }
-
   public setAddressLine1(addressLine1: string): this {
     this.addressLine1 = addressLine1;
     this.updateTimestamp();
     return this;
   }
-
-  public setAddressLine2(addressLine2: string): this {
+  public setAddressLine2(addressLine2: string | null): this {
     this.addressLine2 = addressLine2;
     this.updateTimestamp();
     return this;
   }
-
   public setCity(city: string): this {
     this.city = city;
     this.updateTimestamp();
     return this;
   }
-
   public setPostalCode(postalCode: string): this {
     this.postalCode = postalCode;
     this.updateTimestamp();
     return this;
   }
-
-  public setStateRegion(stateRegion: string): this {
+  public setStateRegion(stateRegion: string | null): this {
     this.stateRegion = stateRegion;
     this.updateTimestamp();
     return this;
   }
-
   public setCountry(country: string): this {
     this.country = country;
     this.updateTimestamp();
     return this;
   }
-
   public setIsDefault(isDefault: boolean): this {
     this.isDefault = isDefault;
     this.updateTimestamp();
     return this;
   }
-
   protected getEntityData(): Record<string, unknown> {
     return {
       userId: this.userId,
-      type: this.type,
       firstName: this.firstName,
       lastName: this.lastName,
       company: this.company,
