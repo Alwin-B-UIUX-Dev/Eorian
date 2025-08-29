@@ -1,6 +1,7 @@
 import type { CreateCartItemsDto } from '@/dtos';
 import type { ICartItems, ICartItemsRepository, ICartItemsService } from '@/interfaces';
-import type { CreateCartItemsData, WithoutSystemFieldsType } from '@/types';
+import type { WithoutSystemFieldsType } from '@/types';
+import type { CreateCartItemsData } from '@/types/entities/cart-items/ICartItemsData';
 
 export class CartItemsService implements ICartItemsService {
   constructor(private readonly CartItemsRepository: ICartItemsRepository) {}

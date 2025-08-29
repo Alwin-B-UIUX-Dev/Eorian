@@ -1,5 +1,10 @@
 export type * from '@/types/entities/addresses/index';
 export type * from '@/types/entities/BaseType';
-export type { IBaseEntityData } from '@/types/entities/IBaseEntityData';
+export type * from '@/types/entities/IBaseEntityData';
+export * from '@/types/entities/order-items/index';
 export * from '@/types/entities/product/index';
 export type * from '@/types/entities/user/index';
+export * from '@/types/entities/orders/index'
+
+// exemple
+export * from '@/types/entities/'

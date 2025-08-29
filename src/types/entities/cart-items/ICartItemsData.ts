@@ -2,10 +2,10 @@ import type { PartialWithoutSystemFieldsType, WithoutSystemFieldsType } from '..
 import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface ICartItemsData extends IBaseEntityData {
-  userId: string;
-  productId: string;
-  quantity: string;
-  addedAt: string;
+  userId: number;
+  productId: number;
+  quantity: number;
+  addedAt: Date;
 }
 
 export type CreateCartItemsData = WithoutSystemFieldsType<ICartItemsData>;

@@ -1,1 +1,1 @@
-export { IAddressesData } from '@/types/entities/addresses/IAddressesData';
+export * from '@/types/entities/addresses/IAddressesData';

@@ -5,17 +5,16 @@ import type {
 } from '@/types';
 
 export interface IAddressesData extends IBaseEntityData {
-  userId: string;
-  type: string;
+  userId: number;
   firstName: string;
   lastName: string;
-  company: string;
+  company: string | null;
   phone: string;
   addressLine1: string;
-  addressLine2: string;
+  addressLine2: string | null;
   city: string;
   postalCode: string;
-  stateRegion: string;
+  stateRegion: string | null;
   country: string;
   isDefault: boolean;
 }

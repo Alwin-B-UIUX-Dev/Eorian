@@ -1,2 +1,1 @@
-export { ICartItemsData } from '@/types/entities/cart_items/ICartItemsData'
-
+export * from '@/types/entities/cart-items/ICartItemsData';
