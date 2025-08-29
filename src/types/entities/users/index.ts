@@ -1,1 +1,1 @@
-export * from '@/types/entities/users/index';
+export * from '@/types/entities/users/IUsersData';
