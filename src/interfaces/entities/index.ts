@@ -8,4 +8,5 @@ export * from '@/interfaces/entities/product-images/index';
 export * from '@/interfaces/entities/tax-rates/index';
 export * from '@/interfaces/entities/user-profiles/index';
 export * from '@/interfaces/entities/user-roles/index';
+export * from '@/interfaces/entities/user-sessions/index';
 export * from '@/interfaces/entities/users/index';

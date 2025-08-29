@@ -1,5 +1,5 @@
+import type { IBaseEntityData } from '@/types';
 import type { PartialWithoutSystemFieldsType, WithoutSystemFieldsType } from '../BaseType';
-import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface IUserSessionsData extends IBaseEntityData {
   user_id: number;

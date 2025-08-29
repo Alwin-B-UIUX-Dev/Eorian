@@ -1,1 +1,1 @@
-export * from '@/types/entities/user-sessions/index';
+export * from '@/types/entities/user-sessions/IUserSessionsData';

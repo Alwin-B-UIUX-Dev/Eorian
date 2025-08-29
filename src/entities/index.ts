@@ -9,3 +9,4 @@ export * from '@/entities/tax-rates/index';
 export * from '@/entities/user-payment-methods/index';
 export * from '@/entities/user-profiles/index';
 export * from '@/entities/user-roles/index';
+export * from '@/entities/user-sessions/index';

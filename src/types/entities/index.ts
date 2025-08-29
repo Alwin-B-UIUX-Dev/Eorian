@@ -11,4 +11,5 @@ export * from '@/types/entities/user-payment-methods/index';
 export * from '@/types/entities/user-profiles/index';
 export * from '@/types/entities/user-roles/index';
 export * from '@/types/entities/user-sessions/index';
+export * from '@/types/entities/user-sessions/index';
 export * from '@/types/entities/users/index';

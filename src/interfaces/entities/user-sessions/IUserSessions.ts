@@ -1,5 +1,5 @@
 import type { IEntity } from '@/interfaces';
-export interface ICartItems extends IEntity {
+export interface IUserSessions extends IEntity {
   // === GETTERS COMPLETS ===
   getUserId(): number;
   getRefreshToken(): string;
