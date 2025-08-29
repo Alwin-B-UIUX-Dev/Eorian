@@ -7,7 +7,7 @@ export interface IUserSessionRepository {
     deviceInfo?: IDeviceInfoData,
     ipAddress?: string
   ): Promise<void>;
-  findValidSessionByToken(refreshToken: string): Promise<IUserSessionData | null>;
+  findValidSessionByToken(refreshToken: string): Promise<IUserSessionData>;
 
   revokeSession(refreshToken: string): Promise<void>;
   revokeAllUserSessions(userId: string): Promise<void>;

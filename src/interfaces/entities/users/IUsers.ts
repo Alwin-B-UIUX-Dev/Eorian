@@ -10,8 +10,8 @@ export interface IUsers extends IEntity {
   getIsConnected(): boolean;
   getEmailVerified(): boolean;
   getGdprConsent(): boolean;
-  getGdprConsentDate(): Date | null;
-  getLastLoginAt(): Date | null;
+  getGdprConsentDate(): Date;
+  getLastLoginAt(): Date;
   // === SETTERS COMPLETS ===
   setUsername(username: string): this;
   setEmail(email: string): this;
@@ -21,6 +21,6 @@ export interface IUsers extends IEntity {
   setIsConnected(isConnected: boolean): this;
   setEmailVerified(emailVerified: boolean): this;
   setGdprConsent(gdprConsent: boolean): this;
-  setGdprConsentDate(gdprConsentDate: Date | null): this;
-  setLastLoginAt(lastLoginAt: Date | null): this;
+  setGdprConsentDate(gdprConsentDate: Date): this;
+  setLastLoginAt(lastLoginAt: Date): this;
 }

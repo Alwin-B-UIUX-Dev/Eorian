@@ -3,16 +3,16 @@ import type { IEntity } from '@/interfaces';
 export interface IUserProfiles extends IEntity {
   // === GETTERS COMPLETS ===
   getUserId(): number;
-  getFirstName(): string | null;
-  getLastName(): string | null;
-  getPhone(): string | null;
-  getBirthDate(): Date | null;
-  getAvatarUrl(): string | null;
+  getFirstName(): string;
+  getLastName(): string;
+  getPhone(): string;
+  getBirthDate(): Date;
+  getAvatarUrl(): string;
   // === SETTERS COMPLETS ===
   setUserId(userId: number): this;
-  setFirstName(firstName: string | null): this;
-  setLastName(lastName: string | null): this;
-  setPhone(phone: string | null): this;
-  setBirthDate(birthDate: Date | null): this;
-  setAvatarUrl(avatarUrl: string | null): this;
+  setFirstName(firstName: string): this;
+  setLastName(lastName: string): this;
+  setPhone(phone: string): this;
+  setBirthDate(birthDate: Date): this;
+  setAvatarUrl(avatarUrl: string): this;
 }

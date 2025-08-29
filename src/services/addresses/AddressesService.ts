@@ -32,7 +32,7 @@ export class AdressesService implements IAdressesService {
   public async findAll(limit?: number, offset?: number): Promise<IAddresses[]> {
     throw new Error('Method not implemented.');
   }
-  public async findOne(id: string): Promise<IAddresses | null> {
+  public async findOne(id: string): Promise<IAddresses> {
     throw new Error('Method not implemented.');
   }
   public async update(

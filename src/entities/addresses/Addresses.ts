@@ -6,13 +6,13 @@ export class Addresses extends BaseEntity implements IAddresses {
   private userId: number;
   private firstName: string;
   private lastName: string;
-  private company: string | null;
+  private company: string;
   private phone: string;
   private addressLine1: string;
-  private addressLine2: string | null;
+  private addressLine2: string;
   private city: string;
   private postalCode: string;
-  private stateRegion: string | null;
+  private stateRegion: string;
   private country: string;
   private isDefault: boolean;
 
@@ -42,7 +42,7 @@ export class Addresses extends BaseEntity implements IAddresses {
   public getLastName(): string {
     return this.lastName;
   }
-  public getCompany(): string | null {
+  public getCompany(): string {
     return this.company;
   }
   public getPhone(): string {
@@ -51,7 +51,7 @@ export class Addresses extends BaseEntity implements IAddresses {
   public getAddressLine1(): string {
     return this.addressLine1;
   }
-  public getAddressLine2(): string | null {
+  public getAddressLine2(): string {
     return this.addressLine2;
   }
   public getCity(): string {
@@ -60,7 +60,7 @@ export class Addresses extends BaseEntity implements IAddresses {
   public getPostalCode(): string {
     return this.postalCode;
   }
-  public getStateRegion(): string | null {
+  public getStateRegion(): string {
     return this.stateRegion;
   }
   public getCountry(): string {
@@ -86,7 +86,7 @@ export class Addresses extends BaseEntity implements IAddresses {
     this.updateTimestamp();
     return this;
   }
-  public setCompany(company: string | null): this {
+  public setCompany(company: string): this {
     this.company = company;
     this.updateTimestamp();
     return this;
@@ -101,7 +101,7 @@ export class Addresses extends BaseEntity implements IAddresses {
     this.updateTimestamp();
     return this;
   }
-  public setAddressLine2(addressLine2: string | null): this {
+  public setAddressLine2(addressLine2: string): this {
     this.addressLine2 = addressLine2;
     this.updateTimestamp();
     return this;
@@ -116,7 +116,7 @@ export class Addresses extends BaseEntity implements IAddresses {
     this.updateTimestamp();
     return this;
   }
-  public setStateRegion(stateRegion: string | null): this {
+  public setStateRegion(stateRegion: string): this {
     this.stateRegion = stateRegion;
     this.updateTimestamp();
     return this;

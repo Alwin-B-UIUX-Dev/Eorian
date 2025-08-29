@@ -10,8 +10,8 @@ export interface IUsersData extends IBaseEntityData {
   is_connected: boolean;
   email_verified: boolean;
   gdpr_consent: boolean;
-  gdpr_consent_date: Date | null;
-  last_login_at: Date | null;
+  gdpr_consent_date: Date;
+  last_login_at: Date;
 }
 
 export type CreateUsersData = WithoutSystemFieldsType<IUsersData>;

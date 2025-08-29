@@ -3,10 +3,10 @@ import type { IOrderItemsData } from '@/types';
 import { BaseEntity } from '../BaseEntity';
 
 export class OrderItems extends BaseEntity implements IorderItems {
-  private productId: number | null;
+  private productId: number ;
   private orderId: number;
   private productName: string;
-  private productSku: string | null;
+  private productSku: string ;
   private unitPriceCents: number;
   private taxRate: number;
   private quantity: number;
@@ -28,7 +28,7 @@ export class OrderItems extends BaseEntity implements IorderItems {
     this.lineTotalCents = data.lineTotalCents;
   }
   // === GETTERS ===
-  public getProductId(): number | null {
+  public getProductId(): number  {
     return this.productId;
   }
   public getOrderId(): number {
@@ -37,7 +37,7 @@ export class OrderItems extends BaseEntity implements IorderItems {
   public getProductName(): string {
     return this.productName;
   }
-  public getProductSku(): string | null {
+  public getProductSku(): string  {
     return this.productSku;
   }
   public getUnitPriceCents(): number {
@@ -60,7 +60,7 @@ export class OrderItems extends BaseEntity implements IorderItems {
   }
 
   // === SETTERS ===
-  public setProductId(productId: number | null): this {
+  public setProductId(productId: number ): this {
     this.productId = productId;
     this.updateTimestamp();
     return this;
@@ -75,7 +75,7 @@ export class OrderItems extends BaseEntity implements IorderItems {
     this.updateTimestamp();
     return this;
   }
-  public setProductSku(productSku: string | null): this {
+  public setProductSku(productSku: string ): this {
     this.productSku = productSku;
     this.updateTimestamp();
     return this;

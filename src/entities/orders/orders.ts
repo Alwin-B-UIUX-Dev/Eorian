@@ -5,22 +5,22 @@ import { BaseEntity } from '../BaseEntity';
 export class Orders extends BaseEntity implements IOrders {
   private orderNumber: string;
   private userId: number;
-  private shippingAddressId: number | null;
-  private billingAddressId: number | null;
+  private shippingAddressId: number;
+  private billingAddressId: number;
   private status: string;
   private subtotalCents: number;
   private taxAmountCents: number;
   private shippingCents: number;
   private totalCents: number;
   private paymentStatus: string;
-  private paymentMethod: string | null;
-  private paymentReference: string | null;
-  private shippingMethod: string | null;
-  private trackingNumber: string | null;
-  private customerNotes: string | null;
-  private adminNotes: string | null;
-  private shippedAt: Date | null;
-  private deliveredAt: Date | null;
+  private paymentMethod: string;
+  private paymentReference: string;
+  private shippingMethod: string;
+  private trackingNumber: string;
+  private customerNotes: string;
+  private adminNotes: string;
+  private shippedAt: Date;
+  private deliveredAt: Date;
 
   constructor(data: IOrdersData) {
     super(data, 'orderId');
@@ -52,10 +52,10 @@ export class Orders extends BaseEntity implements IOrders {
   public getUserId(): number {
     return this.userId;
   }
-  public getShippingAddressId(): number | null {
+  public getShippingAddressId(): number {
     return this.shippingAddressId;
   }
-  public getBillingAddressId(): number | null {
+  public getBillingAddressId(): number {
     return this.billingAddressId;
   }
   public getStatus(): string {
@@ -76,28 +76,28 @@ export class Orders extends BaseEntity implements IOrders {
   public getPaymentStatus(): string {
     return this.paymentStatus;
   }
-  public getPaymentMethod(): string | null {
+  public getPaymentMethod(): string {
     return this.paymentMethod;
   }
-  public getPaymentReference(): string | null {
+  public getPaymentReference(): string {
     return this.paymentReference;
   }
-  public getShippingMethod(): string | null {
+  public getShippingMethod(): string {
     return this.shippingMethod;
   }
-  public getTrackingNumber(): string | null {
+  public getTrackingNumber(): string {
     return this.trackingNumber;
   }
-  public getCustomerNotes(): string | null {
+  public getCustomerNotes(): string {
     return this.customerNotes;
   }
-  public getAdminNotes(): string | null {
+  public getAdminNotes(): string {
     return this.adminNotes;
   }
-  public getShippedAt(): Date | null {
+  public getShippedAt(): Date {
     return this.shippedAt;
   }
-  public getDeliveredAt(): Date | null {
+  public getDeliveredAt(): Date {
     return this.deliveredAt;
   }
 
@@ -113,12 +113,12 @@ export class Orders extends BaseEntity implements IOrders {
     this.updateTimestamp();
     return this;
   }
-  public setShippingAddressId(shippingAddressId: number | null): this {
+  public setShippingAddressId(shippingAddressId: number): this {
     this.shippingAddressId = shippingAddressId;
     this.updateTimestamp();
     return this;
   }
-  public setBillingAddressId(billingAddressId: number | null): this {
+  public setBillingAddressId(billingAddressId: number): this {
     this.billingAddressId = billingAddressId;
     this.updateTimestamp();
     return this;
@@ -153,42 +153,42 @@ export class Orders extends BaseEntity implements IOrders {
     this.updateTimestamp();
     return this;
   }
-  public setPaymentMethod(paymentMethod: string | null): this {
+  public setPaymentMethod(paymentMethod: string): this {
     this.paymentMethod = paymentMethod;
     this.updateTimestamp();
     return this;
   }
-  public setPaymentReference(paymentReference: string | null): this {
+  public setPaymentReference(paymentReference: string): this {
     this.paymentReference = paymentReference;
     this.updateTimestamp();
     return this;
   }
-  public setShippingMethod(shippingMethod: string | null): this {
+  public setShippingMethod(shippingMethod: string): this {
     this.shippingMethod = shippingMethod;
     this.updateTimestamp();
     return this;
   }
-  public setTrackingNumber(trackingNumber: string | null): this {
+  public setTrackingNumber(trackingNumber: string): this {
     this.trackingNumber = trackingNumber;
     this.updateTimestamp();
     return this;
   }
-  public setCustomerNotes(customerNotes: string | null): this {
+  public setCustomerNotes(customerNotes: string): this {
     this.customerNotes = customerNotes;
     this.updateTimestamp();
     return this;
   }
-  public setAdminNotes(adminNotes: string | null): this {
+  public setAdminNotes(adminNotes: string): this {
     this.adminNotes = adminNotes;
     this.updateTimestamp();
     return this;
   }
-  public setShippedAt(shippedAt: Date | null): this {
+  public setShippedAt(shippedAt: Date): this {
     this.shippedAt = shippedAt;
     this.updateTimestamp();
     return this;
   }
-  public setDeliveredAt(deliveredAt: Date | null): this {
+  public setDeliveredAt(deliveredAt: Date): this {
     this.deliveredAt = deliveredAt;
     this.updateTimestamp();
     return this;

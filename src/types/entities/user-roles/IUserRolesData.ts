@@ -3,7 +3,7 @@ import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface IUserRolesData extends IBaseEntityData {
   role_name: string;
-  description: string | null;
+  description: string;
 }
 
 export type CreateUserRolesData = WithoutSystemFieldsType<IUserRolesData>;

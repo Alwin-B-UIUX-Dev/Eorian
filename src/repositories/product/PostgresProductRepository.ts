@@ -47,7 +47,7 @@ export class PostgresProductRepository implements IProductRepository {
     });
   }
 
-  public async findById(id: string): Promise<IProduct | null> {
+  public async findById(id: string): Promise<IProduct> {
     throw new Error('not implemented');
   }
 

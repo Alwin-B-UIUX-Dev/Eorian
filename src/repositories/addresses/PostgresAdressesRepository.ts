@@ -57,7 +57,7 @@ export class PostgresAdressesRepository implements IAdressesRepository {
     });
   }
 
-  public async findById(id: string): Promise<IAddresses | null> {
+  public async findById(id: string): Promise<IAddresses> {
     throw new Error('not implemented');
   }
 

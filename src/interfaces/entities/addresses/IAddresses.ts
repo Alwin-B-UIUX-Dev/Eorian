@@ -5,13 +5,13 @@ export interface IAddresses extends IEntity {
   getUserId(): number;
   getFirstName(): string;
   getLastName(): string;
-  getCompany(): string | null;
+  getCompany(): string;
   getPhone(): string;
   getAddressLine1(): string;
-  getAddressLine2(): string | null;
+  getAddressLine2(): string;
   getCity(): string;
   getPostalCode(): string;
-  getStateRegion(): string | null;
+  getStateRegion(): string;
   getCountry(): string;
   getIsDefault(): boolean;
 
@@ -19,13 +19,13 @@ export interface IAddresses extends IEntity {
   setUserId(userId: number): this;
   setFirstName(firstName: string): this;
   setLastName(lastName: string): this;
-  setCompany(company: string | null): this;
+  setCompany(company: string): this;
   setPhone(phone: string): this;
   setAddressLine1(addressLine1: string): this;
-  setAddressLine2(addressLine2: string | null): this;
+  setAddressLine2(addressLine2: string): this;
   setCity(city: string): this;
   setPostalCode(postalCode: string): this;
-  setStateRegion(stateRegion: string | null): this;
+  setStateRegion(stateRegion: string): this;
   setCountry(country: string): this;
   setIsDefault(isDefault: boolean): this;
   // === MÉTHODES MÉTIER ===

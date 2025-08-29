@@ -4,22 +4,22 @@ import type { IBaseEntityData } from '../IBaseEntityData';
 export interface IOrdersData extends IBaseEntityData {
   orderNumber: string;
   userId: number;
-  shippingAddressId: number | null;
-  billingAddressId: number | null;
+  shippingAddressId: number;
+  billingAddressId: number;
   status: string;
   subtotalCents: number;
   taxAmountCents: number;
   shippingCents: number;
   totalCents: number;
   paymentStatus: string;
-  paymentMethod: string | null;
-  paymentReference: string | null;
-  shippingMethod: string | null;
-  trackingNumber: string | null;
-  customerNotes: string | null;
-  adminNotes: string | null;
-  shippedAt: Date | null;
-  deliveredAt: Date | null;
+  paymentMethod: string;
+  paymentReference: string;
+  shippingMethod: string;
+  trackingNumber: string;
+  customerNotes: string;
+  adminNotes: string;
+  shippedAt: Date;
+  deliveredAt: Date;
 }
 
 export type CreateOrdersData = WithoutSystemFieldsType<IOrdersData>;

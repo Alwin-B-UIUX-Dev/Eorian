@@ -35,15 +35,15 @@ export class PostgresCartItemsRepository implements IcartItemsRepository {
     });
   }
 
-  public async findById(id: string): Promise<ICartItems | null> {
+  public async findById(id: string): Promise<ICartItems> {
     throw new Error('not implemented');
   }
 
-  public async findAll(limit?: number, offset?: number): Promise<ICartItems []> {
+  public async findAll(limit?: number, offset?: number): Promise<ICartItems[]> {
     throw new Error('not implemented');
   }
 
-  public async update(id: string, data: Partial<ICartItemsData>): Promise<ICartItems > {
+  public async update(id: string, data: Partial<ICartItemsData>): Promise<ICartItems> {
     throw new Error('not implemented');
   }
 

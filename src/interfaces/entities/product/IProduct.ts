@@ -4,31 +4,31 @@ export interface IProduct extends IEntity {
   // === GETTERS COMPLETS ===
   getName(): string;
   getSlug(): string;
-  getSku(): string | null;
-  getShortDescription(): string | null;
-  getDescription(): string | null;
+  getSku(): string;
+  getShortDescription(): string;
+  getDescription(): string;
   getPriceCents(): number;
   getTaxRateId(): number;
   getStockQuantity(): number;
   getLowStockThreshold(): number;
   getManageStock(): boolean;
-  getMetaTitle(): string | null;
-  getMetaDescription(): string | null;
+  getMetaTitle(): string;
+  getMetaDescription(): string;
   getIsActive(): boolean;
   getCreatedBy(): number;
   // === SETTERS COMPLETS ===
   setName(name: string): this;
   setSlug(slug: string): this;
-  setSku(sku: string | null): this;
-  setShortDescription(short_description: string | null): this;
-  setDescription(description: string | null): this;
+  setSku(sku: string): this;
+  setShortDescription(short_description: string): this;
+  setDescription(description: string): this;
   setPriceCents(price_cents: number): this;
   setTaxRateId(tax_rate_id: number): this;
   setStockQuantity(stock_quantity: number): this;
   setLowStockThreshold(low_stock_threshold: number): this;
   setManageStock(manage_stock: boolean): this;
-  setMetaTitle(meta_title: string | null): this;
-  setMetaDescription(meta_description: string | null): this;
+  setMetaTitle(meta_title: string): this;
+  setMetaDescription(meta_description: string): this;
   setIsActive(is_active: boolean): this;
   setCreatedBy(created_by: number): this;
 }

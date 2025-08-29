@@ -17,13 +17,13 @@ export class CartItemsService implements ICartItemsService {
     } catch (error) {
       console.error('🚨 ERREUR TECHNIQUE DANS CartItems create():', error);
     }
-    throw new Error("bug")
+    throw new Error('bug');
   }
 
   public async findAll(limit?: number, offset?: number): Promise<ICartItems[]> {
     throw new Error('Method not implemented.');
   }
-  public async findOne(id: string): Promise<ICartItems | null> {
+  public async findOne(id: string): Promise<ICartItems> {
     throw new Error('Method not implemented.');
   }
   public async update(

@@ -7,7 +7,7 @@ export interface ICartItems extends IEntity {
   getIpAddress(): string;
   getExpiresAt(): Date;
   getIsActive(): boolean;
-  getRevokedAt(): Date | null;
+  getRevokedAt(): Date;
   // === SETTERS COMPLETS ===
   setUserId(userId: number): this;
   setRefreshToken(refreshToken: string): this;
@@ -15,5 +15,5 @@ export interface ICartItems extends IEntity {
   setIpAddress(ipAddress: string): this;
   setExpiresAt(expiresAt: Date): this;
   setIsActive(isActive: boolean): this;
-  setRevokedAt(revokedAt: Date | null): this;
+  setRevokedAt(revokedAt: Date): this;
 }

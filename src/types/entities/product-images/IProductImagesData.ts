@@ -4,7 +4,7 @@ import type { IBaseEntityData } from '../IBaseEntityData';
 export interface IProductImagesData extends IBaseEntityData {
   productId: number;
   imageUrl: string;
-  altText: string | null;
+  altText: string;
   isPrimary: boolean;
   sortOrder: number;
   uploadedBy: number;

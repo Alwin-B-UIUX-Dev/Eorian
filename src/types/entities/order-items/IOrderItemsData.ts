@@ -2,10 +2,10 @@ import type { PartialWithoutSystemFieldsType, WithoutSystemFieldsType } from '..
 import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface IOrderItemsData extends IBaseEntityData {
-  productId: number | null;
+  productId: number;
   orderId: number;
   productName: string;
-  productSku: string | null;
+  productSku: string;
   unitPriceCents: number;
   taxRate: number;
   quantity: number;

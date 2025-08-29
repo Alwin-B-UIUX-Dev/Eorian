@@ -7,10 +7,10 @@ export interface IUserPaymentMethods extends IEntity {
   getCardLast4(): string;
   getCardBrand(): string;
   getCardType(): string;
-  getCardholderName(): string | null;
-  getExpiresMonth(): number | null;
-  getExpiresYear(): number | null;
-  getNickname(): string | null;
+  getCardholderName(): string;
+  getExpiresMonth(): number;
+  getExpiresYear(): number;
+  getNickname(): string;
   getIsDefault(): boolean;
   getIsActive(): boolean;
   // === SETTERS COMPLETS ===
@@ -19,10 +19,10 @@ export interface IUserPaymentMethods extends IEntity {
   setCardLast4(cardLast4: string): this;
   setCardBrand(cardBrand: string): this;
   setCardType(cardType: string): this;
-  setCardholderName(cardholderName: string | null): this;
-  setExpiresMonth(expiresMonth: number | null): this;
-  setExpiresYear(expiresYear: number | null): this;
-  setNickname(nickname: string | null): this;
+  setCardholderName(cardholderName: string): this;
+  setExpiresMonth(expiresMonth: number): this;
+  setExpiresYear(expiresYear: number): this;
+  setNickname(nickname: string): this;
   setIsDefault(isDefault: boolean): this;
   setIsActive(isActive: boolean): this;
 }

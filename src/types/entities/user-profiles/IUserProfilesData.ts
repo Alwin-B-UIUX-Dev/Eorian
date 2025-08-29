@@ -3,11 +3,11 @@ import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface IUserProfilesData extends IBaseEntityData {
   user_id: number;
-  first_name: string | null;
-  last_name: string | null;
-  phone: string | null;
-  birth_date: Date | null;
-  avatar_url: string | null;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  birth_date: Date;
+  avatar_url: string;
 }
 
 export type CreateUserProfilesData = WithoutSystemFieldsType<IUserProfilesData>;

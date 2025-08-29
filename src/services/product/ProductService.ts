@@ -27,13 +27,13 @@ export class ProductService implements IProductService {
     } catch (error) {
       console.error('🚨 ERREUR TECHNIQUE DANS product create():', error);
     }
-    throw new Error("bug")
+    throw new Error('bug');
   }
 
   public async findAll(limit?: number, offset?: number): Promise<IProduct[]> {
     throw new Error('Method not implemented.');
   }
-  public async findOne(id: string): Promise<IProduct | null> {
+  public async findOne(id: string): Promise<IProduct> {
     throw new Error('Method not implemented.');
   }
   public async update(

@@ -121,17 +121,16 @@ export class PostgresUserRepository implements IUserRepository {
   // ========================
   // READ (depuis views)
   // ========================
-  public async findById(id: string): Promise<IUser | null> {
+  public async findById(id: string): Promise<IUser> {
     try {
       this.logger.info('Attempting to find user by id', {
         operation: UserLogOperations.FIND_USER_BY_ID,
         id
       });
 
-      const result: IUserData | null = await this.db.oneOrNone(
-        UserQueries.SELECT_USER_PROFILE_COMPLETE,
-        [id]
-      );
+      const result: IUserData = await this.db.oneOrNone(UserQueries.SELECT_USER_PROFILE_COMPLETE, [
+        id
+      ]);
 
       const found: boolean = result !== null;
       this.logger.info(`User search by id completed`, {
@@ -204,14 +203,14 @@ export class PostgresUserRepository implements IUserRepository {
   // ===================================
   // OPÉRATIONS DE RECHERCHE
   // ===================================
-  public async findByEmailOrUsername(identifier: string): Promise<IUser | null> {
+  public async findByEmailOrUsername(identifier: string): Promise<IUser> {
     try {
       this.logger.info('Attempting to find user by email or username', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
         identifier: Masker.maskIdentifier(identifier)
       });
 
-      const result: IUserData | null = await this.db.oneOrNone(
+      const result: IUserData = await this.db.oneOrNone(
         UserQueries.SELECT_USER_BY_EMAIL_OR_USERNAME,
         [identifier]
       );
@@ -236,16 +235,14 @@ export class PostgresUserRepository implements IUserRepository {
     }
   }
 
-  public async findByEmail(email: string): Promise<IUser | null> {
+  public async findByEmail(email: string): Promise<IUser> {
     try {
       this.logger.info('Attempting to find user by email', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL,
         email: Masker.maskEmail(email)
       });
 
-      const result: IUserData | null = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_EMAIL, [
-        email
-      ]);
+      const result: IUserData = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_EMAIL, [email]);
 
       const found: boolean = result !== null;
       this.logger.info(`User search by email completed`, {
@@ -266,17 +263,16 @@ export class PostgresUserRepository implements IUserRepository {
     }
   }
 
-  public async findByUsername(username: string): Promise<IUser | null> {
+  public async findByUsername(username: string): Promise<IUser> {
     try {
       this.logger.info('Attempting to find user by username', {
         operation: UserLogOperations.FIND_USER_BY_USERNAME,
         username: Masker.maskUsername(username)
       });
 
-      const result: IUserData | null = await this.db.oneOrNone(
-        UserQueries.SELECT_USER_BY_USERNAME,
-        [username]
-      );
+      const result: IUserData = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_USERNAME, [
+        username
+      ]);
 
       const found: boolean = result !== null;
       this.logger.info(`User search by username completed`, {

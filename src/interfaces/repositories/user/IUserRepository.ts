@@ -25,7 +25,7 @@ export interface IUserRepository extends IBaseRepository<IUser, IUserData> {
    *
    * @throws {DatabaseError} Si la requête échoue
    */
-  findByEmail(email: string): Promise<IUser | null>;
+  findByEmail(email: string): Promise<IUser>;
 
   /**
    * Rechercher un utilisateur par son nom d'utilisateur
@@ -35,7 +35,7 @@ export interface IUserRepository extends IBaseRepository<IUser, IUserData> {
    *
    * @throws {DatabaseError} Si la requête échoue
    */
-  findByUsername(username: string): Promise<IUser | null>;
+  findByUsername(username: string): Promise<IUser>;
 
   // ===================================
   // OPÉRATIONS D'AUTHENTIFICATION
@@ -55,7 +55,7 @@ export interface IUserRepository extends IBaseRepository<IUser, IUserData> {
    *
    * @throws {DatabaseError} Si la requête échoue
    */
-  findByEmailOrUsername(identifier: string): Promise<IUser | null>;
+  findByEmailOrUsername(identifier: string): Promise<IUser>;
 
   // ===================================
   // OPÉRATIONS TECHNIQUES

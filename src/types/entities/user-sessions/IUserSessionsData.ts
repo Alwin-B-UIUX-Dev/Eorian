@@ -8,7 +8,7 @@ export interface IUserSessionsData extends IBaseEntityData {
   ip_address: string;
   expires_at: Date;
   is_active: boolean;
-  revoked_at: Date | null;
+  revoked_at: Date;
 }
 
 export type CreateUserSessionsData = WithoutSystemFieldsType<IUserSessionsData>;

@@ -4,7 +4,7 @@ import type { IBaseEntityData } from '../IBaseEntityData';
 export interface ITaxRatesData extends IBaseEntityData {
   name: string;
   rate: number;
-  description: string | null;
+  description: string;
   is_active: boolean;
 }
 

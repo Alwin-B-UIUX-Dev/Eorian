@@ -8,13 +8,13 @@ export interface IAddressesData extends IBaseEntityData {
   userId: number;
   firstName: string;
   lastName: string;
-  company: string | null;
+  company: string;
   phone: string;
   addressLine1: string;
-  addressLine2: string | null;
+  addressLine2: string;
   city: string;
   postalCode: string;
-  stateRegion: string | null;
+  stateRegion: string;
   country: string;
   isDefault: boolean;
 }

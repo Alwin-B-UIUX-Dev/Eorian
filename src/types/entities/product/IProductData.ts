@@ -7,16 +7,16 @@ import type {
 export interface IProductData extends IBaseEntityData {
   name: string;
   slug: string;
-  sku: string | null;
-  short_description: string | null;
-  description: string | null;
+  sku: string;
+  short_description: string;
+  description: string;
   price_cents: number;
   tax_rate_id: number;
   stock_quantity: number;
   low_stock_threshold: number;
   manage_stock: boolean;
-  meta_title: string | null;
-  meta_description: string | null;
+  meta_title: string;
+  meta_description: string;
   is_active: boolean;
   created_by: number;
 }

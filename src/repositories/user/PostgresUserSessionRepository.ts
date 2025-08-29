@@ -33,7 +33,7 @@ export class PostgresUserSessionRepository implements IUserSessionRepository {
             userId,
             refreshToken,
             deviceInfo || 'unknown',
-            ipAddress || null,
+            ipAddress |,
             new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
           ]
         );
@@ -85,14 +85,14 @@ export class PostgresUserSessionRepository implements IUserSessionRepository {
     }
   }
 
-  public async findValidSessionByToken(refreshToken: string): Promise<IUserSessionData | null> {
+  public async findValidSessionByToken(refreshToken: string): Promise<IUserSessionData > {
     try {
       this.logger.info('Attempting to find valid session by token', {
         operation: 'find_valid_session_by_token',
         tokenPrefix: `${refreshToken.substring(0, 8)}***` // RGPD: Masquage
       });
 
-      const result: IUserSessionData | null = await this.db.oneOrNone<IUserSessionData>(
+      const result: IUserSessionData  = await this.db.oneOrNone<IUserSessionData>(
         `SELECT * FROM v_user_session WHERE refresh_token = $1`,
         [refreshToken]
       );

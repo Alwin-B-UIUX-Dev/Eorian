@@ -28,7 +28,7 @@ export interface IBaseRepository<T extends IEntity, TData = unknown> {
    *
    * @throws {DatabaseError} Si la requête échoue
    */
-  findById(id: string): Promise<T | null>;
+  findById(id: string): Promise<T>;
 
   /**
    * Récupérer toutes les entités avec pagination
