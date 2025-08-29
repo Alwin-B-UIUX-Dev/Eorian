@@ -8,7 +8,6 @@ export interface IProductImagesData extends IBaseEntityData {
   isPrimary: boolean;
   sortOrder: number;
   uploadedBy: number;
-  updatedAt: Date;
 }
 
 export type CreateProductImagesData = WithoutSystemFieldsType<IProductImagesData>;

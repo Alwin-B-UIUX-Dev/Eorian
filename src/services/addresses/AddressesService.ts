@@ -5,7 +5,7 @@ import type { CreateAddressesData, IAddressesData, WithoutSystemFieldsType } fro
 export class AdressesService implements IAdressesService {
   constructor(private readonly adressesRepository: IAdressesRepository) {}
 
-  public async create(createAddressesDto: CreateAddressesDto): Promise<IAddresses> {
+  public async create(createAddressesDto: CreateAddressesData): Promise<IAddresses> {
     try {
       // Etape 1 : Création de adressesData pour le repository
       const adressesData: CreateAddressesData = {

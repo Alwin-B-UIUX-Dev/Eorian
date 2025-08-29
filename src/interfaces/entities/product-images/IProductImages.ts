@@ -8,7 +8,6 @@ export interface IProductImages extends IEntity {
   getIsPrimary(): boolean;
   getSortOrder(): number;
   getUploadedBy(): number;
-  getUpdatedAt(): Date;
   // === SETTERS COMPLETS ===
   setProductId(productId: number): this;
   setImageUrl(imageUrl: string): this;
@@ -16,5 +15,4 @@ export interface IProductImages extends IEntity {
   setIsPrimary(isPrimary: boolean): this;
   setSortOrder(sortOrder: number): this;
   setUploadedBy(uploadedBy: number): this;
-  setUpdatedAt(updatedAt: Date): this;
 }
