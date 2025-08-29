@@ -1,1 +1,1 @@
-export { IAddresses } from '@/interfaces/entities/addresses/IAddresses';
+export * from '@/interfaces/entities/addresses/IAddresses';
