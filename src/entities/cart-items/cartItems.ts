@@ -1,5 +1,5 @@
 import type { ICartItems } from '@/interfaces';
-import type { ICartItemsData } from '@/types/entities/cart-items/ICartItemsData';
+import type { ICartItemsData } from '@/types';
 import { BaseEntity } from '../BaseEntity';
 
 export class CartItems extends BaseEntity implements ICartItems {

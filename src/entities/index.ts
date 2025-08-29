@@ -6,3 +6,5 @@ export * from '@/entities/orders/index';
 export * from '@/entities/product/index';
 export * from '@/entities/product-images/index';
 export * from '@/entities/tax-rates/index';
+export * from '@/entities/user-payment-methods/index';
+export * from '@/entities/user-profiles/index';
