@@ -7,18 +7,18 @@ import type {
 export interface IProductData extends IBaseEntityData {
   name: string;
   slug: string;
-  sku: string;
-  shortDescription: string;
-  description: string;
-  priceCents: string;
-  taxRateId: string;
-  stockQuantity: string;
-  lowStockThreshold: string;
-  manageStock: boolean;
-  metaTitle: string;
-  metaDescription: string;
-  isActive: boolean;
-  createdBy: string;
+  sku: string | null;
+  short_description: string | null;
+  description: string | null;
+  price_cents: number;
+  tax_rate_id: number;
+  stock_quantity: number;
+  low_stock_threshold: number;
+  manage_stock: boolean;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_active: boolean;
+  created_by: number;
 }
 
 export type CreateProductData = WithoutSystemFieldsType<IProductData>;
