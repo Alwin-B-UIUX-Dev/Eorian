@@ -2,16 +2,24 @@ import type { PartialWithoutSystemFieldsType, WithoutSystemFieldsType } from '..
 import type { IBaseEntityData } from '../IBaseEntityData';
 
 export interface IOrdersData extends IBaseEntityData {
-  productId: number | null;
-  orderId: number;
-  productName: string;
-  productSku: string | null;
-  unitPriceCents: number;
-  taxRate: number;
-  quantity: number;
-  lineSubtotalCents: number;
-  lineTaxCents: number;
-  lineTotalCents: number;
+  orderNumber: string;
+  userId: number;
+  shippingAddressId: number | null;
+  billingAddressId: number | null;
+  status: string;
+  subtotalCents: number;
+  taxAmountCents: number;
+  shippingCents: number;
+  totalCents: number;
+  paymentStatus: string;
+  paymentMethod: string | null;
+  paymentReference: string | null;
+  shippingMethod: string | null;
+  trackingNumber: string | null;
+  customerNotes: string | null;
+  adminNotes: string | null;
+  shippedAt: Date | null;
+  deliveredAt: Date | null;
 }
 
 export type CreateOrdersData = WithoutSystemFieldsType<IOrdersData>;
