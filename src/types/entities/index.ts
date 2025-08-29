@@ -5,6 +5,7 @@ export * from '@/types/entities/order-items/index';
 export * from '@/types/entities/product/index';
 export type * from '@/types/entities/user/index';
 export * from '@/types/entities/orders/index'
+export * from '@/types/entities/product-images/index'
 
 // exemple
 export * from '@/types/entities/'
