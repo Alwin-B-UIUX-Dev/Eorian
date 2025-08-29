@@ -5,3 +5,4 @@ export * from '@/interfaces/entities/order-items/index';
 export * from '@/interfaces/entities/orders/index';
 export * from '@/interfaces/entities/product/index';
 export * from '@/interfaces/entities/product-images/index';
+export * from '@/interfaces/entities/tax-rates/index';
