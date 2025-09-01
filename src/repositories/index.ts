@@ -8,3 +8,4 @@ export * from '@/repositories/user-payment-methods/index';
 export * from '@/repositories/user-profiles/index';
 export * from '@/repositories/user-roles/index';
 export * from '@/repositories/user-sessions/index';
+export * from '@/repositories/users/index';

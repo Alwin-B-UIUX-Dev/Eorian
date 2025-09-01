@@ -13,27 +13,16 @@ export class PostgresUserSessionsRepository implements IUserSessionsRepository {
       try {
         const result: { id: string } = await t.one(
           /*sql*/
-          `INSERT INTO UserSessions (order_number, user_id, shipping_address_id, billing_address_id, status, subtotal_cents, tax_amount_cents, shipping_cents, total_cents, payment_status, payment_method, payment_reference, shipping_method, tracking_number, customer_notes, admin_notes, shipped_at, delivered_at)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING id`,
+          `INSERT INTO user-sessions (user_id, refresh_token, device_info, ip_address, expires_at, is_active, revoked_at)
+          VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
           [
-            userSessionsData.order_number,
             userSessionsData.user_id,
-            userSessionsData.shipping_address_id,
-            userSessionsData.billing_address_id,
-            userSessionsData.status,
-            userSessionsData.subtotal_cents,
-            userSessionsData.tax_amount_cents,
-            userSessionsData.shipping_cents,
-            userSessionsData.total_cents,
-            userSessionsData.payment_status,
-            userSessionsData.payment_method,
-            userSessionsData.payment_reference,
-            userSessionsData.shipping_method,
-            userSessionsData.tracking_number,
-            userSessionsData.customer_notes,
-            userSessionsData.admin_notes,
-            userSessionsData.shipped_at,
-            userSessionsData.delivered_at
+            userSessionsData.refresh_token,
+            userSessionsData.device_info,
+            userSessionsData.ip_address,
+            userSessionsData.expires_at,
+            userSessionsData.is_active,
+            userSessionsData.revoked_at
           ]
         );
 
