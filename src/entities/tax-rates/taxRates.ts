@@ -1,6 +1,7 @@
 import type { ITaxRates } from '@/interfaces';
 import type { ITaxRatesData } from '@/types';
 import { BaseEntity } from '../BaseEntity';
+
 export class TaxRates extends BaseEntity implements ITaxRates {
   private name: string;
   private rate: number;

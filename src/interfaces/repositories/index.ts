@@ -3,5 +3,6 @@ export * from '@/interfaces/repositories/cart-items/index';
 export { IBaseRepository } from '@/interfaces/repositories/IBaseRepository';
 export * from '@/interfaces/repositories/order-items/index';
 export * from '@/interfaces/repositories/orders/index';
-export * from '@/interfaces/repositories/product/index';
+export * from '@/interfaces/repositories/product-images/index';
+export * from '@/interfaces/repositories/products/index';
 export * from '@/interfaces/repositories/user/index';

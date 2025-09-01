@@ -1,8 +1,8 @@
 import { BaseEntity } from '@/entities/BaseEntity';
-import type { IProduct } from '@/interfaces';
-import type { IProductData } from '@/types';
+import type { IProducts } from '@/interfaces';
+import type { IProductsData } from '@/types';
 
-export class Product extends BaseEntity implements IProduct {
+export class Product extends BaseEntity implements IProducts {
   private name: string;
   private slug: string;
   private sku: string;
@@ -18,7 +18,7 @@ export class Product extends BaseEntity implements IProduct {
   private isActive: boolean;
   private createdBy: number;
 
-  constructor(data: IProductData) {
+  constructor(data: IProductsData) {
     super(data, 'productId');
     this.name = data.name;
     this.slug = data.slug;

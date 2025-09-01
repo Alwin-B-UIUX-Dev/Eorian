@@ -1,6 +1,6 @@
 import type { IEntity } from '@/interfaces';
 
-export interface IProduct extends IEntity {
+export interface IProducts extends IEntity {
   // === GETTERS COMPLETS ===
   getName(): string;
   getSlug(): string;

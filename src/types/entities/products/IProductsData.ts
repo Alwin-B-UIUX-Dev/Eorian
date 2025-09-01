@@ -4,7 +4,7 @@ import type {
   WithoutSystemFieldsType
 } from '@/types';
 
-export interface IProductData extends IBaseEntityData {
+export interface IProductsData extends IBaseEntityData {
   name: string;
   slug: string;
   sku: string;
@@ -21,5 +21,5 @@ export interface IProductData extends IBaseEntityData {
   created_by: number;
 }
 
-export type CreateProductData = WithoutSystemFieldsType<IProductData>;
-export type UpdateProductData = PartialWithoutSystemFieldsType<IProductData>;
+export type CreateProductData = WithoutSystemFieldsType<IProductsData>;
+export type UpdateProductData = PartialWithoutSystemFieldsType<IProductsData>;
