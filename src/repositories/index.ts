@@ -5,3 +5,4 @@ export * from '@/repositories/product/index';
 export * from '@/repositories/product-images/index';
 export * from '@/repositories/tax-rates/index';
 export * from '@/repositories/user-payment-methods/index';
+export * from '@/repositories/user-profiles/index';

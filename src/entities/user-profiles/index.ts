@@ -1,1 +1,1 @@
-export * from '@/entities/user-payment-methods/userPaymentMethods';
+export * from '@/entities/user-profiles/userProfiles';
