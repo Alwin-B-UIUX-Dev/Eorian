@@ -1,11 +1,11 @@
 import type { IDatabase } from 'pg-promise';
 import { database } from '@/configs';
 import { OrderItems } from '@/entities';
-import type { ICartItemsRepository, IOrderItems } from '@/interfaces';
+import type { IOrderItems, IOrderItemsRepository } from '@/interfaces';
 import type { CreateOrderItemsData, IOrderItemsData } from '@/types';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresCartItemsRepository implements ICartItemsRepository {
+export class PostgresCartItemsRepository implements IOrderItemsRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
 
   public async create(orderItemsData: CreateOrderItemsData): Promise<IOrderItems> {
@@ -44,15 +44,15 @@ export class PostgresCartItemsRepository implements ICartItemsRepository {
     });
   }
 
-  public async findById(id: string): Promise<IOrdersItems> {
+  public async findById(id: string): Promise<IOrderItems> {
     throw new Error('not implemented');
   }
 
-  public async findAll(limit?: number, offset?: number): Promise<ICartItems[]> {
+  public async findAll(limit?: number, offset?: number): Promise<IOrderItems[]> {
     throw new Error('not implemented');
   }
 
-  public async update(id: string, data: Partial<ICartItemsData>): Promise<ICartItems> {
+  public async update(id: string, data: Partial<IOrderItemsData>): Promise<IOrderItems> {
     throw new Error('not implemented');
   }
 
