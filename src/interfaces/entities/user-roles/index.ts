@@ -1,1 +1,1 @@
-export * from '@/interfaces/entities/user-roles/index';
+export * from '@/interfaces/entities/user-roles/IUserRoles';
