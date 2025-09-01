@@ -1,33 +1,38 @@
 import type { IDatabase } from 'pg-promise';
 import { database } from '@/configs';
 import { CartItems } from '@/entities';
-import type { ICartItems, IcartItemsRepository } from '@/interfaces';
+import type { ICartItems, ICartItemsRepository } from '@/interfaces';
 import type {
   CreateCartItemsData,
   ICartItemsData
 } from '@/types/entities/cart-items/ICartItemsData';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresCartItemsRepository implements IcartItemsRepository {
+export class PostgresCartItemsRepository implements ICartItemsRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
-  public async create(CartItemsData: CreateCartItemsData): Promise<ICartItems> {
+
+  public async create(cartItemsData: CreateCartItemsData): Promise<ICartItems> {
     return await this.db.tx(async t => {
       try {
         const result: { id: string } = await t.one(
           /*sql*/
-          `insert INTO CartItems (userId, productId, quantity)
-                    VALUES ($1, $2, $3) RETURNING id
-                    `,
-          [CartItemsData.userId, CartItemsData.productId, CartItemsData.quantity]
+          `INSERT INTO cart-items (user_id, product_id, quantity, added_at) VALUES ($1, $2, $3, $4) RETURNING id`,
+          [
+            cartItemsData.user_id,
+            cartItemsData.product_id,
+            cartItemsData.quantity,
+            cartItemsData.added_at
+          ]
         );
-        const CartItemsCatalog: ICartItemsData = await t.one(
-          /*sql*/ `SELECT * FROM v_CartItemss_catalog WHERE CartItems_id = 1$`,
+
+        const userCartItems: ICartItemsData = await t.one(
+          /*sql*/ `SELECT * FROM v_user_cart_items WHERE user_id = $1`,
           [result.id]
         );
 
-        // Mapping automatique snake_case → camelCase
         const mappedEntity: ICartItemsData =
-          DatabaseMapper.snakeToCamel<ICartItemsData>(CartItemsCatalog);
+          DatabaseMapper.snakeToCamel<ICartItemsData>(userCartItems);
+
         return new CartItems(mappedEntity);
       } catch (error) {
         throw new Error(`erreur${error}`);
