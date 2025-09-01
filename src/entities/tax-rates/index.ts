@@ -1,1 +1,1 @@
-export * from '@/entities/tax-rates/taxRates';
+export * from '@/entities/tax-rates/TaxRates';

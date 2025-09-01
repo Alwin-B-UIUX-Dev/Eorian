@@ -2,7 +2,7 @@ import { BaseEntity } from '@/entities/BaseEntity';
 import type { IProducts } from '@/interfaces';
 import type { IProductsData } from '@/types';
 
-export class Product extends BaseEntity implements IProducts {
+export class Products extends BaseEntity implements IProducts {
   private name: string;
   private slug: string;
   private sku: string;

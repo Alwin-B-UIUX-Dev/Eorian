@@ -1,13 +1,13 @@
 import type { IDatabase } from 'pg-promise';
 import { database } from '@/configs';
-import { Product } from '@/entities';
-import type { IProduct, IProductRepository } from '@/interfaces';
-import type { CreateProductData, IProductData } from '@/types';
+import { Products } from '@/entities/products/Products';
+import type { IProducts, IProductsRepository } from '@/interfaces';
+import type { CreateProductData, IProductsData } from '@/types';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresProductRepository implements IProductRepository {
+export class PostgresProductRepository implements IProductsRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
-  public async create(productData: CreateProductData): Promise<IProduct> {
+  public async create(productData: CreateProductData): Promise<IProducts> {
     return await this.db.tx(async t => {
       try {
         const result: { id: string } = await t.one(
@@ -32,30 +32,30 @@ export class PostgresProductRepository implements IProductRepository {
             productData.createdBy
           ]
         );
-        const productCatalog: IProductData = await t.one(
+        const productCatalog: IProductsData = await t.one(
           /*sql*/ `SELECT * FROM v_products_catalog WHERE product_id = 1$`,
           [result.id]
         );
 
         // Mapping automatique snake_case → camelCase
-        const mappedEntity: IProductData =
-          DatabaseMapper.snakeToCamel<IProductData>(productCatalog);
-        return new Product(mappedEntity);
+        const mappedEntity: IProductsData =
+          DatabaseMapper.snakeToCamel<IProductsData>(productCatalog);
+        return new Products(mappedEntity);
       } catch (error) {
         throw new Error(`erreur${error}`);
       }
     });
   }
 
-  public async findById(id: string): Promise<IProduct> {
+  public async findById(id: string): Promise<IProducts> {
     throw new Error('not implemented');
   }
 
-  public async findAll(limit?: number, offset?: number): Promise<IProduct[]> {
+  public async findAll(limit?: number, offset?: number): Promise<IProducts[]> {
     throw new Error('not implemented');
   }
 
-  public async update(id: string, data: Partial<IProductData>): Promise<IProduct> {
+  public async update(id: string, data: Partial<IProductsData>): Promise<IProducts> {
     throw new Error('not implemented');
   }
 
