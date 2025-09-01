@@ -38,7 +38,7 @@ export class PostgresProductImagesRepository implements IProductImagesRepository
         );
 
         const userProductImages: IProductImagesData = await t.one(
-          /*sql*/ `SELECT * FROM v_user_ProductImages WHERE order_id = $1`,
+          /*sql*/ `SELECT * FROM v_product_images_list WHERE order_id = $1`,
           [result.id]
         );
 

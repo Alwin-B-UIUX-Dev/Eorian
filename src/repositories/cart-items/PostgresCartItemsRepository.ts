@@ -26,7 +26,7 @@ export class PostgresCartItemsRepository implements ICartItemsRepository {
         );
 
         const userCartItems: ICartItemsData = await t.one(
-          /*sql*/ `SELECT * FROM v_user_cart_items WHERE user_id = $1`,
+          /*sql*/ `SELECT * FROM v_cart_items_summary WHERE user_id = $1`,
           [result.id]
         );
 

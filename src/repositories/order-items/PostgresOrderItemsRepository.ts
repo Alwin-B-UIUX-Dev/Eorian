@@ -30,7 +30,7 @@ export class PostgresCartItemsRepository implements IOrderItemsRepository {
         );
 
         const userOrderItems: IOrderItemsData = await t.one(
-          /*sql*/ `SELECT * FROM v_user_order_items WHERE order_id = $1`,
+          /*sql*/ `SELECT * FROM v_order_items_detailed WHERE order_id = $1`,
           [result.id]
         );
 
