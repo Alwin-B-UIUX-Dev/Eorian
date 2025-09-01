@@ -1,6 +1,6 @@
 import type { IEntity } from '@/interfaces';
 
-export interface IorderItems extends IEntity {
+export interface IOrderItems extends IEntity {
   // === GETTERS COMPLETS ===
   getProductId(): number;
   getOrderId(): number;
