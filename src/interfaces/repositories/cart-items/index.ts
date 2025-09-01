@@ -1,1 +1,1 @@
-export * from '@/interfaces/repositories/cart-items/IcartItemsRepository'
+export * from '@/interfaces/repositories/cart-items/ICartItemsRepository';
