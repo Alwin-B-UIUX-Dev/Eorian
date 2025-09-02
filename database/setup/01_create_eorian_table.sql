@@ -51,7 +51,7 @@ COMMENT ON ROLE customer_eorian IS 'Read-only - Customer frontend';
 -- - POST /api/v1/auth/login
 -- - GET /api/v1/profile
 -- - PUT /api/v1/profile
--- TABLES : users, user_profiles
+-- TABLES : s, user_profiles
 
 -- TABLE : users
 
