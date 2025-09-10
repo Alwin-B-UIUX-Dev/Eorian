@@ -90,7 +90,7 @@ export class TokenService implements ITokenService {
   // RÉVOCATION DE TOUS LES REFRESH TOKENS D'UN USER
   public async revokeAllUserRefreshTokens(userId: string): Promise<void> {
     try {
-      await this.sessionRepository.revokeAllUserSessions(userId);
+      await this.sessionRepository.revokeAllUserSession(userId);
     } catch (error) {
       logger.error('Failed to revoke all user refresh tokens', {
         operation: 'revoke_all_user_refresh_tokens',

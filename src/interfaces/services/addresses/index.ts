@@ -1,1 +1,0 @@
-export { IAdressesService } from '@/interfaces/services/addresses/IAddressesService';

@@ -14,7 +14,7 @@ export class AuthService implements IAuthService {
   public async register(registerUserDto: RegisterUserDto): Promise<IUser> {
     try {
       // ÉTAPE 1 : Vérifications séparées pour messages d'erreur précis
-      const existingUserByEmail: IUser = await this.userRepository.findByEmail(
+      const existingUserByEmail: IUser | null = await this.userRepository.findByEmail(
         registerUserDto.getEmail()
       );
 
@@ -22,7 +22,7 @@ export class AuthService implements IAuthService {
         throw UserError.emailExists(registerUserDto.getEmail());
       }
 
-      const existingUserByUsername: IUser = await this.userRepository.findByUsername(
+      const existingUserByUsername: IUser | null = await this.userRepository.findByUsername(
         registerUserDto.getUsername()
       );
 
@@ -62,7 +62,7 @@ export class AuthService implements IAuthService {
   public async login(loginDto: LoginDto): Promise<IUser> {
     try {
       // 🔍 ÉTAPE 1 : Recherche utilisateur par email OU username
-      const user: IUser = await this.userRepository.findByEmailOrUsername(
+      const user: IUser | null = await this.userRepository.findByEmailOrUsername(
         loginDto.getIdentifier() // identifier = email OU username
       );
 

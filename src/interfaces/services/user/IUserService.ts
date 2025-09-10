@@ -35,7 +35,7 @@ export interface IUserService {
    *
    * @returns Utilisateur trouvé ou null
    */
-  findOne(id: string): Promise<IUser>;
+  findOne(id: string): Promise<IUser | null>;
 
   /**
    * Mise à jour d'un utilisateur

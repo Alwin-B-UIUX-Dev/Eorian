@@ -12,6 +12,7 @@ export class User extends BaseEntity implements IUser {
   private email: string;
   private username: string;
   private roleId: string;
+  private readonly roleName: string;
   #passwordHash: string;
   private isActive: boolean;
   private isConnected: boolean;
@@ -25,6 +26,7 @@ export class User extends BaseEntity implements IUser {
     this.email = data.email;
     this.username = data.username;
     this.roleId = data.roleId;
+    this.roleName = data.roleName;
     this.#passwordHash = data.passwordHash;
     this.isActive = data.isActive ?? false;
     this.isConnected = data.isConnected ?? false;
@@ -44,6 +46,9 @@ export class User extends BaseEntity implements IUser {
   }
   public getRoleId(): string {
     return this.roleId; // Pour les relations/FK
+  }
+  public getRoleName(): RoleEnum {
+    return this.roleName as RoleEnum; // Pour la logique métier
   }
   public getPasswordHash(): string {
     return this.#passwordHash;
@@ -112,6 +117,7 @@ export class User extends BaseEntity implements IUser {
     this.updateTimestamp();
     return this;
   }
+
   public setGdprConsent(consent: boolean): this {
     this.gdprConsent = consent;
     this.gdprConsentDate = new Date();
@@ -154,6 +160,7 @@ export class User extends BaseEntity implements IUser {
       email: this.email,
       username: this.username,
       roleId: this.roleId,
+      roleName: this.roleName,
       isActive: this.isActive,
       isConnected: this.isConnected,
       emailVerified: this.emailVerified,

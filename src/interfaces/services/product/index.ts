@@ -1,1 +1,1 @@
-export { IProductService } from '@/interfaces/services/product/IProductService';
+export * from '@/interfaces/services/product/IProductService';

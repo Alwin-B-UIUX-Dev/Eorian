@@ -14,7 +14,7 @@ export class UserService implements IUserService {
   public async create(createUserAdminDto: CreateUserAdminDto): Promise<IUser> {
     try {
       // ÉTAPE 1 : Vérifications séparées pour messages d'erreur précis
-      const existingUserByEmail: IUser = await this.userRepository.findByEmail(
+      const existingUserByEmail: IUser | null = await this.userRepository.findByEmail(
         createUserAdminDto.getEmail()
       );
 
@@ -22,7 +22,7 @@ export class UserService implements IUserService {
         throw UserError.emailExists(createUserAdminDto.getEmail());
       }
 
-      const existingUserByUsername: IUser = await this.userRepository.findByUsername(
+      const existingUserByUsername: IUser | null = await this.userRepository.findByUsername(
         createUserAdminDto.getUsername()
       );
 
@@ -80,7 +80,7 @@ export class UserService implements IUserService {
     }
   }
 
-  public async findOne(id: string): Promise<IUser> {
+  public async findOne(id: string): Promise<IUser | null> {
     try {
       return await this.userRepository.findById(id);
     } catch (error) {
@@ -94,7 +94,7 @@ export class UserService implements IUserService {
     data: Partial<WithoutSystemFieldsType<IUserData>>
   ): Promise<IUser> {
     try {
-      const existingUser: IUser = await this.userRepository.findById(id);
+      const existingUser: IUser | null = await this.userRepository.findById(id);
       if (!existingUser) {
         throw UserError.notFound(id);
       }
@@ -113,7 +113,7 @@ export class UserService implements IUserService {
 
   public async remove(id: string): Promise<void> {
     try {
-      const existingUser: IUser = await this.userRepository.findById(id);
+      const existingUser: IUser | null = await this.userRepository.findById(id);
       if (!existingUser) {
         throw UserError.notFound(id);
       }

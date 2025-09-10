@@ -5,4 +5,6 @@ export * from '@/interfaces/entities/index';
 export * from '@/interfaces/http/index';
 export * from '@/interfaces/repositories/index';
 export * from '@/interfaces/security/index';
+export * from '@/interfaces/services/auth/IAuthService';
+export * from '@/interfaces/services/auth/ITokenService';
 export * from '@/interfaces/services/index';

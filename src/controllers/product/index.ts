@@ -1,1 +1,1 @@
-export { ProductController } from '@/controllers/product/ProductController';
+export * from '@/controllers/product/ProductController';

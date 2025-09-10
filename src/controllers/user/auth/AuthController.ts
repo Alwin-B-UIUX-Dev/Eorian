@@ -12,7 +12,7 @@ import type {
   IUser
 } from '@/interfaces';
 import type { IApiResponseData, IDeviceInfoData } from '@/types';
-import { ApiResponse, DeviceInfo, Masker, RequestIdGenerator } from '@/utils';
+import { ApiResponseFactory, DeviceInfoHelper, MaskerHelper, RequestIdGenerator } from '@/utils';
 
 export class AuthController implements IAuthController {
   constructor(
@@ -38,18 +38,18 @@ export class AuthController implements IAuthController {
       });
 
       const requestId: string = RequestIdGenerator.getFromRequest(req);
-      const deviceInfo: IDeviceInfoData = DeviceInfo.extractFromRequest(req);
-      const clientIP: string = DeviceInfo.getClientIP(req);
+      const deviceInfo: IDeviceInfoData = DeviceInfoHelper.extractFromRequest(req);
+      const clientIP: string = DeviceInfoHelper.getClientIP(req);
       const registerUserDto = new RegisterUserDto(req.body);
       const gdprConsent: boolean = registerUserDto.getGdprConsent();
       console.log('🚀 ~ AuthController ~ register ~ registerUserDto:', registerUserDto);
 
       logger.info('User registration attempt', {
         requestId,
-        email: Masker.maskEmail(registerUserDto.getEmail()),
-        username: Masker.maskUsername(registerUserDto.getUsername()),
+        email: MaskerHelper.maskEmail(registerUserDto.getEmail()),
+        username: MaskerHelper.maskUsername(registerUserDto.getUsername()),
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_registration'
       });
@@ -57,10 +57,10 @@ export class AuthController implements IAuthController {
       if (gdprConsent === false) {
         throw new ApiError('Veuillez accepter notre politique de confidentialité.', 403, {
           requestId,
-          email: Masker.maskEmail(registerUserDto.getEmail()),
-          username: Masker.maskUsername(registerUserDto.getUsername()),
+          email: MaskerHelper.maskEmail(registerUserDto.getEmail()),
+          username: MaskerHelper.maskUsername(registerUserDto.getUsername()),
           deviceInfo,
-          clientIP: Masker.MaskClientIP(clientIP),
+          clientIP: MaskerHelper.MaskClientIP(clientIP),
           timestamp: new Date().toISOString(),
           operation: 'user_registration'
         });
@@ -71,15 +71,15 @@ export class AuthController implements IAuthController {
 
       logger.info('User registration successful', {
         requestId,
-        email: Masker.maskEmail(registerUserDto.getEmail()),
-        username: Masker.maskUsername(registerUserDto.getUsername()),
+        email: MaskerHelper.maskEmail(registerUserDto.getEmail()),
+        username: MaskerHelper.maskUsername(registerUserDto.getUsername()),
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_registration_success'
       });
 
-      const response: IApiResponseData<{ user: ResponseUserDto }> = ApiResponse.success(
+      const response: IApiResponseData<{ user: ResponseUserDto }> = ApiResponseFactory.success(
         'Inscription réussie. Veuillez vous connecter.',
         { user: userResponse },
         requestId
@@ -88,8 +88,8 @@ export class AuthController implements IAuthController {
       res.status(201).json(response);
     } catch (error) {
       const requestId: string = RequestIdGenerator.getFromRequest(req);
-      const clientIP: string = DeviceInfo.getClientIP(req);
-      const deviceInfo: IDeviceInfoData = DeviceInfo.extractFromRequest(req);
+      const clientIP: string = DeviceInfoHelper.getClientIP(req);
+      const deviceInfo: IDeviceInfoData = DeviceInfoHelper.extractFromRequest(req);
 
       // Si c'est déjà une ApiError, on la log et la passe au middleware
       if (error instanceof ApiError) {
@@ -102,7 +102,7 @@ export class AuthController implements IAuthController {
         requestId,
         email: req.body?.email,
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         operation: 'user_registration_failed',
         originalError: error instanceof Error ? error.message : String(error)
       });
@@ -118,16 +118,16 @@ export class AuthController implements IAuthController {
   public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const requestId: string = RequestIdGenerator.getFromRequest(req);
-      const deviceInfo: IDeviceInfoData = DeviceInfo.extractFromRequest(req);
-      const clientIP: string = DeviceInfo.getClientIP(req);
+      const deviceInfo: IDeviceInfoData = DeviceInfoHelper.extractFromRequest(req);
+      const clientIP: string = DeviceInfoHelper.getClientIP(req);
       const loginDto = new LoginDto(req.body);
 
       logger.info('User login attempt', {
         requestId,
-        identifier: Masker.maskIdentifier(loginDto.getIdentifierType()),
+        identifier: MaskerHelper.maskIdentifier(loginDto.getIdentifierType()),
         rememberMe: loginDto.getRememberMe(),
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_login'
       });
@@ -159,10 +159,10 @@ export class AuthController implements IAuthController {
       logger.info('User login successful', {
         requestId,
         userId: userResponse.id,
-        email: Masker.maskEmail(userResponse.email),
+        email: MaskerHelper.maskEmail(userResponse.email),
         sessionType,
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_login_success'
       });
@@ -177,7 +177,7 @@ export class AuthController implements IAuthController {
         user: ResponseUserDto;
         sessionType: 'stateless' | 'stateful';
         expiresAt: Date;
-      }> = ApiResponse.success(
+      }> = ApiResponseFactory.success(
         'Connexion réussie.',
         {
           user: userResponse,
@@ -189,15 +189,15 @@ export class AuthController implements IAuthController {
 
       res.status(200).json(response);
     } catch (error) {
-      const deviceInfo: IDeviceInfoData = DeviceInfo.extractFromRequest(req);
-      const clientIP: string = DeviceInfo.getClientIP(req);
+      const deviceInfo: IDeviceInfoData = DeviceInfoHelper.extractFromRequest(req);
+      const clientIP: string = DeviceInfoHelper.getClientIP(req);
 
       logger.error('User login failed', {
         requestId: RequestIdGenerator.getFromRequest(req),
         email: req.body?.email,
         error: error instanceof Error ? error.message : 'Unknown error',
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_login_failed'
       });
@@ -208,8 +208,8 @@ export class AuthController implements IAuthController {
 
   public async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const deviceInfo: IDeviceInfoData = DeviceInfo.extractFromRequest(req);
-      const clientIP: string = DeviceInfo.getClientIP(req);
+      const deviceInfo: IDeviceInfoData = DeviceInfoHelper.extractFromRequest(req);
+      const clientIP: string = DeviceInfoHelper.getClientIP(req);
       const logoutDto = new LogoutDto(req.body);
       const userId: string | undefined = req.user?.id;
       const tokenType: 'access' | 'refresh' | undefined = req.user?.tokenType;
@@ -219,7 +219,7 @@ export class AuthController implements IAuthController {
         logoutInfo: logoutDto.getLogInfo(),
         tokenType,
         deviceInfo,
-        clientIP: Masker.MaskClientIP(clientIP),
+        clientIP: MaskerHelper.MaskClientIP(clientIP),
         timestamp: new Date().toISOString(),
         operation: 'user_logout'
       });
@@ -233,16 +233,19 @@ export class AuthController implements IAuthController {
           userId,
           tokenType,
           deviceInfo,
-          clientIP: Masker.MaskClientIP(clientIP),
+          clientIP: MaskerHelper.MaskClientIP(clientIP),
           timestamp: new Date().toISOString(),
           operation: 'user_logout_success'
         });
 
         res.status(200).json(
-          ApiResponse.success('Déconnexion réussie - Votre session expirera automatiquement', {
-            loggedOut: true,
-            strategy: 'stateless'
-          })
+          ApiResponseFactory.success(
+            'Déconnexion réussie - Votre session expirera automatiquement',
+            {
+              loggedOut: true,
+              strategy: 'stateless'
+            }
+          )
         );
       }
       // REFRESH TOKEN → Déconnexion stateful
@@ -260,13 +263,13 @@ export class AuthController implements IAuthController {
           logoutInfo: logoutDto.getLogInfo(),
           tokenType,
           deviceInfo,
-          clientIP: Masker.MaskClientIP(clientIP),
+          clientIP: MaskerHelper.MaskClientIP(clientIP),
           timestamp: new Date().toISOString(),
           operation: 'user_logout_success'
         });
 
         res.status(200).json(
-          ApiResponse.success('Déconnexion réussie - Session révoquée immédiatement', {
+          ApiResponseFactory.success('Déconnexion réussie - Session révoquée immédiatement', {
             loggedOut: true,
             strategy: 'stateful'
           })

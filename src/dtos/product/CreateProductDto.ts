@@ -1,40 +1,40 @@
-import { type CreateProductSchemaType, ProductConstants } from '@/constants/zod/ProductConstants';
+import { type CreateProductSchemaType, ProductConstants } from '@/constants';
 
 export class CreateProductDto {
   public readonly name: string;
   public readonly slug: string;
   public readonly sku: string;
-  public readonly shortDescription: string;
+  public readonly short_description: string;
   public readonly description: string;
-  public readonly priceCents: string;
-  public readonly taxRateId: string;
-  public readonly stockQuantity: string;
-  public readonly lowStockThreshold: string;
-  public readonly manageStock: boolean;
-  public readonly metaTitle: string;
-  public readonly metaDescription: string;
-  public readonly isActive: boolean;
-  public readonly createdBy: string;
+  public readonly price_cents: string;
+  public readonly tax_rate_id: string;
+  public readonly stock_quantity: string;
+  public readonly low_stock_threshold: string;
+  public readonly manage_stock: boolean;
+  public readonly meta_title: string;
+  public readonly meta_description: string;
+  public readonly is_active: boolean;
+  public readonly created_by: string;
 
   constructor(data: unknown) {
-    const validated: CreateProductSchemaType = ProductConstants.validationCreateProduct(data);
+    const validated: CreateProductSchemaType = ProductConstants.validateCreateProduct(data);
     this.name = validated.name;
     this.slug = validated.slug;
     this.sku = validated.sku;
-    this.shortDescription = validated.shortDescription;
+    this.short_description = validated.shortDescription;
     this.description = validated.description;
-    this.priceCents = validated.priceCents;
-    this.taxRateId = validated.taxRateId;
-    this.stockQuantity = validated.stockQuantity;
-    this.lowStockThreshold = validated.lowStockThreshold;
-    this.manageStock = validated.manageStock;
-    this.metaTitle = validated.metaTitle;
-    this.metaDescription = validated.metaDescription;
-    this.isActive = validated.isActive;
-    this.createdBy = validated.createdBy;
+    this.price_cents = validated.priceCents;
+    this.tax_rate_id = validated.taxRateId;
+    this.stock_quantity = validated.stockQuantity;
+    this.low_stock_threshold = validated.lowStockThreshold;
+    this.manage_stock = validated.manageStock;
+    this.meta_title = validated.metaTitle;
+    this.meta_description = validated.metaDescription;
+    this.is_active = validated.isActive;
+    this.created_by = validated.createdBy;
   }
 
-  // === GETTERS ===
+  // Getters
   public getName(): string {
     return this.name;
   }
@@ -45,36 +45,36 @@ export class CreateProductDto {
     return this.sku;
   }
   public getShortDescription(): string {
-    return this.shortDescription;
+    return this.short_description;
   }
   public getDescription(): string {
     return this.description;
   }
   public getPriceCents(): string {
-    return this.priceCents;
+    return this.price_cents;
   }
   public getTaxRateId(): string {
-    return this.taxRateId;
+    return this.tax_rate_id;
   }
   public getStockQuantity(): string {
-    return this.stockQuantity;
+    return this.stock_quantity;
   }
   public getLowStockThreshold(): string {
-    return this.lowStockThreshold;
+    return this.low_stock_threshold;
   }
   public getManageStock(): boolean {
-    return this.manageStock;
+    return this.manage_stock;
   }
   public getMetaTitle(): string {
-    return this.metaTitle;
+    return this.meta_title;
   }
   public getMetaDescription(): string {
-    return this.metaDescription;
+    return this.meta_description;
   }
   public getIsActive(): boolean {
-    return this.isActive;
+    return this.is_active;
   }
   public getCreatedBy(): string {
-    return this.createdBy;
+    return this.created_by;
   }
 }

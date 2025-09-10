@@ -10,6 +10,7 @@ export interface IUserData extends IBaseEntityData {
   email: string;
   passwordHash: string;
   roleId: string;
+  roleName: string;
   isActive: boolean;
   isConnected: boolean;
   emailVerified: boolean;

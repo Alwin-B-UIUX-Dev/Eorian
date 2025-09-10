@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { logger } from '@/configs';
 import { ServiceFactory } from '@/configs/ServiceFactory';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes, ProductRoutes } from '@/routes';
+import { AuthRoutes } from '@/routes';
 
 export class RouteFactory {
   private static router: Router;
@@ -16,7 +16,7 @@ export class RouteFactory {
     // Enregistrement des routes
     RouteFactory.registerAuthRoutes();
     // RouteFactory.registerUserRoutes();
-    RouteFactory.registerProductRoutes();
+    // RouteFactory.registerProductRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -38,13 +38,13 @@ export class RouteFactory {
   //   RouteFactory.router.use('/api/v1', userRoutes.getRouter());
   // }
 
-  private static registerProductRoutes(): void {
-    const productController = ServiceFactory.getProductController();
-    // const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
-    const productRoutes = new ProductRoutes(productController);
+  // private static registerProductRoutes(): void {
+  //   const productController = ServiceFactory.getProductController();
+  //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
+  //   const productRoutes = new ProductRoutes(productController, tokenManager);
 
-    RouteFactory.router.use('/api/v1', productRoutes.getRouter());
-  }
+  //   RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  // }
 
   public static reset(): void {
     RouteFactory.router = undefined as unknown as Router;

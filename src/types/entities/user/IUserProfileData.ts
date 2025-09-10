@@ -11,6 +11,8 @@ export interface IUserProfileData extends IBaseEntityData {
   lastName: string;
   phone: string;
   birthDate: Date;
+  newsletterConsent: boolean;
+  newsletterConsentDate: Date;
   avatarUrl: string;
 }
 
