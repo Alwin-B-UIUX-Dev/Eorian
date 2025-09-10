@@ -3,11 +3,11 @@ import type { IProduct, IProductRepository, IProductService } from '@/interfaces
 import type { CreateProductData, WithoutSystemFieldsType } from '@/types';
 
 export class ProductService implements IProductService {
-  constructor(private readonly ProductRepository: IProductRepository) {}
+  constructor(private readonly productRepository: IProductRepository) {}
 
   public async create(CreateProductDto: CreateProductDto): Promise<IProduct> {
     try {
-      const productData: CreateProductData = {
+      const productsData: CreateProductData = {
         name: CreateProductDto.getName(),
         slug: CreateProductDto.getSlug(),
         sku: CreateProductDto.getSku(),
@@ -23,9 +23,9 @@ export class ProductService implements IProductService {
         isActive: CreateProductDto.getIsActive(),
         createdBy: CreateProductDto.getCreatedBy()
       };
-      return await this.ProductRepository.create(productData);
+      return await this.productRepository.create(productsData);
     } catch (error) {
-      console.error('🚨 ERREUR TECHNIQUE DANS Product create():', error);
+      console.error('🚨 ERREUR TECHNIQUE DANS product create():', error);
     }
     throw new Error('bug');
   }
