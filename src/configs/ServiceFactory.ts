@@ -145,6 +145,8 @@ export class ServiceFactory {
     return ServiceFactory.productController;
   }
 
+  
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
