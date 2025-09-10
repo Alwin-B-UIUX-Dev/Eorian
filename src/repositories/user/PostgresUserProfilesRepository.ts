@@ -1,11 +1,11 @@
 import type { IDatabase } from 'pg-promise';
 import { database } from '@/configs';
 import { UserProfile } from '@/entities';
-import type { IUserProfile, IUserProfilesRepository } from '@/interfaces';
+import type { IUserProfile, IUserProfileRepository } from '@/interfaces';
 import type { CreateUserProfileData, IUserProfileData } from '@/types';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresUserProfileRepository implements IUserProfilesRepository {
+export class PostgresUserProfileRepository implements IUserProfileRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
 
   public async create(userProfileData: CreateUserProfileData): Promise<IUserProfile> {

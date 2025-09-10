@@ -34,7 +34,6 @@ export class ResponseUserSessionDto {
     return this.deviceInfo;
   }
 
-
   public getExpiresAt(): Date {
     return this.expiresAt;
   }
@@ -42,7 +41,6 @@ export class ResponseUserSessionDto {
   public getIsActive(): boolean {
     return this.isActive;
   }
-
 
   public static from(userSession: IUserSession): ResponseUserSessionDto {
     return new ResponseUserSessionDto({

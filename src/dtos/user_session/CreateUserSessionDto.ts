@@ -29,7 +29,6 @@ export class CreateUserSessionDto {
     return this.deviceInfo;
   }
 
-
   public getExpiresAt(): Date {
     return this.expiresAt;
   }
@@ -37,5 +36,4 @@ export class CreateUserSessionDto {
   public getIsActive(): boolean {
     return this.isActive;
   }
-
 }
