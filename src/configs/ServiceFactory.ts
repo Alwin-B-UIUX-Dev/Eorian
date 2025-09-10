@@ -1,19 +1,22 @@
 // src/configs/ServiceFactory.ts
-import { AuthController, ProductController } from '@/controllers';
+import { AuthController, ProductController, TaxRateController } from '@/controllers';
 import type {
   IAuthService,
   ICookieManager,
   IPasswordHasher,
   IProductRepository,
   IProductService,
+  ITaxRateRepository,
+  ITaxRateService,
   ITokenManager,
   ITokenService,
   IUserRepository,
   IUserSessionRepository
 } from '@/interfaces';
-import { PostgresProductRepository } from '@/repositories';
+import { PostgresProductRepository, PostgresTaxRateRepository } from '@/repositories';
 import { PostgresUserRepository, PostgresUserSessionRepository } from '@/repositories/user';
 import { AuthService, ProductService, TokenService } from '@/services';
+import { TaxRateService } from '@/services/tax_rate/TaxRateService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
 export class ServiceFactory {
@@ -31,6 +34,10 @@ export class ServiceFactory {
   private static productController: ProductController;
   private static productService: IProductService;
   private static productRepository: IProductRepository;
+
+  private static taxRateController: TaxRateController;
+  private static taxRateService: ITaxRateService;
+  private static taxRateRepository: ITaxRateRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -53,6 +60,13 @@ export class ServiceFactory {
       ServiceFactory.productRepository = new PostgresProductRepository();
     }
     return ServiceFactory.productRepository;
+  }
+
+  public static getTaxRateRepository(): ITaxRateRepository {
+    if (!ServiceFactory.taxRateRepository) {
+      ServiceFactory.taxRateRepository = new PostgresTaxRateRepository();
+    }
+    return ServiceFactory.taxRateRepository;
   }
 
   // Utils
@@ -111,6 +125,14 @@ export class ServiceFactory {
     return ServiceFactory.productService;
   }
 
+  public static getTaxRateService(): ITaxRateService {
+    if (!ServiceFactory.taxRateService) {
+      const taxRateRepository = ServiceFactory.getTaxRateRepository();
+      ServiceFactory.taxRateService = new TaxRateService(taxRateRepository);
+    }
+    return ServiceFactory.taxRateService;
+  }
+
   // Controllers
   public static getAuthController(): AuthController {
     if (!ServiceFactory.authController) {
@@ -145,7 +167,19 @@ export class ServiceFactory {
     return ServiceFactory.productController;
   }
 
-  
+  public static getTaxRateController(): TaxRateController {
+    if (!ServiceFactory.taxRateController) {
+      console.log('🏭 Creating TaxRateController...');
+      const taxRateService: ITaxRateService = ServiceFactory.getTaxRateService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!taxRateService
+      });
+
+      ServiceFactory.taxRateController = new TaxRateController(taxRateService);
+    }
+    return ServiceFactory.taxRateController;
+  }
 
   // Reset pour les tests
   public static reset(): void {
@@ -158,7 +192,8 @@ export class ServiceFactory {
     ServiceFactory.tokenService = undefined as unknown as ITokenService;
     ServiceFactory.authController = undefined as unknown as AuthController;
 
-  // TODO Ajouter les nouveau services ICI pour chaque donné 5
+    // TODO Ajouter les nouveau services ICI pour chaque donné 5
     ServiceFactory.productController = undefined as unknown as ProductController;
+    ServiceFactory.taxRateController = undefined as unknown as TaxRateController;
   }
 }
