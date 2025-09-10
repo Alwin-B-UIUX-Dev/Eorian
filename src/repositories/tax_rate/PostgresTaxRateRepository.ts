@@ -14,7 +14,7 @@ export class PostgresTaxRateRepository implements ITaxRateRepository {
       try {
         const result: { id: string } = await t.one(
           /*sql*/
-          `INSERT INTO tax_rate (name, rate, description, is_active)
+          `INSERT INTO tax_rates (name, rate, description, is_active)
           VALUES ($1, $2, $3, $4) RETURNING id`,
           [taxRateData.name, taxRateData.rate, taxRateData.description, taxRateData.is_active]
         );

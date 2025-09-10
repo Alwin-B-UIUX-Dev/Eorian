@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 
 # Perso
 *.txt
+# Fichier temporaire à ignorer
+Z_pour_copie_a_supr
