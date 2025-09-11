@@ -1,4 +1,5 @@
-CREATE OR REPLACE VIEW vw_tax_rates_active AS
+-- Active: 1753172327999@@127.0.0.1@5432@eorian_fr_db
+CREATE OR REPLACE VIEW v_user_taxrate AS
 SELECT
     id,
     name,

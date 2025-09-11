@@ -10,5 +10,5 @@ export interface ITaxRate extends IEntity {
   setName(name: string): this;
   setRate(rate: string): this;
   setDescription(description: string): this;
-  setIsActive(is_active: boolean): this;
+  setIsActive(isActive: boolean): this;
 }

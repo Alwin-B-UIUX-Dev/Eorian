@@ -43,31 +43,6 @@ COMMENT ON ROLE api_service_eorian IS 'All privileges - Backend API service';
 COMMENT ON ROLE admin_eorian IS 'CRUD privileges - Admin operations';
 COMMENT ON ROLE customer_eorian IS 'Read-only - Customer frontend';
 
--- =====================================================
--- THÈME : AUTHENTIFICATION & PROFILS
--- =====================================================
--- JUSTIFICATION : Base sécurisée pour tous les utilisateurs
--- ENDPOINTS LIÉS :
--- - POST /api/v1/auth/login
--- - GET /api/v1/profile
--- - PUT /api/v1/profile
--- TABLES : s, user_profiles
-
--- TABLE : users
-
--- RÔLE MÉTIER : Authentification pure et gestion des rôles
--- RELATIONS :
--- └─ users 1:1 user_profiles (profil étendu)
--- └─ users 1:N products (admin créateur)
--- └─ users 1:N orders (customer acheteur)
-
--- -----------------------------------------------------
--- TABLE : user_roles
--- -----------------------------------------------------
--- RÔLE MÉTIER : Référentiel simple des rôles utilisateurs (customer, admin)
--- RELATIONS :
---   └─ user_roles 1:N users (un rôle peut être assigné à plusieurs utilisateurs)
--- PRINCIPE : KISS - Fonctionnalités de base uniquement, évolutif si besoin
 
 CREATE TABLE IF NOT EXISTS user_roles (
     id SERIAL PRIMARY KEY,
@@ -105,44 +80,7 @@ COMMENT ON COLUMN user_roles.updated_at IS
 CREATE INDEX IF NOT EXISTS idx_user_roles_name
 ON user_roles (role_name);
 
--- =====================================================
--- RLS : ROW LEVEL SECURITY
--- =====================================================
 
-ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
-
--- JUSTIFICATION : Tous les utilisateurs connectés peuvent lire les rôles
--- USAGE : Interface utilisateur peut afficher les rôles disponibles
-CREATE POLICY user_roles_read_all ON user_roles
-FOR SELECT
-USING (true);                                        -- Lecture libre pour tous les rôles connectés
-
--- JUSTIFICATION : Seuls les admins peuvent modifier les rôles
--- USAGE : Panel admin pour créer/modifier des rôles personnalisés
-CREATE POLICY user_roles_admin_write ON user_roles
-FOR ALL TO admin_eorian
-USING (true);
-
--- JUSTIFICATION : API service a accès complet pour gestion backend
--- USAGE : Node.js API peut gérer les rôles sans restriction
-CREATE POLICY user_roles_api_service ON user_roles
-FOR ALL TO api_service_eorian
-USING (true);
-
--- =====================================================
--- !ATTENTION : DISTINCTION IMPORTANTE
--- =====================================================
--- • customer_eorian = Rôle PostgreSQL (connexion DB)
--- • 'customer' = Rôle métier application (données)
--- Ces deux concepts sont DIFFÉRENTS et ne se mélangent pas
-
--- =====================================================
--- DONNÉES DE RÉFÉRENCE - RÔLES DE BASE DE L'APPLICATION
--- =====================================================
-
--- JUSTIFICATION : Rôles minimum pour démarrer l'application
--- customer : Utilisateurs standard qui achètent
--- admin : Gestionnaires avec accès complet
 INSERT INTO user_roles (role_name, description) VALUES
 ('customer', 'Client standard - achat et consultation'),
 ('admin', 'Administrateur - gestion complète du système')
@@ -167,26 +105,6 @@ COMMENT ON COLUMN user_roles.created_at IS
 COMMENT ON COLUMN user_roles.updated_at IS
 'Date de dernière modification. Doit être mise à jour manuellement par l''API lors des modifications.';
 
--- =====================================================
--- NOTES POUR LES DÉVELOPPEURS
--- =====================================================
-
-/*
-ÉVOLUTION POSSIBLE :
-- Ajouter is_active si on veut désactiver des rôles sans les supprimer
-- Ajouter permissions granulaires si le système devient complexe
-- Créer une table user_role_permissions pour des droits avancés
-
-USAGE API TYPIQUE :
-1. Login : SELECT role_name FROM user_roles ur JOIN users u ON u.role_id = ur.id WHERE u.email = ?
-2. Interface admin : SELECT * FROM user_roles ORDER BY role_name
-3. Création utilisateur : SELECT id FROM user_roles WHERE role_name = 'customer'
-
-SÉCURITÉ :
-- RLS activé : protection automatique selon les rôles
-- Contraintes de format : évite les erreurs de saisie
-- UNIQUE sur role_name : pas de doublons
-*/
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -210,11 +128,6 @@ CREATE TABLE IF NOT EXISTS users (
     CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES user_roles(id)
 );
 
--- =====================================================
--- INDEX OPTIMISÉS POUR AUTHENTIFICATION
--- =====================================================
-
--- JUSTIFICATION : Login rapide email/username sur comptes actifs uniquement
 CREATE INDEX IF NOT EXISTS idx_users_email
 ON users (email)
 WHERE is_active = true;
@@ -226,34 +139,6 @@ WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_users_role_id
 ON users (role_id);
 
--- =====================================================
--- RLS : ROW LEVEL SECURITY
--- =====================================================
-
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-
--- Customers : accès uniquement à leurs propres données
-CREATE POLICY users_customer_access ON users
-    FOR ALL TO customer_eorian
-    USING (true);  -- Node.js fait WHERE id = $1
-
--- Admins : accès complet
-CREATE POLICY admin_full_users ON users
-    FOR ALL TO admin_eorian
-    USING (true);
-
--- API Service : accès complet pour backend Node.js
-CREATE POLICY api_service_full_access ON users
-    FOR ALL TO api_service_eorian
-    USING (true);
-
--- =====================================================
--- TABLE : user_sessions
--- =====================================================
--- RÔLE MÉTIER : Gestion refresh tokens multi-appareils pour sessions stateful (7 jours)
--- RELATIONS :
---   └─ users 1:N user_sessions (CASCADE DELETE) = un utilisateur peut avoir plusieurs sessions par device différent
---   └─ LOGIQUE MÉTIER : Limitation sessions gérée côté API Node.js (flexibilité maximale)
 
 CREATE TABLE IF NOT EXISTS user_sessions (
     id SERIAL PRIMARY KEY,
@@ -278,10 +163,6 @@ CREATE TABLE IF NOT EXISTS user_sessions (
         revoked_at IS NULL OR is_active = FALSE
     )
 );
-
--- =====================================================
--- INDEX JUSTIFICATIONS
--- =====================================================
 
 -- Recherche refresh token (authentification stateful) - Très fréquent
 CREATE INDEX IF NOT EXISTS idx_user_sessions_token
@@ -326,27 +207,6 @@ COMMENT ON COLUMN user_sessions.device_info IS 'Infos device en JSONB: type, nam
 
 
 
--- RLS JUSTIFICATION : Tokens privés par utilisateur
-ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY sessions_customer_access ON user_sessions
-    FOR ALL TO customer_eorian
-    USING (true);  -- Node.js filtre avec WHERE user_id = $1
-
-CREATE POLICY sessions_admin_all ON user_sessions
-    FOR ALL TO admin_eorian
-    USING (true);  -- Admin accès complet
-
-CREATE POLICY sessions_api_service_full ON user_sessions
-    FOR ALL TO api_service_eorian
-    USING (true);
-
--- TABLE : user_profiles
-
--- RÔLE MÉTIER : Données personnelles étendues séparées de l'auth
--- RELATIONS :
--- └─ users 1:1 user_profiles (CASCADE DELETE) = si l'utilisateur est supprimé, son profil est supprimé
-
 CREATE TABLE IF NOT EXISTS user_profiles (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL UNIQUE,
@@ -362,36 +222,6 @@ CREATE TABLE IF NOT EXISTS user_profiles (
     REFERENCES users (id) ON DELETE CASCADE,
     CONSTRAINT valid_phone CHECK (phone IS NULL OR phone ~* '^\+?[0-9\s\-\.]{10,15}$')
 );
--- RLS JUSTIFICATION : Profils privés par utilisateur
-ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY profiles_customer_access ON user_profiles
-    FOR ALL TO customer_eorian
-    USING (true);  -- Node.js fait WHERE user_id = $1
-
-CREATE POLICY admin_full_profiles ON user_profiles
-    FOR ALL TO admin_eorian
-    USING (true);
-CREATE POLICY api_service_full_profiles ON user_profiles
-    FOR ALL TO api_service_eorian
-    USING (true);
-
--- =====================================================
--- THÈME : USER MANAGEMENT
--- =====================================================
--- JUSTIFICATION : Données sensibles utilisateur (cartes bancaires)
--- ENDPOINTS LIÉS :
---   POST /api/payment-methods (ajouter carte)
---   GET /api/payment-methods (lister cartes user)
---   PUT /api/payment-methods/:id (modifier carte)
---   DELETE /api/payment-methods/:id (supprimer carte)
-
--- -----------------------------------------------------
--- TABLE : user_payment_methods
--- -----------------------------------------------------
--- RÔLE MÉTIER : Stockage sécurisé des moyens de paiement utilisateur
--- RELATIONS :
--- └─ users 1:N user_payment_methods (CASCADE DELETE) = un utilisateur peut avoir plusieurs cartes
 
 CREATE TABLE IF NOT EXISTS user_payment_methods (
     id SERIAL PRIMARY KEY,
@@ -456,41 +286,6 @@ WHERE is_default = TRUE AND is_active = TRUE;
 -- - Token unique (sécurité + intégrité Stripe)
 CREATE UNIQUE INDEX idx_payment_methods_token ON user_payment_methods (card_token);
 
--- RLS DOUBLE SÉCURITÉ : Cartes ultra-sensibles
-ALTER TABLE user_payment_methods ENABLE ROW LEVEL SECURITY;
-
--- Policy utilisateur : voit seulement ses cartes
-CREATE POLICY payment_methods_customer_access ON user_payment_methods
-    FOR ALL TO customer_eorian
-    USING (true);  -- Node.js fait WHERE user_id = $1
-
--- Policy admin : accès complet pour support client
-CREATE POLICY admin_full_payment_methods ON user_payment_methods
-    FOR ALL TO admin_eorian
-    USING (true);
-
--- Policy service API : accès technique complet
-CREATE POLICY api_service_full_payment_methods ON user_payment_methods
-    FOR ALL TO api_service_eorian
-    USING (true);
-
--- =====================================================
--- THÈME : RÉFÉRENTIELS MÉTIER
--- =====================================================
--- JUSTIFICATION : Tables de référence pour la conformité fiscale et organisation
--- ENDPOINTS LIÉS :
--- - GET /api/v1/categories (navigation)
--- - GET /api/v1/tax-rates (calculs checkout)
--- - POST /api/v1/admin/tax-rates (gestion admin)
--- TABLES : tax_rates, categories
-
--- -----------------------------------------------------
--- TABLE : tax_rates
--- -----------------------------------------------------
--- RÔLE MÉTIER : Centraliser les taux TVA pour conformité fiscale française
--- RELATIONS :
--- └─ tax_rates 1:N products (calcul TVA par produit)
-
 CREATE TABLE IF NOT EXISTS tax_rates (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL,
@@ -511,13 +306,8 @@ WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_tax_rates_name ON tax_rates (name)
 WHERE is_active = true;
 
--- RLS JUSTIFICATION : Lecture publique, modification admin uniquement
-ALTER TABLE tax_rates ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY tax_rates_read_all ON tax_rates FOR
-SELECT USING (is_active = true);
 
-CREATE POLICY admin_manage_tax_rates ON tax_rates FOR ALL TO admin_eorian USING (true);
 
 -- DONNÉES RÉFÉRENCE FRANCE 2025
 INSERT INTO
@@ -543,17 +333,7 @@ VALUES (
         'Exonération de TVA - micro-entreprises'
     );
 
--- -----------------------------------------------------
--- TABLE : products (MISE À JOUR AVEC CITEXT + MÉTADONNÉES LIVRES)
--- -----------------------------------------------------
--- RÔLE MÉTIER : Catalogue produits avec recherche insensible à la casse
--- RELATIONS :
---   └─ tax_rates 1:N products (calcul TVA)
---   └─ users(admin) 1:N products (créateur)
---   └─ products N:M categories (via product_categories)
---   └─ products 1:N product_images (galerie)
---   └─ products 1:N cart_items (ajout panier)
---   └─ products 1:N order_items (commandes)
+
 
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
@@ -585,31 +365,6 @@ CREATE TABLE IF NOT EXISTS products (
         REFERENCES users (id)
 );
 
--- =====================================================
--- RLS : ROW LEVEL SECURITY
--- =====================================================
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-
--- JUSTIFICATION : Lecture publique des produits actifs uniquement
-CREATE POLICY products_read_active ON products FOR SELECT
-    USING (is_active = true);
-
--- JUSTIFICATION : Admins gèrent tous les produits
-CREATE POLICY admin_manage_products ON products FOR ALL TO admin_eorian
-    USING (true);
-
--- JUSTIFICATION : Service API accès technique complet
-CREATE POLICY api_service_full_products ON products FOR ALL TO api_service_eorian
-    USING (true);
-
-
--- -----------------------------------------------------
--- TABLE : product_images
--- -----------------------------------------------------
--- RÔLE MÉTIER : Galerie d'images par produit avec image principale
--- RELATIONS :
---   └─ products 1:N product_images (galerie)
---   └─ users(admin) 1:N product_images (qui a uploadé)
 
 CREATE TABLE IF NOT EXISTS product_images (
     id SERIAL PRIMARY KEY,
@@ -630,7 +385,6 @@ CREATE TABLE IF NOT EXISTS product_images (
         REFERENCES users (id)
 );
 
--- CONTRAINTE CRITIQUE : Une seule image primary par produit
 CREATE UNIQUE INDEX idx_product_images_one_primary
     ON product_images (product_id)
     WHERE is_primary = true;
@@ -640,33 +394,6 @@ CREATE INDEX IF NOT EXISTS idx_product_images_product ON product_images (product
 CREATE INDEX IF NOT EXISTS idx_product_images_product_order ON product_images (product_id, sort_order); -- Ordre affichage
 CREATE INDEX IF NOT EXISTS idx_product_images_uploaded_by ON product_images (uploaded_by);              -- Images par admin
 
--- RLS JUSTIFICATION : Images publiques, gestion admin
-ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY images_read_all ON product_images FOR SELECT
-    USING (true);
-
-CREATE POLICY admin_manage_images ON product_images FOR ALL TO admin_eorian
-    USING (true);
-
-
--- =====================================================
--- THÈME : GESTION UTILISATEUR
--- =====================================================
--- JUSTIFICATION : Données clients pour livraisons et préférences
--- ENDPOINTS LIÉS :
--- - GET /api/v1/addresses
--- - POST /api/v1/addresses
--- - PUT /api/v1/addresses/:id/default
--- TABLES : addresses, cart_items
-
--- -----------------------------------------------------
--- TABLE : addresses
--- -----------------------------------------------------
--- RÔLE MÉTIER : Adresses de livraison et facturation clients
--- RELATIONS :
---   └─ users(customer) 1:N addresses (adresses multiples)
---   └─ addresses 1:N orders (adresse de livraison/facturation)
 
 CREATE TABLE IF NOT EXISTS addresses (
     id SERIAL PRIMARY KEY,
@@ -714,27 +441,7 @@ CREATE INDEX IF NOT EXISTS idx_addresses_user ON addresses (user_id);           
 CREATE INDEX IF NOT EXISTS idx_addresses_user_type ON addresses (user_id, type);         -- Filtrer par type
 CREATE INDEX IF NOT EXISTS idx_addresses_country ON addresses (country);                 -- Stats par pays
 
--- RLS JUSTIFICATION : Adresses privées par utilisateur
-ALTER TABLE addresses ENABLE ROW LEVEL SECURITY;
 
--- Customers peuvent gérer leurs adresses
-CREATE POLICY customers_manage_addresses ON addresses
-    FOR ALL TO customer_eorian
-    USING (true);  -- ← RLS simple
-
--- Admin voit toutes les adresses
-CREATE POLICY admin_view_addresses ON addresses
-    FOR SELECT TO admin_eorian
-    USING (true);
-
-
--- -----------------------------------------------------
--- TABLE : cart_items
--- -----------------------------------------------------
--- RÔLE MÉTIER : Panier persistant pour chaque utilisateur connecté
--- RELATIONS :
---   └─ users(customer) 1:N cart_items (panier multi-produits)
---   └─ products 1:N cart_items (référence produit)
 
 CREATE TABLE IF NOT EXISTS cart_items (
     id SERIAL PRIMARY KEY,
@@ -758,27 +465,6 @@ CREATE INDEX IF NOT EXISTS idx_cart_items_user ON cart_items (user_id);         
 CREATE INDEX IF NOT EXISTS idx_cart_items_product ON cart_items (product_id);              -- Produits populaires + stock
 CREATE INDEX IF NOT EXISTS idx_cart_items_updated ON cart_items (updated_at);              -- Nettoyage paniers anciens
 
--- RLS JUSTIFICATION : Panier privé par utilisateur
-ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
-
--- Customers gèrent leurs paniers
-CREATE POLICY customers_manage_cart ON cart_items
-    FOR ALL TO customer_eorian
-    USING (true);
-
--- Admin voit tous les paniers
-CREATE POLICY admin_view_cart ON cart_items
-    FOR SELECT TO admin_eorian
-    USING (true);
-
--- -----------------------------------------------------
--- TABLE : orders
--- -----------------------------------------------------
--- RÔLE MÉTIER : Commandes clients avec calculs prix figés et statut suivi
--- RELATIONS :
---   └─ users(customer) 1:N orders (historique commandes)
---   └─ addresses N:1 orders (livraison/facturation)
---   └─ orders 1:N order_items (lignes commande)
 
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
@@ -846,26 +532,7 @@ CREATE INDEX IF NOT EXISTS idx_orders_status_date ON orders (status, created_at)
 -- CONSTRAINT UNIQUE après les index pour cohérence
 CREATE UNIQUE INDEX idx_orders_number_unique ON orders (order_number);      -- Numérotation unique
 
--- RLS JUSTIFICATION : Commandes privées par client
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 
--- Customers peuvent consulter leurs commandes
-CREATE POLICY customers_view_orders ON orders
-    FOR SELECT TO customer_eorian
-    USING (true);
-
--- Admin gère toutes les commandes
-CREATE POLICY admin_manage_orders ON orders
-    FOR ALL TO admin_eorian
-    USING (true);
-
--- -----------------------------------------------------
--- TABLE : order_items
--- -----------------------------------------------------
--- RÔLE MÉTIER : Lignes de commande avec snapshot produit immutable
--- RELATIONS :
---   └─ orders 1:N order_items (détail commande)
---   └─ products N:1 order_items (référence produit - peut changer)
 
 CREATE TABLE IF NOT EXISTS order_items (
     id SERIAL PRIMARY KEY,
@@ -907,14 +574,3 @@ CREATE INDEX IF NOT EXISTS idx_order_items_sku ON order_items (product_sku)     
     WHERE product_sku IS NOT NULL;                                         -- Index partiel
 
 -- RLS JUSTIFICATION : Accès via la commande parente
-ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
-
--- Customers peuvent consulter leurs items de commande
-CREATE POLICY customers_view_order_items ON order_items
-    FOR SELECT TO customer_eorian
-    USING (true);
-
--- Admin gère tous les items
-CREATE POLICY admin_manage_order_items ON order_items
-    FOR ALL TO admin_eorian
-    USING (true);

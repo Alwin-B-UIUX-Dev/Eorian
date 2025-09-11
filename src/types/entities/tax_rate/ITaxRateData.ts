@@ -8,7 +8,7 @@ export interface ITaxRateData extends IBaseEntityData {
   name: string;
   rate: string;
   description: string;
-  is_active: boolean;
+  isActive: boolean;
 }
 
 export type CreateTaxRateData = WithoutSystemFieldsType<ITaxRateData>;
