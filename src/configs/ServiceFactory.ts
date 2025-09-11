@@ -7,7 +7,8 @@ import {
   OrderItemController,
   ProductController,
   ProductImageController,
-  TaxRateController
+  TaxRateController,
+  UserPaymentMethodController
 } from '@/controllers';
 import type {
   IAddresseRepository,
@@ -29,6 +30,8 @@ import type {
   ITaxRateService,
   ITokenManager,
   ITokenService,
+  IUserPaymentMethodRepository,
+  IUserPaymentMethodService,
   IUserRepository,
   IUserSessionRepository
 } from '@/interfaces';
@@ -40,6 +43,7 @@ import {
   PostgresProductImageRepository,
   PostgresProductRepository,
   PostgresTaxRateRepository,
+  PostgresUserPaymentMethodRepository,
   PostgresUserRepository,
   PostgresUserSessionRepository
 } from '@/repositories';
@@ -52,7 +56,8 @@ import {
   ProductImageService,
   ProductService,
   TaxRateService,
-  TokenService
+  TokenService,
+  UserPaymentMethodService
 } from '@/services';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -95,6 +100,10 @@ export class ServiceFactory {
   private static productImageController: ProductImageController;
   private static productImageService: IProductImageService;
   private static productImageRepository: IProductImageRepository;
+
+  private static userPaymentMethodController: UserPaymentMethodController;
+  private static userPaymentMethodService: IUserPaymentMethodService;
+  private static userPaymentMethodRepository: IUserPaymentMethodRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -183,6 +192,13 @@ export class ServiceFactory {
     return ServiceFactory.orderRepository;
   }
 
+  public static getUserPaymentMethodRepository(): IUserPaymentMethodRepository {
+    if (!ServiceFactory.userPaymentMethodRepository) {
+      ServiceFactory.userPaymentMethodRepository = new PostgresUserPaymentMethodRepository();
+    }
+    return ServiceFactory.userPaymentMethodRepository;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -263,6 +279,16 @@ export class ServiceFactory {
       ServiceFactory.productImageService = new ProductImageService(productImageRepository);
     }
     return ServiceFactory.productImageService;
+  }
+
+  public static getUserPaymentMethodService(): IUserPaymentMethodService {
+    if (!ServiceFactory.userPaymentMethodService) {
+      const userPaymentMethodRepository = ServiceFactory.getUserPaymentMethodRepository();
+      ServiceFactory.userPaymentMethodService = new UserPaymentMethodService(
+        userPaymentMethodRepository
+      );
+    }
+    return ServiceFactory.userPaymentMethodService;
   }
 
   // Controllers
@@ -383,6 +409,23 @@ export class ServiceFactory {
     return ServiceFactory.productImageController;
   }
 
+  public static getUserPaymentMethodController(): UserPaymentMethodController {
+    if (!ServiceFactory.userPaymentMethodController) {
+      console.log('🏭 Creating UserPaymentMethodController...');
+      const userPaymentMethodService: IUserPaymentMethodService =
+        ServiceFactory.getUserPaymentMethodService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!userPaymentMethodService
+      });
+
+      ServiceFactory.userPaymentMethodController = new UserPaymentMethodController(
+        userPaymentMethodService
+      );
+    }
+    return ServiceFactory.userPaymentMethodController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -402,5 +445,7 @@ export class ServiceFactory {
     ServiceFactory.orderItemController = undefined as unknown as OrderItemController;
     ServiceFactory.orderController = undefined as unknown as OrderController;
     ServiceFactory.productImageController = undefined as unknown as ProductImageController;
+    ServiceFactory.userPaymentMethodController =
+      undefined as unknown as UserPaymentMethodController;
   }
 }
