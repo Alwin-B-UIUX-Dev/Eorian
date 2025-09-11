@@ -18,7 +18,7 @@ export interface IUserController {
    * Créer un nouvel utilisateur (Administration)
    * Endpoint: POST /api/v1/users
    */
-  // store(req: Request, res: Response, next: NextFunction): Promise<void>;
+  store(req: Request, res: Response, next: NextFunction): Promise<void>;
 
   /**
    * Modifier un utilisateur (Administration)

@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
 export interface IUserProfileController {
+  store: any;
   // ===== CONTEXTE UTILISATEUR (Mon compte) =====
   /**
    * Modifier l'email de l'utilisateur connecté
