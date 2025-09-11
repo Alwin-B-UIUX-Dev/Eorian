@@ -6,6 +6,7 @@ import {
   OrderController,
   OrderItemController,
   ProductController,
+  ProductImageController,
   TaxRateController
 } from '@/controllers';
 import type {
@@ -20,6 +21,8 @@ import type {
   IOrderRepository,
   IOrderService,
   IPasswordHasher,
+  IProductImageRepository,
+  IProductImageService,
   IProductRepository,
   IProductService,
   ITaxRateRepository,
@@ -34,6 +37,7 @@ import {
   PostgresCartItemRepository,
   PostgresOrderItemRepository,
   PostgresOrderRepository,
+  PostgresProductImageRepository,
   PostgresProductRepository,
   PostgresTaxRateRepository,
   PostgresUserRepository,
@@ -45,6 +49,7 @@ import {
   CartItemService,
   OrderItemService,
   OrderService,
+  ProductImageService,
   ProductService,
   TaxRateService,
   TokenService
@@ -86,6 +91,10 @@ export class ServiceFactory {
   private static orderController: OrderController;
   private static orderService: IOrderService;
   private static orderRepository: IOrderRepository;
+
+  private static productImageController: ProductImageController;
+  private static productImageService: IProductImageService;
+  private static productImageRepository: IProductImageRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -136,6 +145,13 @@ export class ServiceFactory {
       ServiceFactory.orderItemRepository = new PostgresOrderItemRepository();
     }
     return ServiceFactory.orderItemRepository;
+  }
+
+  public static getProductImageRepository(): IProductImageRepository {
+    if (!ServiceFactory.productImageRepository) {
+      ServiceFactory.productImageRepository = new PostgresProductImageRepository();
+    }
+    return ServiceFactory.productImageRepository;
   }
 
   // Utils
@@ -239,6 +255,14 @@ export class ServiceFactory {
       ServiceFactory.orderService = new OrderService(orderRepository);
     }
     return ServiceFactory.orderService;
+  }
+
+  public static getProductImageService(): IProductImageService {
+    if (!ServiceFactory.productImageService) {
+      const productImageRepository = ServiceFactory.getProductImageRepository();
+      ServiceFactory.productImageService = new ProductImageService(productImageRepository);
+    }
+    return ServiceFactory.productImageService;
   }
 
   // Controllers
@@ -345,6 +369,20 @@ export class ServiceFactory {
     return ServiceFactory.orderController;
   }
 
+  public static getProductImageController(): ProductImageController {
+    if (!ServiceFactory.productImageController) {
+      console.log('🏭 Creating ProductImageController...');
+      const productImageService: IProductImageService = ServiceFactory.getProductImageService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!productImageService
+      });
+
+      ServiceFactory.productImageController = new ProductImageController(productImageService);
+    }
+    return ServiceFactory.productImageController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -363,5 +401,6 @@ export class ServiceFactory {
     ServiceFactory.cartItemController = undefined as unknown as CartItemController;
     ServiceFactory.orderItemController = undefined as unknown as OrderItemController;
     ServiceFactory.orderController = undefined as unknown as OrderController;
+    ServiceFactory.productImageController = undefined as unknown as ProductImageController;
   }
 }
