@@ -3,6 +3,7 @@ import {
   AddresseController,
   AuthController,
   CartItemController,
+  OrderController,
   OrderItemController,
   ProductController,
   TaxRateController
@@ -16,6 +17,8 @@ import type {
   ICookieManager,
   IOrderItemRepository,
   IOrderItemService,
+  IOrderRepository,
+  IOrderService,
   IPasswordHasher,
   IProductRepository,
   IProductService,
@@ -30,6 +33,7 @@ import {
   PostgresAddresseRepository,
   PostgresCartItemRepository,
   PostgresOrderItemRepository,
+  PostgresOrderRepository,
   PostgresProductRepository,
   PostgresTaxRateRepository,
   PostgresUserRepository,
@@ -40,6 +44,7 @@ import {
   AuthService,
   CartItemService,
   OrderItemService,
+  OrderService,
   ProductService,
   TaxRateService,
   TokenService
@@ -77,6 +82,10 @@ export class ServiceFactory {
   private static orderItemController: OrderItemController;
   private static orderItemService: IOrderItemService;
   private static orderItemRepository: IOrderItemRepository;
+
+  private static orderController: OrderController;
+  private static orderService: IOrderService;
+  private static orderRepository: IOrderRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -151,6 +160,13 @@ export class ServiceFactory {
     return ServiceFactory.cookieManager;
   }
 
+  public static getOrderRepository(): IOrderRepository {
+    if (!ServiceFactory.orderRepository) {
+      ServiceFactory.orderRepository = new PostgresOrderRepository();
+    }
+    return ServiceFactory.orderRepository;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -215,6 +231,14 @@ export class ServiceFactory {
       ServiceFactory.orderItemService = new OrderItemService(orderItemRepository);
     }
     return ServiceFactory.orderItemService;
+  }
+
+  public static getOrderService(): IOrderService {
+    if (!ServiceFactory.orderService) {
+      const orderRepository = ServiceFactory.getOrderRepository();
+      ServiceFactory.orderService = new OrderService(orderRepository);
+    }
+    return ServiceFactory.orderService;
   }
 
   // Controllers
@@ -307,6 +331,20 @@ export class ServiceFactory {
     return ServiceFactory.orderItemController;
   }
 
+  public static getOrderController(): OrderController {
+    if (!ServiceFactory.orderController) {
+      console.log('🏭 Creating OrderController...');
+      const orderService: IOrderService = ServiceFactory.getOrderService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!orderService
+      });
+
+      ServiceFactory.orderController = new OrderController(orderService);
+    }
+    return ServiceFactory.orderController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -324,5 +362,6 @@ export class ServiceFactory {
     ServiceFactory.addresseController = undefined as unknown as AddresseController;
     ServiceFactory.cartItemController = undefined as unknown as CartItemController;
     ServiceFactory.orderItemController = undefined as unknown as OrderItemController;
+    ServiceFactory.orderController = undefined as unknown as OrderController;
   }
 }

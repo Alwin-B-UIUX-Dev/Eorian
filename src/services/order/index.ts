@@ -1,1 +1,1 @@
-export * from '@/interfaces/services/order/IOrderService';
+export * from '@/services/order/OrdersService';
