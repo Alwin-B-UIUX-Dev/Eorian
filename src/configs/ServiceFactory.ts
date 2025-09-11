@@ -8,7 +8,10 @@ import {
   ProductController,
   ProductImageController,
   TaxRateController,
-  UserPaymentMethodController
+  UserPaymentMethodController,
+  UserProfileController,
+  UserRoleController,
+  UserSessionController
 } from '@/controllers';
 import type {
   IAddresseRepository,
@@ -32,8 +35,13 @@ import type {
   ITokenService,
   IUserPaymentMethodRepository,
   IUserPaymentMethodService,
+  IUserProfileRepository,
+  IUserProfileService,
   IUserRepository,
-  IUserSessionRepository
+  IUserRoleRepository,
+  IUserRoleService,
+  IUserSessionRepository,
+  IUserSessionService
 } from '@/interfaces';
 import {
   PostgresAddresseRepository,
@@ -44,7 +52,9 @@ import {
   PostgresProductRepository,
   PostgresTaxRateRepository,
   PostgresUserPaymentMethodRepository,
+  PostgresUserProfileRepository,
   PostgresUserRepository,
+  PostgresUserRolesRepository,
   PostgresUserSessionRepository
 } from '@/repositories';
 import {
@@ -57,7 +67,10 @@ import {
   ProductService,
   TaxRateService,
   TokenService,
-  UserPaymentMethodService
+  UserPaymentMethodService,
+  UserProfilesService,
+  UserRoleService,
+  UserSessionsService
 } from '@/services';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -104,6 +117,18 @@ export class ServiceFactory {
   private static userPaymentMethodController: UserPaymentMethodController;
   private static userPaymentMethodService: IUserPaymentMethodService;
   private static userPaymentMethodRepository: IUserPaymentMethodRepository;
+
+  private static userProfileController: UserProfileController;
+  private static userProfileService: IUserProfileService;
+  private static userProfileRepository: IUserProfileRepository;
+
+  private static userRoleController: UserRoleController;
+  private static userRoleService: IUserRoleService;
+  private static userRoleRepository: IUserRoleRepository;
+
+  private static userSessionController: UserSessionController;
+  private static userSessionService: IUserSessionService;
+  private static userSessionRepository: IUserSessionRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -163,6 +188,20 @@ export class ServiceFactory {
     return ServiceFactory.productImageRepository;
   }
 
+  public static getUserRoleRepository(): IUserRoleRepository {
+    if (!ServiceFactory.userRoleRepository) {
+      ServiceFactory.userRoleRepository = new PostgresUserRolesRepository();
+    }
+    return ServiceFactory.userRoleRepository;
+  }
+
+  public static getUserSessionRepository(): IUserSessionRepository {
+    if (!ServiceFactory.userSessionRepository) {
+      ServiceFactory.userSessionRepository = new PostgresUserSessionRepository();
+    }
+    return ServiceFactory.userSessionRepository;
+  }
+
   // Utils
   public static getPasswordHasher(): IPasswordHasher {
     if (!ServiceFactory.passwordHasher) {
@@ -197,6 +236,13 @@ export class ServiceFactory {
       ServiceFactory.userPaymentMethodRepository = new PostgresUserPaymentMethodRepository();
     }
     return ServiceFactory.userPaymentMethodRepository;
+  }
+
+  public static getUserProfileRepository(): IUserProfileRepository {
+    if (!ServiceFactory.userProfileRepository) {
+      ServiceFactory.userProfileRepository = new PostgresUserProfileRepository();
+    }
+    return ServiceFactory.userProfileRepository;
   }
 
   // Services
@@ -289,6 +335,30 @@ export class ServiceFactory {
       );
     }
     return ServiceFactory.userPaymentMethodService;
+  }
+
+  public static getUserProfileService(): IUserProfileService {
+    if (!ServiceFactory.userProfileService) {
+      const userProfileRepository = ServiceFactory.getUserProfileRepository();
+      ServiceFactory.userProfileService = new UserProfilesService(userProfileRepository);
+    }
+    return ServiceFactory.userProfileService;
+  }
+
+  public static getUserRoleService(): IUserRoleService {
+    if (!ServiceFactory.userRoleService) {
+      const userRoleRepository = ServiceFactory.getUserRoleRepository();
+      ServiceFactory.userRoleService = new UserRoleService(userRoleRepository);
+    }
+    return ServiceFactory.userRoleService;
+  }
+
+  public static getUserSessionService(): IUserSessionService {
+    if (!ServiceFactory.userSessionService) {
+      const userSessionRepository = ServiceFactory.getUserSessionRepository();
+      ServiceFactory.userSessionService = new UserSessionsService(userSessionRepository);
+    }
+    return ServiceFactory.userSessionService;
   }
 
   // Controllers
@@ -426,6 +496,48 @@ export class ServiceFactory {
     return ServiceFactory.userPaymentMethodController;
   }
 
+  public static getUserProfileController(): UserProfileController {
+    if (!ServiceFactory.userProfileController) {
+      console.log('🏭 Creating UserProfileController...');
+      const userProfileService: IUserProfileService = ServiceFactory.getUserProfileService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!userProfileService
+      });
+
+      ServiceFactory.userProfileController = new UserProfileController(userProfileService);
+    }
+    return ServiceFactory.userProfileController;
+  }
+
+  public static getUserRoleController(): UserRoleController {
+    if (!ServiceFactory.userRoleController) {
+      console.log('🏭 Creating UserRoleController...');
+      const userRoleService: IUserRoleService = ServiceFactory.getUserRoleService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!userRoleService
+      });
+
+      ServiceFactory.userRoleController = new UserRoleController(userRoleService);
+    }
+    return ServiceFactory.userRoleController;
+  }
+
+  public static getUserSessionController(): UserSessionController {
+    if (!ServiceFactory.userSessionController) {
+      console.log('🏭 Creating UserSessionController...');
+      const userSessionService: IUserSessionService = ServiceFactory.getUserSessionService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!userSessionService
+      });
+
+      ServiceFactory.userSessionController = new UserSessionController(userSessionService);
+    }
+    return ServiceFactory.userSessionController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -447,5 +559,8 @@ export class ServiceFactory {
     ServiceFactory.productImageController = undefined as unknown as ProductImageController;
     ServiceFactory.userPaymentMethodController =
       undefined as unknown as UserPaymentMethodController;
+    ServiceFactory.userProfileController = undefined as unknown as UserProfileController;
+    ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
+    ServiceFactory.userSessionController = undefined as unknown as UserSessionController;
   }
 }
