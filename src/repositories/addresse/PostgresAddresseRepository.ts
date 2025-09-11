@@ -6,7 +6,7 @@ import type { IAddresseRepository } from '@/interfaces/repositories/addresse';
 import type { CreateAddresseData, IAddresseData } from '@/types/entities/addresse/IAddresseData';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresAdressesRepository implements IAddresseRepository {
+export class PostgresAddresseRepository implements IAddresseRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
 
   public async create(addresseData: CreateAddresseData): Promise<IAddresse> {

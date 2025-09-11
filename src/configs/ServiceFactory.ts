@@ -1,6 +1,13 @@
 // src/configs/ServiceFactory.ts
-import { AuthController, ProductController, TaxRateController } from '@/controllers';
+import {
+  AddresseController,
+  AuthController,
+  ProductController,
+  TaxRateController
+} from '@/controllers';
 import type {
+  IAddresseRepository,
+  IAddresseService,
   IAuthService,
   ICookieManager,
   IPasswordHasher,
@@ -13,9 +20,13 @@ import type {
   IUserRepository,
   IUserSessionRepository
 } from '@/interfaces';
-import { PostgresProductRepository, PostgresTaxRateRepository } from '@/repositories';
+import {
+  PostgresAddresseRepository,
+  PostgresProductRepository,
+  PostgresTaxRateRepository
+} from '@/repositories';
 import { PostgresUserRepository, PostgresUserSessionRepository } from '@/repositories/user';
-import { AuthService, ProductService, TokenService } from '@/services';
+import { AddresseService, AuthService, ProductService, TokenService } from '@/services';
 import { TaxRateService } from '@/services/tax_rate/TaxRateService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -39,6 +50,10 @@ export class ServiceFactory {
   private static taxRateService: ITaxRateService;
   private static taxRateRepository: ITaxRateRepository;
 
+  private static addresseController: AddresseController;
+  private static addresseService: AddresseService;
+  private static addresseRepository: IAddresseRepository;
+
   // Repositories
   public static getUserRepository(): IUserRepository {
     if (!ServiceFactory.userRepository) {
@@ -54,7 +69,7 @@ export class ServiceFactory {
     return ServiceFactory.sessionRepository;
   }
 
-  // TODO Ajouter les nouveau services ICI pour chaque donné 2
+  // TODO Ajouter les nouveau repository ICI pour chaque donné 2
   public static getProductRepository(): IProductRepository {
     if (!ServiceFactory.productRepository) {
       ServiceFactory.productRepository = new PostgresProductRepository();
@@ -67,6 +82,13 @@ export class ServiceFactory {
       ServiceFactory.taxRateRepository = new PostgresTaxRateRepository();
     }
     return ServiceFactory.taxRateRepository;
+  }
+
+  public static getAddresseRepository(): IAddresseRepository {
+    if (!ServiceFactory.addresseRepository) {
+      ServiceFactory.addresseRepository = new PostgresAddresseRepository();
+    }
+    return ServiceFactory.addresseRepository;
   }
 
   // Utils
@@ -133,6 +155,14 @@ export class ServiceFactory {
     return ServiceFactory.taxRateService;
   }
 
+  public static getAddresseService(): IAddresseService {
+    if(!ServiceFactory.addresseService) {
+      const addresseRepository= ServiceFactory.getAddresseRepository();
+      ServiceFactory.addresseService= new AddresseService(addresseRepository);
+    }
+    return ServiceFactory.addresseService
+  }
+
   // Controllers
   public static getAuthController(): AuthController {
     if (!ServiceFactory.authController) {
@@ -181,6 +211,20 @@ export class ServiceFactory {
     return ServiceFactory.taxRateController;
   }
 
+  public static getAddresseController(): AddresseController {
+    if (!ServiceFactory.addresseController) {
+      console.log('🏭 Creating AddresseController...');
+      const addresseService: IAddresseService = ServiceFactory.getAddresseService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!addresseService
+      });
+
+      ServiceFactory.addresseController = new AddresseController(addresseService);
+    }
+    return ServiceFactory.addresseController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -195,5 +239,6 @@ export class ServiceFactory {
     // TODO Ajouter les nouveau services ICI pour chaque donné 5
     ServiceFactory.productController = undefined as unknown as ProductController;
     ServiceFactory.taxRateController = undefined as unknown as TaxRateController;
+    ServiceFactory.productController = undefined as unknown as AddresseController;
   }
 }
