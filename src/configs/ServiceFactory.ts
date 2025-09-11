@@ -2,6 +2,7 @@
 import {
   AddresseController,
   AuthController,
+  CartItemController,
   ProductController,
   TaxRateController
 } from '@/controllers';
@@ -9,6 +10,8 @@ import type {
   IAddresseRepository,
   IAddresseService,
   IAuthService,
+  ICartItemRepository,
+  ICartItemService,
   ICookieManager,
   IPasswordHasher,
   IProductRepository,
@@ -22,12 +25,20 @@ import type {
 } from '@/interfaces';
 import {
   PostgresAddresseRepository,
+  PostgresCartItemRepository,
   PostgresProductRepository,
-  PostgresTaxRateRepository
+  PostgresTaxRateRepository,
+  PostgresUserRepository,
+  PostgresUserSessionRepository
 } from '@/repositories';
-import { PostgresUserRepository, PostgresUserSessionRepository } from '@/repositories/user';
-import { AddresseService, AuthService, ProductService, TokenService } from '@/services';
-import { TaxRateService } from '@/services/tax_rate/TaxRateService';
+import {
+  AddresseService,
+  AuthService,
+  CartItemService,
+  ProductService,
+  TaxRateService,
+  TokenService
+} from '@/services';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
 export class ServiceFactory {
@@ -53,6 +64,10 @@ export class ServiceFactory {
   private static addresseController: AddresseController;
   private static addresseService: AddresseService;
   private static addresseRepository: IAddresseRepository;
+
+  private static cartItemController: CartItemController;
+  private static cartItemService: ICartItemService;
+  private static cartItemRepository: ICartItemRepository;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -89,6 +104,13 @@ export class ServiceFactory {
       ServiceFactory.addresseRepository = new PostgresAddresseRepository();
     }
     return ServiceFactory.addresseRepository;
+  }
+
+  public static getCartItemRepository(): ICartItemRepository {
+    if (!ServiceFactory.cartItemRepository) {
+      ServiceFactory.cartItemRepository = new PostgresCartItemRepository();
+    }
+    return ServiceFactory.cartItemRepository;
   }
 
   // Utils
@@ -163,6 +185,14 @@ export class ServiceFactory {
     return ServiceFactory.addresseService;
   }
 
+  public static getCartItemService(): ICartItemService {
+    if (!ServiceFactory.cartItemService) {
+      const cartItemRepository = ServiceFactory.getCartItemRepository();
+      ServiceFactory.cartItemService = new CartItemService(cartItemRepository);
+    }
+    return ServiceFactory.cartItemService;
+  }
+
   // Controllers
   public static getAuthController(): AuthController {
     if (!ServiceFactory.authController) {
@@ -225,6 +255,20 @@ export class ServiceFactory {
     return ServiceFactory.addresseController;
   }
 
+  public static getCartItemController(): CartItemController {
+    if (!ServiceFactory.cartItemController) {
+      console.log('🏭 Creating CartItemController...');
+      const cartItemService: ICartItemService = ServiceFactory.getCartItemService();
+      // Vérifications debug
+      console.log('🔧 Dependencies check', {
+        hasAuthService: !!cartItemService
+      });
+
+      ServiceFactory.cartItemController = new CartItemController(cartItemService);
+    }
+    return ServiceFactory.cartItemController;
+  }
+
   // Reset pour les tests
   public static reset(): void {
     ServiceFactory.userRepository = undefined as unknown as IUserRepository;
@@ -240,5 +284,6 @@ export class ServiceFactory {
     ServiceFactory.productController = undefined as unknown as ProductController;
     ServiceFactory.taxRateController = undefined as unknown as TaxRateController;
     ServiceFactory.addresseController = undefined as unknown as AddresseController;
+    ServiceFactory.cartItemController = undefined as unknown as CartItemController;
   }
 }

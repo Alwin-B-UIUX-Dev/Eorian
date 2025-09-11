@@ -1,5 +1,6 @@
 export * from '@/repositories/addresse/index';
 export * from '@/repositories/addresse/PostgresAddresseRepository';
+export * from '@/repositories/cart_item/index';
 export * from '@/repositories/order/index';
 export * from '@/repositories/order_item/index';
 export * from '@/repositories/product/index';

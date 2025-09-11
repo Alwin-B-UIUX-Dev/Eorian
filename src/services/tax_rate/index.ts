@@ -1,1 +1,1 @@
-export * from '@/services/tax_rate/index';
+export * from '@/services/tax_rate/TaxRateService';

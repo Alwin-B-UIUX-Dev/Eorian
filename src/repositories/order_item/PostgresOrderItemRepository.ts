@@ -5,7 +5,7 @@ import type { IOrderItem, IOrderItemRepository } from '@/interfaces';
 import type { CreateOrderItemData, IOrderItemData } from '@/types';
 import { DatabaseMapper } from '@/utils';
 
-export class PostgresCartItemRepository implements IOrderItemRepository {
+export class PostgresOrderItemRepository implements IOrderItemRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
 
   public async create(orderItemData: CreateOrderItemData): Promise<IOrderItem> {
