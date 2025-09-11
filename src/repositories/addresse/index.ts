@@ -1,1 +1,1 @@
-export { PostgresAdressesRepository } from '@/repositories/addresse/PostgresAddresseRepository';
+export { PostgresAddresseRepository } from '@/repositories/addresse/PostgresAddresseRepository';

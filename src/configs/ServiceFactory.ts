@@ -156,11 +156,11 @@ export class ServiceFactory {
   }
 
   public static getAddresseService(): IAddresseService {
-    if(!ServiceFactory.addresseService) {
-      const addresseRepository= ServiceFactory.getAddresseRepository();
-      ServiceFactory.addresseService= new AddresseService(addresseRepository);
+    if (!ServiceFactory.addresseService) {
+      const addresseRepository = ServiceFactory.getAddresseRepository();
+      ServiceFactory.addresseService = new AddresseService(addresseRepository);
     }
-    return ServiceFactory.addresseService
+    return ServiceFactory.addresseService;
   }
 
   // Controllers
@@ -239,6 +239,6 @@ export class ServiceFactory {
     // TODO Ajouter les nouveau services ICI pour chaque donné 5
     ServiceFactory.productController = undefined as unknown as ProductController;
     ServiceFactory.taxRateController = undefined as unknown as TaxRateController;
-    ServiceFactory.productController = undefined as unknown as AddresseController;
+    ServiceFactory.addresseController = undefined as unknown as AddresseController;
   }
 }
