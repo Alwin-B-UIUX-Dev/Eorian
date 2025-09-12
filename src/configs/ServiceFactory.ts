@@ -1,20 +1,24 @@
 // src/configs/ServiceFactory.ts
 import { AuthController } from '@/controllers';
-import { ProductController } from '@/controllers/product';
+import { UserRoleController } from '@/controllers/user/UserRoleController';
 import type {
   IAuthService,
   ICookieManager,
   IPasswordHasher,
-  IProductRepository,
-  IProductService,
   ITokenManager,
   ITokenService,
   IUserRepository,
   IUserSessionRepository
 } from '@/interfaces';
-import { PostgresProductRepository } from '@/repositories';
-import { PostgresUserRepository, PostgresUserSessionRepository } from '@/repositories/user';
-import { AuthService, ProductService, TokenService } from '@/services';
+import type { IUserRoleRepository } from '@/interfaces/repositories/user/IUserRoleRepository';
+import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
+import {
+  PostgresUserRepository,
+  PostgresUserRoleRepository,
+  PostgresUserSessionRepository
+} from '@/repositories/user';
+import { AuthService, TokenService } from '@/services';
+import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
 export class ServiceFactory {
@@ -27,10 +31,9 @@ export class ServiceFactory {
   private static authService: IAuthService;
   private static tokenService: ITokenService;
   private static authController: AuthController;
-  private static productController: ProductController;
-  private static productService: IProductService;
-  private static productRepository: IProductRepository;
-
+  private static userRoleController: UserRoleController;
+  private static userRoleRepository: IUserRoleRepository;
+  private static userRoleService: IUserRoleService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -46,11 +49,29 @@ export class ServiceFactory {
     }
     return ServiceFactory.sessionRepository;
   }
-  public static getProductRepository(): IProductRepository {
-    if (!ServiceFactory.productRepository) {
-      ServiceFactory.productRepository = new PostgresProductRepository();
+
+  // User Roles
+  public static getUserRoleRepository(): IUserRoleRepository {
+    if (!ServiceFactory.userRoleRepository) {
+      ServiceFactory.userRoleRepository = new PostgresUserRoleRepository();
     }
-    return ServiceFactory.productRepository;
+    return ServiceFactory.userRoleRepository;
+  }
+
+  public static getUserRoleService(): IUserRoleService {
+    if (!ServiceFactory.userRoleService) {
+      ServiceFactory.userRoleService = new UserRoleService(ServiceFactory.getUserRoleRepository());
+    }
+    return ServiceFactory.userRoleService;
+  }
+
+  public static getUserRoleController(): UserRoleController {
+    if (!ServiceFactory.userRoleController) {
+      ServiceFactory.userRoleController = new UserRoleController(
+        ServiceFactory.getUserRoleService()
+      );
+    }
+    return ServiceFactory.userRoleController;
   }
 
   // Utils
@@ -99,13 +120,6 @@ export class ServiceFactory {
     }
     return ServiceFactory.tokenService;
   }
-  public static getProductService(): IProductService {
-    if (!ServiceFactory.productService) {
-      const productRepository = ServiceFactory.getProductRepository();
-      ServiceFactory.productService = new ProductService(productRepository);
-    }
-    return ServiceFactory.productService;
-  }
 
   // Controllers
   public static getAuthController(): AuthController {
@@ -125,19 +139,6 @@ export class ServiceFactory {
     }
     return ServiceFactory.authController;
   }
-  public static getProductController(): ProductController {
-    if (!ServiceFactory.productController) {
-      console.log('🏭 Creating ProductController...');
-      const productService: IProductService = ServiceFactory.getProductService();
-      // Vérifications debug
-      console.log('🔧 Dependencies check', {
-        hasAuthService: !!productService,
-      });
-
-      ServiceFactory.productController = new ProductController(productService);
-    }
-    return ServiceFactory.productController;
-  }
 
   // Reset pour les tests
   public static reset(): void {
@@ -149,6 +150,5 @@ export class ServiceFactory {
     ServiceFactory.authService = undefined as unknown as IAuthService;
     ServiceFactory.tokenService = undefined as unknown as ITokenService;
     ServiceFactory.authController = undefined as unknown as AuthController;
-    ServiceFactory.productController = undefined as unknown as ProductController;
   }
 }

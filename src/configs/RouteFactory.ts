@@ -3,7 +3,8 @@ import { Router } from 'express';
 import { logger } from '@/configs';
 import { ServiceFactory } from '@/configs/ServiceFactory';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes, ProductRoutes } from '@/routes';
+import { AuthRoutes } from '@/routes';
+import { UserRoleRoutes } from '@/routes/UserRoleRoutes';
 
 export class RouteFactory {
   private static router: Router;
@@ -15,8 +16,9 @@ export class RouteFactory {
 
     // Enregistrement des routes
     RouteFactory.registerAuthRoutes();
+    RouteFactory.registerUserRoleRoutes();
     // RouteFactory.registerUserRoutes();
-    RouteFactory.registerProductRoutes();
+    // RouteFactory.registerProductRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -30,6 +32,12 @@ export class RouteFactory {
     RouteFactory.router.use('/api/v1', authRoutes.getRouter());
   }
 
+  private static registerUserRoleRoutes(): void {
+    const userRoleController = ServiceFactory.getUserRoleController();
+    const userRoleRoutes = new UserRoleRoutes(userRoleController);
+    RouteFactory.router.use('/api/v1', userRoleRoutes.getRouter());
+  }
+
   // private static registerUserRoutes(): void {
   //   const userController = ServiceFactory.getUserController();
   //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
@@ -38,13 +46,13 @@ export class RouteFactory {
   //   RouteFactory.router.use('/api/v1', userRoutes.getRouter());
   // }
 
-  private static registerProductRoutes(): void {
-    const productController = ServiceFactory.getProductController();
-    // const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
-    const productRoutes = new ProductRoutes(productController);
+  // private static registerProductRoutes(): void {
+  //   const productController = ServiceFactory.getProductController();
+  //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
+  //   const productRoutes = new ProductRoutes(productController, tokenManager);
 
-    RouteFactory.router.use('/api/v1', productRoutes.getRouter());
-  }
+  //   RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  // }
 
   public static reset(): void {
     RouteFactory.router = undefined as unknown as Router;
