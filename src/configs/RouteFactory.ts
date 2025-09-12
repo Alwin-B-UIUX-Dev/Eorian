@@ -4,6 +4,7 @@ import { logger } from '@/configs';
 import { ServiceFactory } from '@/configs/ServiceFactory';
 import type { ITokenManager } from '@/interfaces';
 import { AuthRoutes } from '@/routes';
+import { TaxRateRoutes } from '@/routes/TaxRateRoutes';
 import { UserRoleRoutes } from '@/routes/UserRoleRoutes';
 
 export class RouteFactory {
@@ -17,6 +18,7 @@ export class RouteFactory {
     // Enregistrement des routes
     RouteFactory.registerAuthRoutes();
     RouteFactory.registerUserRoleRoutes();
+    RouteFactory.registerTaxRateRoutes();
     // RouteFactory.registerUserRoutes();
     // RouteFactory.registerProductRoutes();
 
@@ -36,6 +38,13 @@ export class RouteFactory {
     const userRoleController = ServiceFactory.getUserRoleController();
     const userRoleRoutes = new UserRoleRoutes(userRoleController);
     RouteFactory.router.use('/api/v1', userRoleRoutes.getRouter());
+  }
+
+  // TODO 2
+  private static registerTaxRateRoutes(): void {
+    const taxRateController = ServiceFactory.getTaxRateController();
+    const taxRateRoutes = new TaxRateRoutes(taxRateController);
+    RouteFactory.router.use('/api/v1', taxRateRoutes.getRouter());
   }
 
   // private static registerUserRoutes(): void {

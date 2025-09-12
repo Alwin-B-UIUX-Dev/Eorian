@@ -1,13 +1,8 @@
-// src/entities/UserRole.ts
-
 import { RoleEnum } from '@/constants';
 import { BaseEntity } from '@/entities/BaseEntity';
 import type { IUserRole } from '@/interfaces/entities/user/IUserRole';
 import type { IUserRoleData } from '@/types/entities/user';
 
-/**
- * Classe metier User - Entité metier de User
- */
 export class UserRole extends BaseEntity implements IUserRole {
   private roleName: string;
   private description: string;
@@ -17,7 +12,8 @@ export class UserRole extends BaseEntity implements IUserRole {
     this.roleName = data.roleName;
     this.description = data.description;
   }
-
+  
+  // === GETTERS ===
   public getRoleName(): string {
     return this.roleName;
   }
@@ -26,6 +22,7 @@ export class UserRole extends BaseEntity implements IUserRole {
     return this.description;
   }
 
+  // === SETTERS ===
   public setRoleName(roleName: string): this {
     this.roleName = roleName;
     this.updateTimestamp();

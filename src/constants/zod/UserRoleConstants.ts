@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Respect SQL constraints from database/setup/01_create_bookstore_table.sql
 const roleNameRegex = /^(?:[a-z][a-z0-9_]*[a-z0-9]|[a-z])$/;
 
 export class UserRoleConstants {
@@ -17,17 +16,21 @@ export class UserRoleConstants {
 
   public static readonly CREATE_ROLE_SCHEMA = z.object({
     roleName: UserRoleConstants.ROLE_NAME,
+    description: UserRoleConstants.DESCRIPTION.optional().default('')
+  });
+
+  public static readonly UPDATE_ROLE_SCHEMA = z.object({
+    roleName: UserRoleConstants.ROLE_NAME.optional(),
     description: UserRoleConstants.DESCRIPTION.optional()
   });
 
-  public static readonly UPDATE_ROLE_SCHEMA = z
-    .object({
-      roleName: UserRoleConstants.ROLE_NAME.optional(),
-      description: UserRoleConstants.DESCRIPTION
-    })
-    .refine(obj => Object.keys(obj).length > 0, {
-      message: 'Aucune donnée fournie pour la mise à jour'
-    });
+  public static readonly RESPONSE_ROLE_SCHEMA = z.object({
+    id: z.number(),
+    roleName: UserRoleConstants.ROLE_NAME,
+    description: z.string().max(255),
+    createdAt: z.date(),
+    updatedAt: z.date()
+  });
 
   public static validateCreateRole(data: unknown): CreateUserRoleSchemaType {
     return UserRoleConstants.CREATE_ROLE_SCHEMA.parse(data);
@@ -36,9 +39,11 @@ export class UserRoleConstants {
   public static validateUpdateRole(data: unknown): UpdateUserRoleSchemaType {
     return UserRoleConstants.UPDATE_ROLE_SCHEMA.parse(data);
   }
-}
 
+  public static validateResponseRole(data: unknown): ResponseUserRoleSchemaType {
+    return UserRoleConstants.RESPONSE_ROLE_SCHEMA.parse(data);
+  }
+}
 export type CreateUserRoleSchemaType = z.infer<typeof UserRoleConstants.CREATE_ROLE_SCHEMA>;
 export type UpdateUserRoleSchemaType = z.infer<typeof UserRoleConstants.UPDATE_ROLE_SCHEMA>;
-
-
+export type ResponseUserRoleSchemaType = z.infer<typeof UserRoleConstants.RESPONSE_ROLE_SCHEMA>;

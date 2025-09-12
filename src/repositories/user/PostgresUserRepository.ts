@@ -2,7 +2,11 @@
 
 import type { IDatabase } from 'pg-promise';
 import { database, logger } from '@/configs';
-import { UserErrorMessages, UserLogOperations, UserQueries } from '@/constants';
+import {
+  UserErrorMessagesConstants,
+  UserOperationsConstants,
+  UserQueriesConstants
+} from '@/constants';
 import { User } from '@/entities';
 import { DatabaseError } from '@/exceptions';
 import type { IUser, IUserRepository } from '@/interfaces';
@@ -21,11 +25,11 @@ export class PostgresUserRepository implements IUserRepository {
       const email = userData.email as string;
       try {
         this.logger.info('Attempting to create new user', {
-          operation: UserLogOperations.CREATE_USER,
+          operation: UserOperationsConstants.CREATE_USER,
           email: Masker.maskEmail(email)
         });
 
-        const result: { id: string } = await t.one(UserQueries.INSERT_USER, [
+        const result: { id: string } = await t.one(UserQueriesConstants.INSERT_USER, [
           userData.email,
           userData.username,
           userData.passwordHash,
@@ -36,13 +40,15 @@ export class PostgresUserRepository implements IUserRepository {
           userData.gdprConsentDate
         ]);
 
-        const userProfile: IUserData = await t.one(UserQueries.SELECT_USER_BY_ID, [result.id]);
+        const userProfile: IUserData = await t.one(UserQueriesConstants.SELECT_USER_BY_ID, [
+          result.id
+        ]);
 
         // Mapping automatique snake_case → camelCase
         const mappedProfile: IUserData = DatabaseMapper.snakeToCamel<IUserData>(userProfile);
 
         this.logger.info('User created successfully', {
-          operation: UserLogOperations.CREATE_USER,
+          operation: UserOperationsConstants.CREATE_USER,
           userId: result.id,
           email: Masker.maskEmail(email)
         });
@@ -50,17 +56,17 @@ export class PostgresUserRepository implements IUserRepository {
         return new User(mappedProfile); // Toutes les données sont déjà mappées
       } catch (err: unknown) {
         this.logger.error('Failed to create user', {
-          operation: UserLogOperations.CREATE_USER,
+          operation: UserOperationsConstants.CREATE_USER,
           error: err instanceof Error ? err.message : 'unknown',
           stack: err instanceof Error ? err.stack : undefined
         });
 
         if (err instanceof Error) {
-          if (err.message.includes(UserErrorMessages.DUPLICATE_KEY)) {
-            throw DatabaseError.transactionFailed(UserErrorMessages.CREATE_USER_DUPLICATE);
+          if (err.message.includes(UserErrorMessagesConstants.DUPLICATE_KEY)) {
+            throw DatabaseError.transactionFailed(UserErrorMessagesConstants.CREATE_USER_DUPLICATE);
           }
         }
-        throw DatabaseError.transactionFailed(UserErrorMessages.CREATE_USER_FAILED);
+        throw DatabaseError.transactionFailed(UserErrorMessagesConstants.CREATE_USER_FAILED);
       }
     });
   }
@@ -70,14 +76,17 @@ export class PostgresUserRepository implements IUserRepository {
         this.logger.info('Attempting to update user', { userId: id });
 
         // UPSERT natif PostgreSQL !
-        const updatedUserData: IUserData = await t.one(UserQueries.UPSERT_USER_WITHOUT_PASSWORD, [
-          id,
-          userData.username,
-          userData.email,
-          userData.roleId,
-          userData.isActive,
-          userData.emailVerified
-        ]);
+        const updatedUserData: IUserData = await t.one(
+          UserQueriesConstants.UPSERT_USER_WITHOUT_PASSWORD,
+          [
+            id,
+            userData.username,
+            userData.email,
+            userData.roleId,
+            userData.isActive,
+            userData.emailVerified
+          ]
+        );
 
         const mappedUserData: IUserData = DatabaseMapper.snakeToCamel<IUserData>(updatedUserData);
 
@@ -85,7 +94,7 @@ export class PostgresUserRepository implements IUserRepository {
         return new User(mappedUserData);
       } catch (err: unknown) {
         this.logger.error('Failed to update user', { userId: id, error: err });
-        throw DatabaseError.transactionFailed(UserErrorMessages.UPDATE_USER_FAILED);
+        throw DatabaseError.transactionFailed(UserErrorMessagesConstants.UPDATE_USER_FAILED);
       }
     });
   }
@@ -94,26 +103,29 @@ export class PostgresUserRepository implements IUserRepository {
     return await this.db.tx(async t => {
       try {
         this.logger.info('Attempting to delete user by id', {
-          operation: UserLogOperations.DELETE_USER_BY_ID,
+          operation: UserOperationsConstants.DELETE_USER_BY_ID,
           id
         });
 
-        const result: { rowCount: number } = await t.result(UserQueries.DELETE_USER_BY_ID, [id]);
+        const result: { rowCount: number } = await t.result(
+          UserQueriesConstants.DELETE_USER_BY_ID,
+          [id]
+        );
 
         this.logger.info('User deleted', {
-          operation: UserLogOperations.DELETE_USER_BY_ID,
+          operation: UserOperationsConstants.DELETE_USER_BY_ID,
           deletedCount: result.rowCount
         });
 
         return result.rowCount > 0;
       } catch (error) {
         this.logger.error('Failed to delete user by id', {
-          operation: UserLogOperations.DELETE_USER_BY_ID,
+          operation: UserOperationsConstants.DELETE_USER_BY_ID,
           error: error instanceof Error ? error.message : 'unknown',
           stack: error instanceof Error ? error.stack : undefined
         });
 
-        throw DatabaseError.transactionFailed(UserErrorMessages.DELETE_USER_FAILED);
+        throw DatabaseError.transactionFailed(UserErrorMessagesConstants.DELETE_USER_FAILED);
       }
     });
   }
@@ -124,18 +136,18 @@ export class PostgresUserRepository implements IUserRepository {
   public async findById(id: string): Promise<IUser | null> {
     try {
       this.logger.info('Attempting to find user by id', {
-        operation: UserLogOperations.FIND_USER_BY_ID,
+        operation: UserOperationsConstants.FIND_USER_BY_ID,
         id
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
-        UserQueries.SELECT_USER_PROFILE_COMPLETE,
+        UserQueriesConstants.SELECT_USER_PROFILE_COMPLETE,
         [id]
       );
 
       const found: boolean = result !== null;
       this.logger.info(`User search by id completed`, {
-        operation: UserLogOperations.FIND_USER_BY_ID,
+        operation: UserOperationsConstants.FIND_USER_BY_ID,
         found,
         userId: found ? result?.id : null
       });
@@ -143,31 +155,31 @@ export class PostgresUserRepository implements IUserRepository {
       return result ? new User(result) : null;
     } catch (error) {
       this.logger.error('Failed to find user by id', {
-        operation: UserLogOperations.FIND_USER_BY_ID,
+        operation: UserOperationsConstants.FIND_USER_BY_ID,
         error: error instanceof Error ? error.message : 'unknown',
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      throw DatabaseError.transactionFailed(UserLogOperations.FIND_USER_BY_ID);
+      throw DatabaseError.transactionFailed(UserOperationsConstants.FIND_USER_BY_ID);
     }
   }
 
   public async findAll(limit: number = 10, offset: number = 0): Promise<IUser[]> {
     try {
       this.logger.info('Attempting to find all users', {
-        operation: UserLogOperations.FIND_ALL_USERS,
+        operation: UserOperationsConstants.FIND_ALL_USERS,
         limit,
         offset
       });
 
-      const usersData: IUserData[] = await this.db.manyOrNone(UserQueries.SELECT_ALL_USERS, [
-        limit,
-        offset
-      ]);
+      const usersData: IUserData[] = await this.db.manyOrNone(
+        UserQueriesConstants.SELECT_ALL_USERS,
+        [limit, offset]
+      );
 
       if (!usersData || usersData.length === 0) {
         this.logger.info('No users found', {
-          operation: UserLogOperations.FIND_ALL_USERS,
+          operation: UserOperationsConstants.FIND_ALL_USERS,
           limit,
           offset
         });
@@ -181,7 +193,7 @@ export class PostgresUserRepository implements IUserRepository {
       const users: IUser[] = mappedUsersData.map(userData => new User(userData));
 
       this.logger.info('Users found successfully', {
-        operation: UserLogOperations.FIND_ALL_USERS,
+        operation: UserOperationsConstants.FIND_ALL_USERS,
         count: users.length,
         limit,
         offset
@@ -190,14 +202,14 @@ export class PostgresUserRepository implements IUserRepository {
       return users;
     } catch (err: unknown) {
       this.logger.error('Failed to find all users', {
-        operation: UserLogOperations.FIND_ALL_USERS,
+        operation: UserOperationsConstants.FIND_ALL_USERS,
         limit,
         offset,
         error: err instanceof Error ? err.message : 'unknown',
         stack: err instanceof Error ? err.stack : undefined
       });
 
-      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_ALL_USERS_FAILED);
+      throw DatabaseError.transactionFailed(UserErrorMessagesConstants.FIND_ALL_USERS_FAILED);
     }
   }
 
@@ -207,17 +219,17 @@ export class PostgresUserRepository implements IUserRepository {
   public async findByEmailOrUsername(identifier: string): Promise<IUser | null> {
     try {
       this.logger.info('Attempting to find user by email or username', {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL_OR_USERNAME,
         identifier: Masker.maskIdentifier(identifier)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
-        UserQueries.SELECT_USER_BY_EMAIL_OR_USERNAME,
+        UserQueriesConstants.SELECT_USER_BY_EMAIL_OR_USERNAME,
         [identifier]
       );
       const found: boolean = result !== null;
       this.logger.info(`User search by email or username completed`, {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL_OR_USERNAME,
         found,
         userId: found ? result?.id : null
       });
@@ -225,13 +237,13 @@ export class PostgresUserRepository implements IUserRepository {
       return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by email or username', {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL_OR_USERNAME,
         error: error instanceof Error ? error.message : 'unknown',
         stack: error instanceof Error ? error.stack : undefined
       });
 
       throw DatabaseError.transactionFailed(
-        UserErrorMessages.FIND_USER_BY_EMAIL_OR_USERNAME_FAILED
+        UserErrorMessagesConstants.FIND_USER_BY_EMAIL_OR_USERNAME_FAILED
       );
     }
   }
@@ -239,17 +251,18 @@ export class PostgresUserRepository implements IUserRepository {
   public async findByEmail(email: string): Promise<IUser | null> {
     try {
       this.logger.info('Attempting to find user by email', {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL,
         email: Masker.maskEmail(email)
       });
 
-      const result: IUserData | null = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_EMAIL, [
-        email
-      ]);
+      const result: IUserData | null = await this.db.oneOrNone(
+        UserQueriesConstants.SELECT_USER_BY_EMAIL,
+        [email]
+      );
 
       const found: boolean = result !== null;
       this.logger.info(`User search by email completed`, {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL,
         found,
         userId: found ? result?.id : null
       });
@@ -257,30 +270,30 @@ export class PostgresUserRepository implements IUserRepository {
       return result ? new User(result) : null;
     } catch (error) {
       this.logger.error('Failed to find user by email', {
-        operation: UserLogOperations.FIND_USER_BY_EMAIL,
+        operation: UserOperationsConstants.FIND_USER_BY_EMAIL,
         error: error instanceof Error ? error.message : 'unknown',
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_EMAIL_FAILED);
+      throw DatabaseError.transactionFailed(UserErrorMessagesConstants.FIND_USER_BY_EMAIL_FAILED);
     }
   }
 
   public async findByUsername(username: string): Promise<IUser | null> {
     try {
       this.logger.info('Attempting to find user by username', {
-        operation: UserLogOperations.FIND_USER_BY_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_USERNAME,
         username: Masker.maskUsername(username)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
-        UserQueries.SELECT_USER_BY_USERNAME,
+        UserQueriesConstants.SELECT_USER_BY_USERNAME,
         [username]
       );
 
       const found: boolean = result !== null;
       this.logger.info(`User search by username completed`, {
-        operation: UserLogOperations.FIND_USER_BY_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_USERNAME,
         found,
         userId: found ? result?.id : null
       });
@@ -288,12 +301,14 @@ export class PostgresUserRepository implements IUserRepository {
       return result ? new User(result) : null;
     } catch (error) {
       this.logger.error('Failed to find user by username', {
-        operation: UserLogOperations.FIND_USER_BY_USERNAME,
+        operation: UserOperationsConstants.FIND_USER_BY_USERNAME,
         error: error instanceof Error ? error.message : 'unknown',
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_USERNAME_FAILED);
+      throw DatabaseError.transactionFailed(
+        UserErrorMessagesConstants.FIND_USER_BY_USERNAME_FAILED
+      );
     }
   }
 
@@ -307,26 +322,30 @@ export class PostgresUserRepository implements IUserRepository {
   ): Promise<void> {
     try {
       this.logger.info('Attempting to update login status', {
-        operation: UserLogOperations.UPDATE_LOGIN_STATUS,
+        operation: UserOperationsConstants.UPDATE_LOGIN_STATUS,
         userId,
         isConnected
       });
 
-      await this.db.none(UserQueries.UPDATE_LOGIN_STATUS, [userId, isConnected, lastLoginAt]);
+      await this.db.none(UserQueriesConstants.UPDATE_LOGIN_STATUS, [
+        userId,
+        isConnected,
+        lastLoginAt
+      ]);
 
       this.logger.info('Login status updated successfully', {
-        operation: UserLogOperations.UPDATE_LOGIN_STATUS,
+        operation: UserOperationsConstants.UPDATE_LOGIN_STATUS,
         userId,
         isConnected
       });
     } catch (error) {
       this.logger.error('Failed to update login status', {
-        operation: UserLogOperations.UPDATE_LOGIN_STATUS,
+        operation: UserOperationsConstants.UPDATE_LOGIN_STATUS,
         error: error instanceof Error ? error.message : 'unknown',
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      throw DatabaseError.transactionFailed(UserLogOperations.UPDATE_LOGIN_STATUS);
+      throw DatabaseError.transactionFailed(UserOperationsConstants.UPDATE_LOGIN_STATUS);
     }
   }
 }
