@@ -23,9 +23,7 @@
     "start": "node dist/server",
     "start:dev": "npm run build && npm start",
     "clean": "rm -rf dist",
-    "pre-commit": "lint-staged",
-    "prepare": "husky",
-    "postinstall": "husky"
+    "pre-commit": "lint-staged"
   },
   "keywords": [
     "api",
