@@ -2,5 +2,6 @@
 export { IAuthService } from '@/interfaces/services/auth/IAuthService';
 export { ITokenService } from '@/interfaces/services/auth/ITokenService';
 export { IBaseService } from '@/interfaces/services/IBaseService';
+export * from '@/interfaces/services/products/index';
 export * from '@/interfaces/services/tax-rates/index';
 export { IUserService } from '@/interfaces/services/user/IUserService';
