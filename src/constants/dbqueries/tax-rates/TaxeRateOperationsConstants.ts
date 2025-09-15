@@ -1,5 +1,3 @@
-// src/constants/dbqueries/tax-rates/TaxeRateOperationsConstants.ts
-
 export class TaxeRateOperationsConstants {
   public static readonly CREATE_TAXE_RATE: string = 'create_taxe_rate';
   public static readonly UPDATE_TAXE_RATE: string = 'update_taxe_rate';

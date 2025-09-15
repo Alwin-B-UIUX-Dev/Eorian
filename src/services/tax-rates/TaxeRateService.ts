@@ -1,9 +1,6 @@
-// src/services/tax-rates/TaxeRateService.ts
 import { ConflictError, UserError } from '@/exceptions';
-import type { ITaxeRate } from '@/interfaces';
-import type { ITaxeRateRepository } from '@/interfaces/repositories/tax-rates/ITaxeRateRepository';
-import type { ITaxeRateService } from '@/interfaces/services/tax-rates/ITaxeRateService';
-import type { CreateTaxeRateData, UpdateTaxeRateData } from '@/types/entities/tax-rates';
+import type { ITaxeRate, ITaxeRateRepository, ITaxeRateService } from '@/interfaces';
+import type { CreateTaxeRateData, UpdateTaxeRateData } from '@/types';
 
 export class TaxeRateService implements ITaxeRateService {
   constructor(private readonly repository: ITaxeRateRepository) {}

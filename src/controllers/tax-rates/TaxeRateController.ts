@@ -1,11 +1,9 @@
 // src/controllers/tax-rates/TaxeRateController.ts
 
 import type { NextFunction, Request, Response } from 'express';
-import { CreateTaxeRateDto } from '@/dtos/tax-rates/admin/CreateTaxeRateDto';
-import { ResponseTaxeRateDto } from '@/dtos/tax-rates/admin/ResponseTaxeRateDto';
-import type { ITaxeRateController } from '@/interfaces/controllers/tax-rates/ITaxeRateController';
-import type { ITaxeRateService } from '@/interfaces/services/tax-rates/ITaxeRateService';
-import { ApiResponseFactory } from '@/utils/ApiResponseFactory';
+import { CreateTaxeRateDto, ResponseTaxeRateDto } from '@/dtos';
+import type { ITaxeRateController, ITaxeRateService } from '@/interfaces';
+import { ApiResponseFactory } from '@/utils';
 
 export class TaxeRateController implements ITaxeRateController {
   constructor(private readonly service: ITaxeRateService) {}

@@ -1,7 +1,7 @@
 // src/routes/UserRoleRoutes.ts
 
 import { Router } from 'express';
-import type { IUserRoleController } from '@/interfaces/controllers/user/IUserRoleController';
+import type { IUserRoleController } from '@/interfaces';
 
 export class UserRoleRoutes {
   private readonly router: Router;

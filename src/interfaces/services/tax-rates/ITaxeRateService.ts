@@ -1,5 +1,5 @@
-import type { ITaxeRate } from '@/interfaces/entities/tax-rates/ITaxeRate';
-import type { CreateTaxeRateData, UpdateTaxeRateData } from '@/types/entities/tax-rates';
+import type { ITaxeRate } from '@/interfaces';
+import type { CreateTaxeRateData, UpdateTaxeRateData } from '@/types';
 
 export interface ITaxeRateService {
   create(data: CreateTaxeRateData): Promise<ITaxeRate>;

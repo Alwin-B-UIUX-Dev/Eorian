@@ -1,11 +1,8 @@
 // src/configs/RouteFactory.ts
 import { Router } from 'express';
-import { logger } from '@/configs';
-import { ServiceFactory } from '@/configs/ServiceFactory';
+import { logger, ServiceFactory } from '@/configs';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes } from '@/routes';
-import { TaxeRateRoutes } from '@/routes/TaxeRateRoutes';
-import { UserRoleRoutes } from '@/routes/UserRoleRoutes';
+import { AuthRoutes, TaxeRateRoutes, UserRoleRoutes } from '@/routes';
 
 export class RouteFactory {
   private static router: Router;

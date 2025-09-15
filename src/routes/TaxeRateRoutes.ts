@@ -1,7 +1,7 @@
 // src/routes/TaxeRateRoutes.ts
 
 import { Router } from 'express';
-import type { ITaxeRateController } from '@/interfaces/controllers/tax-rates/ITaxeRateController';
+import type { ITaxeRateController } from '@/interfaces';
 
 export class TaxeRateRoutes {
   private readonly router: Router;

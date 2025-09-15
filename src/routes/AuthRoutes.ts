@@ -1,7 +1,7 @@
 // src/routes/AuthRoutes.ts
 import { Router } from 'express';
 import type { IAuthController, ITokenManager } from '@/interfaces';
-import { AuthMiddleware } from '@/middlewares/AuthMiddleware';
+import { AuthMiddleware } from '@/middlewares';
 
 export class AuthRoutes {
   private readonly router: Router;

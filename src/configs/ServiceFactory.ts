@@ -1,28 +1,25 @@
 // src/configs/ServiceFactory.ts
-import { AuthController } from '@/controllers';
-import { TaxeRateController } from '@/controllers/tax-rates/TaxeRateController';
-import { UserRoleController } from '@/controllers/user/UserRoleController';
+import { AuthController, TaxeRateController, UserRoleController } from '@/controllers';
 import type {
   IAuthService,
   ICookieManager,
   IPasswordHasher,
+  ITaxeRateRepository,
+  ITaxeRateService,
   ITokenManager,
   ITokenService,
   IUserRepository,
+  IUserRoleRepository,
   IUserSessionRepository
 } from '@/interfaces';
-import type { ITaxeRateRepository } from '@/interfaces/repositories/tax-rates/ITaxeRateRepository';
-import type { IUserRoleRepository } from '@/interfaces/repositories/user/IUserRoleRepository';
-import type { ITaxeRateService } from '@/interfaces/services/tax-rates/ITaxeRateService';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
-import { PostgresTaxeRateRepository } from '@/repositories/tax-rates/PostgresTaxeRateRepository';
 import {
+  PostgresTaxeRateRepository,
   PostgresUserRepository,
   PostgresUserRoleRepository,
   PostgresUserSessionRepository
-} from '@/repositories/user';
-import { AuthService, TokenService } from '@/services';
-import { TaxeRateService } from '@/services/tax-rates/TaxeRateService';
+} from '@/repositories';
+import { AuthService, TaxeRateService, TokenService } from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 

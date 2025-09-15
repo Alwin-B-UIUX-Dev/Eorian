@@ -1,11 +1,9 @@
 import type { IDatabase } from 'pg-promise';
 import { database, logger } from '@/configs';
-import { TaxeRateOperationsConstants } from '@/constants/dbqueries/tax-rates/TaxeRateOperationsConstants';
-import { TaxeRateQueriesConstants } from '@/constants/dbqueries/tax-rates/TaxeRateQueriesConstants';
-import { TaxeRate } from '@/entities/tax-rates';
+import { TaxeRateOperationsConstants, TaxeRateQueriesConstants } from '@/constants';
+import { TaxeRate } from '@/entities';
 import { DatabaseError } from '@/exceptions';
-import type { ITaxeRate } from '@/interfaces';
-import type { ITaxeRateRepository } from '@/interfaces/repositories/tax-rates';
+import type { ITaxeRate, ITaxeRateRepository } from '@/interfaces';
 import type { CreateTaxeRateData, ITaxeRateData, UpdateTaxeRateData } from '@/types';
 import { DatabaseMapper } from '@/utils';
 

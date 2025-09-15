@@ -1,4 +1,3 @@
-// Export toutes les interfaces de base
 export * from '@/interfaces/controllers/index';
 export * from '@/interfaces/database/index';
 export * from '@/interfaces/entities/index';

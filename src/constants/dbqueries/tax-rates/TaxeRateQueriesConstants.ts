@@ -1,5 +1,3 @@
-// src/constants/dbqueries/tax-rates/TaxeRateQueriesConstants.ts
-
 export class TaxeRateQueriesConstants {
   public static readonly INSERT_TAXE_RATE: string = /*sql*/ `
     INSERT INTO tax_rates (name, rate, description, is_active)

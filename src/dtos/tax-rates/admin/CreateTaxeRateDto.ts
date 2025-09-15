@@ -1,7 +1,4 @@
-import {
-  type CreateTaxeRateSchemaType,
-  TaxeRateConstants
-} from '@/constants/zod/TaxeRateConstants';
+import { type CreateTaxeRateSchemaType, TaxeRateConstants } from '@/constants';
 
 export class CreateTaxeRateDto {
   public readonly name: string;

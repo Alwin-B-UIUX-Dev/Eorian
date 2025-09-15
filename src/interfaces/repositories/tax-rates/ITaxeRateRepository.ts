@@ -1,5 +1,3 @@
-// src/interfaces/repositories/tax-rates/ITaxeRateRepository.ts
-
 import type { IBaseRepository, ITaxeRate } from '@/interfaces';
 import type { ITaxeRateData } from '@/types';
 

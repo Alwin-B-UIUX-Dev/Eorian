@@ -1,12 +1,7 @@
-// src/entities/tax-rates/TaxeRate.ts
+import { BaseEntity } from '@/entities';
+import type { ITaxeRate } from '@/interfaces';
+import type { ITaxeRateData } from '@/types';
 
-import { BaseEntity } from '@/entities/BaseEntity';
-import type { ITaxeRate } from '@/interfaces/entities/tax-rates';
-import type { ITaxeRateData } from '@/types/entities/tax-rates';
-
-/**
- * Classe metier TaxeRate - Entité metier de TaxeRate
- */
 export class TaxeRate extends BaseEntity implements ITaxeRate {
   private name: string;
   private rate: number;

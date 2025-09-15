@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Respect SQL constraints from database/setup/01_create_bookstore_table.sql
 const roleNameRegex = /^(?:[a-z][a-z0-9_]*[a-z0-9]|[a-z])$/;
 
 export class UserRoleConstants {
@@ -40,5 +39,3 @@ export class UserRoleConstants {
 
 export type CreateUserRoleSchemaType = z.infer<typeof UserRoleConstants.CREATE_ROLE_SCHEMA>;
 export type UpdateUserRoleSchemaType = z.infer<typeof UserRoleConstants.UPDATE_ROLE_SCHEMA>;
-
-

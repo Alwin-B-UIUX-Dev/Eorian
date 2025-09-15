@@ -1,4 +1,4 @@
-import type { ITaxeRateData } from '@/types/entities/tax-rates';
+import type { ITaxeRateData } from '@/types';
 
 export class ResponseTaxeRateDto {
   public readonly taxeRateId: string;
