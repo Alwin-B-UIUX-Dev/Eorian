@@ -1,10 +1,12 @@
 // src/configs/ServiceFactory.ts
-import { AuthController } from '@/controllers';
+import { AuthController, TaxeRateController } from '@/controllers';
 import { UserRoleController } from '@/controllers/user/UserRoleController';
 import type {
   IAuthService,
   ICookieManager,
   IPasswordHasher,
+  ITaxeRateRepository,
+  ITaxeRateService,
   ITokenManager,
   ITokenService,
   IUserRepository,
@@ -12,12 +14,13 @@ import type {
 } from '@/interfaces';
 import type { IUserRoleRepository } from '@/interfaces/repositories/user/IUserRoleRepository';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
+import { PostgresTaxeRateRepository } from '@/repositories';
 import {
   PostgresUserRepository,
   PostgresUserRoleRepository,
   PostgresUserSessionRepository
 } from '@/repositories/user';
-import { AuthService, TokenService } from '@/services';
+import { AuthService, TaxeRateService, TokenService } from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -34,6 +37,10 @@ export class ServiceFactory {
   private static userRoleController: UserRoleController;
   private static userRoleRepository: IUserRoleRepository;
   private static userRoleService: IUserRoleService;
+
+  private static taxeRateController: TaxeRateController;
+  private static taxeRateRepository: ITaxeRateRepository;
+  private static taxeRateService: ITaxeRateService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -72,6 +79,30 @@ export class ServiceFactory {
       );
     }
     return ServiceFactory.userRoleController;
+  }
+
+  // Taxe Rates
+  public static getTaxeRateRepository(): ITaxeRateRepository {
+    if (!ServiceFactory.taxeRateRepository) {
+      ServiceFactory.taxeRateRepository = new PostgresTaxeRateRepository();
+    }
+    return ServiceFactory.taxeRateRepository;
+  }
+
+  public static getTaxeRateService(): ITaxeRateService {
+    if (!ServiceFactory.taxeRateService) {
+      ServiceFactory.taxeRateService = new TaxeRateService(ServiceFactory.getTaxeRateRepository());
+    }
+    return ServiceFactory.taxeRateService;
+  }
+
+  public static getTaxeRateController(): TaxeRateController {
+    if (!ServiceFactory.taxeRateController) {
+      ServiceFactory.taxeRateController = new TaxeRateController(
+        ServiceFactory.getTaxeRateService()
+      );
+    }
+    return ServiceFactory.taxeRateController;
   }
 
   // Utils
@@ -150,5 +181,11 @@ export class ServiceFactory {
     ServiceFactory.authService = undefined as unknown as IAuthService;
     ServiceFactory.tokenService = undefined as unknown as ITokenService;
     ServiceFactory.authController = undefined as unknown as AuthController;
+    ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
+    ServiceFactory.userRoleRepository = undefined as unknown as IUserRoleRepository;
+    ServiceFactory.userRoleService = undefined as unknown as IUserRoleService;
+    ServiceFactory.taxeRateController = undefined as unknown as TaxeRateController;
+    ServiceFactory.taxeRateRepository = undefined as unknown as ITaxeRateRepository;
+    ServiceFactory.taxeRateService = undefined as unknown as ITaxeRateService;
   }
 }

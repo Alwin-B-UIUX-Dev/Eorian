@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { logger } from '@/configs';
 import { ServiceFactory } from '@/configs/ServiceFactory';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes } from '@/routes';
+import { AuthRoutes, TaxeRateRoutes } from '@/routes';
 import { UserRoleRoutes } from '@/routes/UserRoleRoutes';
 
 export class RouteFactory {
@@ -17,6 +17,7 @@ export class RouteFactory {
     // Enregistrement des routes
     RouteFactory.registerAuthRoutes();
     RouteFactory.registerUserRoleRoutes();
+    RouteFactory.registerTaxeRateRoutes();
     // RouteFactory.registerUserRoutes();
     // RouteFactory.registerProductRoutes();
 
@@ -36,6 +37,12 @@ export class RouteFactory {
     const userRoleController = ServiceFactory.getUserRoleController();
     const userRoleRoutes = new UserRoleRoutes(userRoleController);
     RouteFactory.router.use('/api/v1', userRoleRoutes.getRouter());
+  }
+
+  private static registerTaxeRateRoutes(): void {
+    const taxeRateController = ServiceFactory.getTaxeRateController();
+    const taxeRateRoutes = new TaxeRateRoutes(taxeRateController);
+    RouteFactory.router.use('/api/v1', taxeRateRoutes.getRouter());
   }
 
   // private static registerUserRoutes(): void {
