@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { logger } from '@/configs';
 import { ServiceFactory } from '@/configs/ServiceFactory';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes, TaxeRateRoutes } from '@/routes';
+import { AuthRoutes, ProductRoutes, TaxeRateRoutes } from '@/routes';
 import { UserRoleRoutes } from '@/routes/UserRoleRoutes';
 
 export class RouteFactory {
@@ -18,6 +18,7 @@ export class RouteFactory {
     RouteFactory.registerAuthRoutes();
     RouteFactory.registerUserRoleRoutes();
     RouteFactory.registerTaxeRateRoutes();
+    RouteFactory.registerProductRoutes();
     // RouteFactory.registerUserRoutes();
     // RouteFactory.registerProductRoutes();
 
@@ -45,20 +46,18 @@ export class RouteFactory {
     RouteFactory.router.use('/api/v1', taxeRateRoutes.getRouter());
   }
 
+  private static registerProductRoutes(): void {
+    const productController = ServiceFactory.getProductController();
+    const productRoutes = new ProductRoutes(productController);
+    RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  }
+
   // private static registerUserRoutes(): void {
   //   const userController = ServiceFactory.getUserController();
   //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
   //   const userRoutes = new UserRoutes(userController, tokenManager);
 
   //   RouteFactory.router.use('/api/v1', userRoutes.getRouter());
-  // }
-
-  // private static registerProductRoutes(): void {
-  //   const productController = ServiceFactory.getProductController();
-  //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
-  //   const productRoutes = new ProductRoutes(productController, tokenManager);
-
-  //   RouteFactory.router.use('/api/v1', productRoutes.getRouter());
   // }
 
   public static reset(): void {
