@@ -1,7 +1,7 @@
 // src/controllers/tax-rates/TaxeRateController.ts
 
 import type { NextFunction, Request, Response } from 'express';
-
+import { CreateTaxeRateDto, ResponseTaxeRateDto } from '@/dtos';
 import type { ITaxeRateController, ITaxeRateService } from '@/interfaces';
 import { ApiResponseFactory } from '@/utils/ApiResponseFactory';
 
