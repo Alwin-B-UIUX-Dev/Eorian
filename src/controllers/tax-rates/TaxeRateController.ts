@@ -3,6 +3,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { CreateTaxeRateDto, ResponseTaxeRateDto } from '@/dtos';
 import type { ITaxeRateController, ITaxeRateService } from '@/interfaces';
+import type { ITaxeRateData } from '@/types';
 import { ApiResponseFactory } from '@/utils/ApiResponseFactory';
 
 export class TaxeRateController implements ITaxeRateController {
@@ -16,7 +17,7 @@ export class TaxeRateController implements ITaxeRateController {
       res.json(
         ApiResponseFactory.success(
           'Taxe rates fetched',
-          taxeRates.map(tr => new ResponseTaxeRateDto(tr.toObject()))
+          taxeRates.map(tr => new ResponseTaxeRateDto(tr.toObject() as ITaxeRateData))
         )
       );
     } catch (error) {
@@ -35,7 +36,7 @@ export class TaxeRateController implements ITaxeRateController {
       res.json(
         ApiResponseFactory.success(
           'Taxe rate fetched',
-          taxeRate ? new ResponseTaxeRateDto(taxeRate.toObject()) : null
+          taxeRate ? new ResponseTaxeRateDto(taxeRate.toObject() as ITaxeRateData) : null
         )
       );
     } catch (error) {
@@ -57,7 +58,7 @@ export class TaxeRateController implements ITaxeRateController {
         .json(
           ApiResponseFactory.success(
             'Taxe rate created',
-            new ResponseTaxeRateDto(taxeRate.toObject())
+            new ResponseTaxeRateDto(taxeRate.toObject() as ITaxeRateData)
           )
         );
     } catch (error) {
@@ -76,7 +77,7 @@ export class TaxeRateController implements ITaxeRateController {
       res.json(
         ApiResponseFactory.success(
           'Taxe rate updated',
-          new ResponseTaxeRateDto(taxeRate.toObject())
+          new ResponseTaxeRateDto(taxeRate.toObject() as ITaxeRateData)
         )
       );
     } catch (error) {

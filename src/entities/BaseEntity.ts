@@ -59,8 +59,8 @@ export abstract class BaseEntity implements IEntity {
   public toObject(): Record<string, unknown> {
     return {
       id: this.id,
-      createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       ...this.getEntityData()
     };
   }
