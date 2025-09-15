@@ -7,7 +7,7 @@ import { User } from '@/entities';
 import { DatabaseError } from '@/exceptions';
 import type { IUser, IUserRepository } from '@/interfaces';
 import type { CreateUserData, IUserData, UpdateUserData } from '@/types';
-import { DatabaseMapper, Masker } from '@/utils';
+import { DatabaseMapper, MaskerHelper } from '@/utils';
 
 export class PostgresUserRepository implements IUserRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
@@ -22,7 +22,7 @@ export class PostgresUserRepository implements IUserRepository {
       try {
         this.logger.info('Attempting to create new user', {
           operation: UserLogOperations.CREATE_USER,
-          email: Masker.maskEmail(email)
+          email: MaskerHelper.maskEmail(email)
         });
 
         const result: { id: string } = await t.one(UserQueries.INSERT_USER, [
@@ -44,7 +44,7 @@ export class PostgresUserRepository implements IUserRepository {
         this.logger.info('User created successfully', {
           operation: UserLogOperations.CREATE_USER,
           userId: result.id,
-          email: Masker.maskEmail(email)
+          email: MaskerHelper.maskEmail(email)
         });
 
         return new User(mappedProfile); // Toutes les données sont déjà mappées
@@ -208,7 +208,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by email or username', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
-        identifier: Masker.maskIdentifier(identifier)
+        identifier: MaskerHelper.maskIdentifier(identifier)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
@@ -240,7 +240,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by email', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL,
-        email: Masker.maskEmail(email)
+        email: MaskerHelper.maskEmail(email)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_EMAIL, [
@@ -270,7 +270,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by username', {
         operation: UserLogOperations.FIND_USER_BY_USERNAME,
-        username: Masker.maskUsername(username)
+        username: MaskerHelper.maskUsername(username)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
