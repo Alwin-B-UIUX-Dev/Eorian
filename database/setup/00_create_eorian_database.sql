@@ -1,4 +1,4 @@
--- Active: 1753172327999@@127.0.0.1@5432@eorian_fr_db
+-- Active: 1753172327999@@127.0.0.1@5432@postgres
 CREATE DATABASE eorian_fr_db
 WITH
     ENCODING 'UTF8' LC_COLLATE = 'fr_FR.UTF-8' LC_CTYPE = 'fr_FR.UTF-8' TEMPLATE template0;

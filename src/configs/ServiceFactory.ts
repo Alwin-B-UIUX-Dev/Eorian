@@ -1,9 +1,12 @@
 // src/configs/ServiceFactory.ts
+
+import { logger } from '@/configs';
 import {
   AuthController,
   CartItemController,
   ProductController,
   TaxeRateController,
+  UserController,
   UserRoleController
 } from '@/controllers';
 import type {
@@ -20,6 +23,7 @@ import type {
   ITokenService,
   IUserRepository,
   IUserRoleRepository,
+  IUserService,
   IUserSessionRepository
 } from '@/interfaces';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
@@ -36,7 +40,8 @@ import {
   CartItemService,
   ProductService,
   TaxeRateService,
-  TokenService
+  TokenService,
+  UserService
 } from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
@@ -51,6 +56,8 @@ export class ServiceFactory {
   private static authService: IAuthService;
   private static tokenService: ITokenService;
   private static authController: AuthController;
+  private static userService: IUserService;
+  private static userController: UserController;
   private static userRoleController: UserRoleController;
   private static userRoleRepository: IUserRoleRepository;
   private static userRoleService: IUserRoleService;
@@ -199,11 +206,11 @@ export class ServiceFactory {
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
-      console.log('🏭 Creating AuthService...');
+      logger.info('🏭 Creating AuthService...');
 
       const userRepository: IUserRepository = ServiceFactory.getUserRepository();
       const passwordHasher: IPasswordHasher = ServiceFactory.getPasswordHasher();
-      console.log('🔧 AuthService dependencies', {
+      logger.info('🔧 AuthService dependencies', {
         hasUserRepo: !!userRepository,
         hasPasswordHasher: !!passwordHasher
       });
@@ -224,12 +231,12 @@ export class ServiceFactory {
   // Controllers
   public static getAuthController(): AuthController {
     if (!ServiceFactory.authController) {
-      console.log('🏭 Creating AuthController...');
+      logger.info('🏭 Creating AuthController...');
       const authService: IAuthService = ServiceFactory.getAuthService();
       const tokenService: ITokenService = ServiceFactory.getTokenService();
       const cookieManager: ICookieManager = ServiceFactory.getCookieManager();
       // Vérifications debug
-      console.log('🔧 Dependencies check', {
+      logger.info('🔧 Dependencies check', {
         hasAuthService: !!authService,
         hasTokenService: !!tokenService,
         hasCookieManager: !!cookieManager
@@ -238,6 +245,34 @@ export class ServiceFactory {
       ServiceFactory.authController = new AuthController(authService, tokenService, cookieManager);
     }
     return ServiceFactory.authController;
+  }
+
+  // User Service
+  public static getUserService(): IUserService {
+    if (!ServiceFactory.userService) {
+      logger.info('🏭 Creating UserService...');
+      const userRepository: IUserRepository = ServiceFactory.getUserRepository();
+      const passwordHasher: IPasswordHasher = ServiceFactory.getPasswordHasher();
+      logger.info('🔧 UserService dependencies', {
+        hasUserRepo: !!userRepository,
+        hasPasswordHasher: !!passwordHasher
+      });
+      ServiceFactory.userService = new UserService(userRepository, passwordHasher);
+    }
+    return ServiceFactory.userService;
+  }
+
+  // User Controller
+  public static getUserController(): UserController {
+    if (!ServiceFactory.userController) {
+      logger.info('🏭 Creating UserController...');
+      const userService: IUserService = ServiceFactory.getUserService();
+      logger.info('🔧 UserController dependencies', {
+        hasUserService: !!userService
+      });
+      ServiceFactory.userController = new UserController(userService);
+    }
+    return ServiceFactory.userController;
   }
 
   // Reset pour les tests
@@ -250,6 +285,8 @@ export class ServiceFactory {
     ServiceFactory.authService = undefined as unknown as IAuthService;
     ServiceFactory.tokenService = undefined as unknown as ITokenService;
     ServiceFactory.authController = undefined as unknown as AuthController;
+    ServiceFactory.userService = undefined as unknown as IUserService;
+    ServiceFactory.userController = undefined as unknown as UserController;
     ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
     ServiceFactory.userRoleRepository = undefined as unknown as IUserRoleRepository;
     ServiceFactory.userRoleService = undefined as unknown as IUserRoleService;

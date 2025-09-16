@@ -1,6 +1,6 @@
 // src/entities/User.ts
 
-import { RoleEnum } from '@/constants';
+import { RoleDisplayLabels, RoleEnum } from '@/constants';
 import { BaseEntity } from '@/entities/BaseEntity';
 import type { IUser } from '@/interfaces';
 import type { IUserData } from '@/types';
@@ -152,6 +152,19 @@ export class User extends BaseEntity implements IUser {
 
   public isCustomer(): boolean {
     return this.roleId === RoleEnum.CUSTOMER;
+  }
+
+  /**
+   * Retourne les données formatées pour la réponse API
+   * Convertit automatiquement les IDs de rôles en labels d'affichage français
+   */
+  public toResponseObject(): { id: string; email: string; username: string; role: string } {
+    return {
+      id: this.id.toString(),
+      email: this.email,
+      username: this.username,
+      role: RoleDisplayLabels[this.roleId]
+    };
   }
 
   protected getEntityData(): Record<string, unknown> {

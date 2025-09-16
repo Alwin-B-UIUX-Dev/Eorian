@@ -140,7 +140,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by id', {
         operation: UserLogOperations.FIND_USER_BY_ID,
@@ -254,7 +254,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by email', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL,
@@ -285,7 +285,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by username', {
         operation: UserLogOperations.FIND_USER_BY_USERNAME,

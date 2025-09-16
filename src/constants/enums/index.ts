@@ -1,2 +1,2 @@
 // Export toutes les enums metier
-export { RoleEnum } from '@/constants/enums/RoleEnum';
+export { RoleEnum, RoleDisplayLabels } from '@/constants/enums/RoleEnum';

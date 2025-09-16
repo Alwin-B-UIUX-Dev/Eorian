@@ -1,4 +1,4 @@
--- Active: 1753172327999@@127.0.0.1@5432@eorian_fr_db
+-- Active: 1757659359211@@127.0.0.1@5432@eorian_fr_db
 -- =====================================================
 -- VUE : Endpoint POST /api/v1/auth/login
 -- =====================================================
@@ -16,7 +16,8 @@ SELECT
     u.is_connected,
     u.role_id, -- FK pour les relations
     ur.role_name, -- Valeur pour la logique
-    u.last_login_at
+    u.last_login_at,
+    u.created_at
 FROM
     users u
     LEFT JOIN user_roles ur ON u.role_id = ur.id
