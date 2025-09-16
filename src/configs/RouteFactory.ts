@@ -2,7 +2,13 @@
 import { Router } from 'express';
 import { logger, ServiceFactory } from '@/configs';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes, ProductRoutes, TaxeRateRoutes, UserRoleRoutes } from '@/routes';
+import {
+  AuthRoutes,
+  CartItemRoutes,
+  ProductRoutes,
+  TaxeRateRoutes,
+  UserRoleRoutes
+} from '@/routes';
 
 export class RouteFactory {
   private static router: Router;
@@ -16,6 +22,7 @@ export class RouteFactory {
     RouteFactory.registerUserRoleRoutes();
     RouteFactory.registerTaxeRateRoutes();
     RouteFactory.registerProductRoutes();
+    RouteFactory.registerCartItemRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -45,6 +52,12 @@ export class RouteFactory {
     const productController = ServiceFactory.getProductController();
     const productRoutes = new ProductRoutes(productController);
     RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  }
+
+  private static registerCartItemRoutes(): void {
+    const cartItemController = ServiceFactory.getCartItemController();
+    const cartItemRoutes = new CartItemRoutes(cartItemController);
+    RouteFactory.router.use('/api/v1', cartItemRoutes.getRouter());
   }
 
   public static reset(): void {
