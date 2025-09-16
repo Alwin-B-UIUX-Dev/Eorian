@@ -1,1 +1,1 @@
-export * from './IProductData';
+export * from '@/types/entities/products/IProductData';

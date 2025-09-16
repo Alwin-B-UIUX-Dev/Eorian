@@ -1,1 +1,1 @@
-export * from './IProductRepository';
+export * from '@/interfaces/repositories/products/IProductRepository';

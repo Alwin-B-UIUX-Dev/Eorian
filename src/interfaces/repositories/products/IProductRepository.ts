@@ -1,6 +1,5 @@
-import type { IBaseRepository } from '@/interfaces';
-import type { IProduct } from '@/interfaces/entities/products';
-import type { IProductData } from '@/types/entities/products';
+import type { IBaseRepository, IProduct } from '@/interfaces';
+import type { IProductData } from '@/types';
 
 export interface IProductRepository extends IBaseRepository<IProduct, IProductData> {
   findByName(name: string): Promise<IProduct | null>;
