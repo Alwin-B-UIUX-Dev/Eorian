@@ -65,4 +65,20 @@ export class TaxeRate extends BaseEntity implements ITaxeRate {
       isActive: this.active
     };
   }
+
+  /**
+   * Retourne les données de l'entité dans le format ITaxeRateData
+   * pour être utilisé par les DTOs
+   */
+  public toData(): ITaxeRateData {
+    return {
+      id: this.id,
+      name: this.name,
+      rate: this.rate,
+      description: this.description,
+      isActive: this.active,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+  }
 }

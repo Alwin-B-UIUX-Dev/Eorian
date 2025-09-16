@@ -1,4 +1,5 @@
 import type { IEntity } from '@/interfaces';
+import type { ITaxeRateData } from '@/types';
 
 export interface ITaxeRate extends IEntity {
   getName(): string;
@@ -9,4 +10,5 @@ export interface ITaxeRate extends IEntity {
   setDescription(description: string): this;
   isActive(): boolean;
   setActive(active: boolean): this;
+  toData(): ITaxeRateData;
 }

@@ -16,7 +16,7 @@ export class TaxeRateController implements ITaxeRateController {
       res.json(
         ApiResponseFactory.success(
           'Taxe rates fetched',
-          taxeRates.map(tr => new ResponseTaxeRateDto(tr.toObject()))
+          taxeRates.map(tr => new ResponseTaxeRateDto(tr.toData()))
         )
       );
     } catch (error) {
@@ -35,7 +35,7 @@ export class TaxeRateController implements ITaxeRateController {
       res.json(
         ApiResponseFactory.success(
           'Taxe rate fetched',
-          taxeRate ? new ResponseTaxeRateDto(taxeRate.toObject()) : null
+          taxeRate ? new ResponseTaxeRateDto(taxeRate.toData()) : null
         )
       );
     } catch (error) {
@@ -57,7 +57,7 @@ export class TaxeRateController implements ITaxeRateController {
         .json(
           ApiResponseFactory.success(
             'Taxe rate created',
-            new ResponseTaxeRateDto(taxeRate.toObject())
+            new ResponseTaxeRateDto(taxeRate.toData())
           )
         );
     } catch (error) {
@@ -74,10 +74,7 @@ export class TaxeRateController implements ITaxeRateController {
       }
       const taxeRate = await this.service.update(String(idNum), req.body);
       res.json(
-        ApiResponseFactory.success(
-          'Taxe rate updated',
-          new ResponseTaxeRateDto(taxeRate.toObject())
-        )
+        ApiResponseFactory.success('Taxe rate updated', new ResponseTaxeRateDto(taxeRate.toData()))
       );
     } catch (error) {
       next(error);
