@@ -15,7 +15,7 @@ export class TaxeRateRoutes {
     // Public routes for simple CRUD testing via Postman
     this.router.get('/tax-rates', this.controller.index.bind(this.controller));
     this.router.get('/tax-rates/:id', this.controller.show.bind(this.controller));
-
+    
     this.router.post('/tax-rates', this.controller.store.bind(this.controller));
     this.router.put('/tax-rates/:id', this.controller.update.bind(this.controller));
     this.router.delete('/tax-rates/:id', this.controller.destroy.bind(this.controller));
