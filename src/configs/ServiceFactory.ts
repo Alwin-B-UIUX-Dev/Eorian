@@ -1,12 +1,15 @@
 // src/configs/ServiceFactory.ts
 import {
   AuthController,
+  CartItemController,
   ProductController,
   TaxeRateController,
   UserRoleController
 } from '@/controllers';
 import type {
   IAuthService,
+  ICartItemRepository,
+  ICartItemService,
   ICookieManager,
   IPasswordHasher,
   IProductRepository,
@@ -21,13 +24,20 @@ import type {
 } from '@/interfaces';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
 import {
+  PostgresCartItemRepository,
   PostgresProductRepository,
   PostgresTaxeRateRepository,
   PostgresUserRepository,
   PostgresUserRoleRepository,
   PostgresUserSessionRepository
 } from '@/repositories';
-import { AuthService, ProductService, TaxeRateService, TokenService } from '@/services';
+import {
+  AuthService,
+  CartItemService,
+  ProductService,
+  TaxeRateService,
+  TokenService
+} from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -50,6 +60,10 @@ export class ServiceFactory {
   private static productController: ProductController;
   private static productRepository: IProductRepository;
   private static productService: IProductService;
+
+  private static cartItemController: CartItemController;
+  private static cartItemRepository: ICartItemRepository;
+  private static cartItemService: ICartItemService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -158,6 +172,30 @@ export class ServiceFactory {
     return ServiceFactory.productController;
   }
 
+  // Cart Items
+  public static getCartItemRepository(): ICartItemRepository {
+    if (!ServiceFactory.cartItemRepository) {
+      ServiceFactory.cartItemRepository = new PostgresCartItemRepository();
+    }
+    return ServiceFactory.cartItemRepository;
+  }
+
+  public static getCartItemService(): ICartItemService {
+    if (!ServiceFactory.cartItemService) {
+      ServiceFactory.cartItemService = new CartItemService(ServiceFactory.getCartItemRepository());
+    }
+    return ServiceFactory.cartItemService;
+  }
+
+  public static getCartItemController(): CartItemController {
+    if (!ServiceFactory.cartItemController) {
+      ServiceFactory.cartItemController = new CartItemController(
+        ServiceFactory.getCartItemService()
+      );
+    }
+    return ServiceFactory.cartItemController;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -221,5 +259,8 @@ export class ServiceFactory {
     ServiceFactory.productController = undefined as unknown as ProductController;
     ServiceFactory.productRepository = undefined as unknown as IProductRepository;
     ServiceFactory.productService = undefined as unknown as IProductService;
+    ServiceFactory.cartItemController = undefined as unknown as CartItemController;
+    ServiceFactory.cartItemRepository = undefined as unknown as ICartItemRepository;
+    ServiceFactory.cartItemService = undefined as unknown as ICartItemService;
   }
 }
