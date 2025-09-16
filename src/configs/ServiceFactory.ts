@@ -1,9 +1,16 @@
 // src/configs/ServiceFactory.ts
-import { AuthController, TaxeRateController, UserRoleController } from '@/controllers';
+import {
+  AuthController,
+  ProductController,
+  TaxeRateController,
+  UserRoleController
+} from '@/controllers';
 import type {
   IAuthService,
   ICookieManager,
   IPasswordHasher,
+  IProductRepository,
+  IProductService,
   ITaxeRateRepository,
   ITaxeRateService,
   ITokenManager,
@@ -14,12 +21,13 @@ import type {
 } from '@/interfaces';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
 import {
+  PostgresProductRepository,
   PostgresTaxeRateRepository,
   PostgresUserRepository,
   PostgresUserRoleRepository,
   PostgresUserSessionRepository
 } from '@/repositories';
-import { AuthService, TaxeRateService, TokenService } from '@/services';
+import { AuthService, ProductService, TaxeRateService, TokenService } from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -39,6 +47,9 @@ export class ServiceFactory {
   private static taxeRateController: TaxeRateController;
   private static taxeRateRepository: ITaxeRateRepository;
   private static taxeRateService: ITaxeRateService;
+  private static productController: ProductController;
+  private static productRepository: IProductRepository;
+  private static productService: IProductService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -125,6 +136,28 @@ export class ServiceFactory {
     return ServiceFactory.cookieManager;
   }
 
+  // Products
+  public static getProductRepository(): IProductRepository {
+    if (!ServiceFactory.productRepository) {
+      ServiceFactory.productRepository = new PostgresProductRepository();
+    }
+    return ServiceFactory.productRepository;
+  }
+
+  public static getProductService(): IProductService {
+    if (!ServiceFactory.productService) {
+      ServiceFactory.productService = new ProductService(ServiceFactory.getProductRepository());
+    }
+    return ServiceFactory.productService;
+  }
+
+  public static getProductController(): ProductController {
+    if (!ServiceFactory.productController) {
+      ServiceFactory.productController = new ProductController(ServiceFactory.getProductService());
+    }
+    return ServiceFactory.productController;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -185,5 +218,8 @@ export class ServiceFactory {
     ServiceFactory.taxeRateController = undefined as unknown as TaxeRateController;
     ServiceFactory.taxeRateRepository = undefined as unknown as ITaxeRateRepository;
     ServiceFactory.taxeRateService = undefined as unknown as ITaxeRateService;
+    ServiceFactory.productController = undefined as unknown as ProductController;
+    ServiceFactory.productRepository = undefined as unknown as IProductRepository;
+    ServiceFactory.productService = undefined as unknown as IProductService;
   }
 }
