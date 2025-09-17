@@ -30,5 +30,5 @@ export interface IUserController {
    * Supprimer un utilisateur (Administration)
    * Endpoint: DELETE /api/v1/users/:id
    */
-  // destroy(req: Request, res: Response, next: NextFunction): Promise<void>;
+  destroy(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

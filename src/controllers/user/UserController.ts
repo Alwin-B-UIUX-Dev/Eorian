@@ -104,8 +104,55 @@ export class UserController implements IUserController {
     }
   }
 
-  // Note: Les autres méthodes CRUD (store, update, destroy) sont commentées
+  /**
+   * Supprimer un utilisateur (Administration)
+   * Endpoint: DELETE /api/v1/users/:id
+   */
+  public async destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const requestId = (req.headers['x-request-id'] as string) || 'unknown';
+      const userId = req.params.id;
+
+      logger.info('Admin requesting user deletion', {
+        requestId,
+        userId,
+        operation: 'admin_delete_user'
+      });
+
+      // Vérifier que l'utilisateur existe avant suppression
+      const existingUser = await this.userService.findOne(userId);
+      if (!existingUser) {
+        res.status(404).json(ApiResponseFactory.error('User not found', 'USER_NOT_FOUND'));
+        return;
+      }
+
+      // Supprimer l'utilisateur
+      await this.userService.remove(userId);
+
+      res.status(200).json(
+        ApiResponseFactory.success('User deleted successfully', {
+          deletedUserId: userId,
+          deletedAt: new Date().toISOString()
+        })
+      );
+
+      logger.info('User deleted successfully', {
+        requestId,
+        userId,
+        operation: 'admin_delete_user'
+      });
+    } catch (error) {
+      logger.error('Failed to delete user', {
+        error: error instanceof Error ? error.message : 'unknown',
+        userId: req.params.id,
+        operation: 'admin_delete_user'
+      });
+      next(error);
+    }
+  }
+
+  // Note: Les autres méthodes CRUD (store, update) sont commentées
   // dans l'interface IUserController car :
   // - store: L'auth s'occupe de la création via /auth/register
-  // - update, destroy: À implémenter si nécessaire pour l'administration
+  // - update: À implémenter si nécessaire pour l'administration
 }

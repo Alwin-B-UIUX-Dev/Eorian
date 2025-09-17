@@ -43,12 +43,12 @@ export class UserRoutes {
     //   this.userController.update.bind(this.userController)
     // );
 
-    // this.router.delete(
-    //   '/users/:id',
-    //   AuthMiddleware.authenticate(this.tokenManager),
-    //   AuthMiddleware.requireRole(['admin']),
-    //   this.userController.destroy.bind(this.userController)
-    // );
+    this.router.delete(
+      '/users/:id',
+      AuthMiddleware.authenticate(this.tokenManager),
+      AuthMiddleware.authenticateRole('admin'),
+      this.userController.destroy.bind(this.userController)
+    );
   }
 
   public getRouter(): Router {
