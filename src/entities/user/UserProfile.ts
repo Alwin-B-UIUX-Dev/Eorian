@@ -7,8 +7,6 @@ export class UserProfile extends BaseEntity {
   private lastName: string;
   private phone: string;
   private birthDate: Date;
-  private newsletterConsent: boolean;
-  private newsletterConsentDate: Date;
   private avatarUrl: string;
   constructor(data: IUserProfileData) {
     super(data, 'userId');
@@ -17,8 +15,6 @@ export class UserProfile extends BaseEntity {
     this.lastName = data.lastName;
     this.phone = data.phone;
     this.birthDate = data.birthDate;
-    this.newsletterConsent = data.newsletterConsent;
-    this.newsletterConsentDate = data.newsletterConsentDate;
     this.avatarUrl = data.avatarUrl;
   }
 
@@ -40,14 +36,6 @@ export class UserProfile extends BaseEntity {
 
   public getBirthDate(): Date {
     return this.birthDate;
-  }
-
-  public getNewsletterConsent(): boolean {
-    return this.newsletterConsent;
-  }
-
-  public getNewsletterConsentDate(): Date {
-    return this.newsletterConsentDate;
   }
 
   public getAvatarUrl(): string {
@@ -88,18 +76,6 @@ export class UserProfile extends BaseEntity {
     return this;
   }
 
-  public setNewsletterConsent(newsletterConsent: boolean): this {
-    this.newsletterConsent = newsletterConsent;
-    this.updateTimestamp();
-    return this;
-  }
-
-  public setNewsletterConsentDate(newsletterConsent_date: Date): this {
-    this.newsletterConsentDate = newsletterConsent_date;
-    this.updateTimestamp();
-    return this;
-  }
-
   public setAvatarUrl(avatarUrl: string): this {
     this.avatarUrl = avatarUrl;
     this.updateTimestamp();
@@ -113,8 +89,6 @@ export class UserProfile extends BaseEntity {
       lastName: this.lastName,
       phone: this.phone,
       birthDate: this.birthDate,
-      newsletterConsent: this.newsletterConsent,
-      newsletterConsentDate: this.newsletterConsentDate,
       avatarUrl: this.avatarUrl
     };
   }
