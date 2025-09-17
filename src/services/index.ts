@@ -1,3 +1,4 @@
+export * from '@/services/addresses/index';
 export * from '@/services/auth/index';
 export * from '@/services/cart-items/index';
 export * from '@/services/http/index';

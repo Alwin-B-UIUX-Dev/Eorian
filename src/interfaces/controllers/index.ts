@@ -1,3 +1,4 @@
+export * from '@/interfaces/controllers/addresses/index';
 export * from '@/interfaces/controllers/auth/index';
 export * from '@/interfaces/controllers/cart-items/index';
 export * from '@/interfaces/controllers/products/index';
