@@ -10,9 +10,9 @@ import {
   ProductController,
   TaxeRateController,
   UserController,
+  UserProfileController,
   UserRoleController
 } from '@/controllers';
-import { UserProfileController } from '@/controllers/user/UserProfileController';
 import type {
   IAddressRepository,
   IAddressService,
@@ -60,9 +60,9 @@ import {
   ProductService,
   TaxeRateService,
   TokenService,
-  UserProfileService,
   UserService
 } from '@/services';
+import { UserProfileService } from '@/services/user/UserProfileService';
 import { UserRoleService } from '@/services/user/UserRoleService';
 import { CookieManager, PasswordHasher, TokenManager } from '@/utils';
 
@@ -79,13 +79,13 @@ export class ServiceFactory {
   private static userService: IUserService;
   private static userController: UserController;
 
-  private static userRoleController: UserRoleController;
-  private static userRoleRepository: IUserRoleRepository;
-  private static userRoleService: IUserRoleService;
-
   private static userProfileController: UserProfileController;
   private static userProfileRepository: IUserProfileRepository;
   private static userProfileService: IUserProfileService;
+
+  private static userRoleController: UserRoleController;
+  private static userRoleRepository: IUserRoleRepository;
+  private static userRoleService: IUserRoleService;
 
   private static taxeRateController: TaxeRateController;
   private static taxeRateRepository: ITaxeRateRepository;
@@ -422,12 +422,12 @@ export class ServiceFactory {
     ServiceFactory.authController = undefined as unknown as AuthController;
     ServiceFactory.userService = undefined as unknown as IUserService;
     ServiceFactory.userController = undefined as unknown as UserController;
-    ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
-    ServiceFactory.userRoleRepository = undefined as unknown as IUserRoleRepository;
-    ServiceFactory.userRoleService = undefined as unknown as IUserRoleService;
     ServiceFactory.userProfileController = undefined as unknown as UserProfileController;
     ServiceFactory.userProfileRepository = undefined as unknown as IUserProfileRepository;
     ServiceFactory.userProfileService = undefined as unknown as IUserProfileService;
+    ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
+    ServiceFactory.userRoleRepository = undefined as unknown as IUserRoleRepository;
+    ServiceFactory.userRoleService = undefined as unknown as IUserRoleService;
     ServiceFactory.taxeRateController = undefined as unknown as TaxeRateController;
     ServiceFactory.taxeRateRepository = undefined as unknown as ITaxeRateRepository;
     ServiceFactory.taxeRateService = undefined as unknown as ITaxeRateService;

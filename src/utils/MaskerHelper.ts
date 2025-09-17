@@ -48,4 +48,28 @@ export class MaskerHelper {
     }
     return MaskerHelper.maskUsername(identifier);
   }
+
+  public static maskPhone(phone: string): string {
+    if (!phone) return '***';
+
+    // Supprimer tous les caractères non numériques
+    const cleanPhone = phone.replace(/\D/g, '');
+
+    if (cleanPhone.length >= 10) {
+      // Masquer les 4 chiffres du milieu
+      const start = cleanPhone.substring(0, 3);
+      const end = cleanPhone.substring(cleanPhone.length - 3);
+      return `${start}****${end}`;
+    }
+
+    // Pour les numéros plus courts, masquer le milieu
+    if (cleanPhone.length >= 6) {
+      const start = cleanPhone.substring(0, 2);
+      const end = cleanPhone.substring(cleanPhone.length - 2);
+      return `${start}****${end}`;
+    }
+
+    // Fallback
+    return `${'*'.repeat(cleanPhone.length)}`;
+  }
 }

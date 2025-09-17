@@ -10,6 +10,7 @@ import {
   OrderRoutes,
   ProductRoutes,
   TaxeRateRoutes,
+  UserProfileRoutes,
   UserRoleRoutes,
   UserRoutes
 } from '@/routes';
@@ -24,6 +25,7 @@ export class RouteFactory {
 
     RouteFactory.registerAuthRoutes();
     RouteFactory.registerUserRoutes();
+    RouteFactory.registerUserProfileRoutes();
     RouteFactory.registerUserRoleRoutes();
     RouteFactory.registerTaxeRateRoutes();
     RouteFactory.registerProductRoutes();
@@ -50,6 +52,14 @@ export class RouteFactory {
     const userRoutes = new UserRoutes(userController, tokenManager);
 
     RouteFactory.router.use('/api/v1', userRoutes.getRouter());
+  }
+
+  private static registerUserProfileRoutes(): void {
+    const userProfileController = ServiceFactory.getUserProfileController();
+    const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
+    const userProfileRoutes = new UserProfileRoutes(userProfileController, tokenManager);
+
+    RouteFactory.router.use('/api/v1', userProfileRoutes.getRouter());
   }
 
   private static registerUserRoleRoutes(): void {

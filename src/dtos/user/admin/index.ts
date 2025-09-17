@@ -1,8 +1,4 @@
-export * from '@/dtos/user/admin/CreateUserAdminDto';
-export * from '@/dtos/user/admin/CreateUserAdminDto';
-export * from '@/dtos/user/admin/CreateUserProfileDto';
-export * from '@/dtos/user/admin/CreateUserRoleDto';
-export * from '@/dtos/user/admin/ResponseUserProfileDto';
-export * from '@/dtos/user/admin/ResponseUserRoleDto';
-export * from '@/dtos/user/admin/UpdateUserProfileDto';
-export * from '@/dtos/user/admin/UpdateUserRoleDto';
+export { CreateUserAdminDto } from '@/dtos/user/admin/CreateUserAdminDto';
+export { CreateUserProfileDto } from '@/dtos/user/admin/CreateUserProfileDto';
+export { ResponseUserProfileDto } from '@/dtos/user/admin/ResponseUserProfileDto';
+export { UpdateUserProfileDto } from '@/dtos/user/admin/UpdateUserProfileDto';
