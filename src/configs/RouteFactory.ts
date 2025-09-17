@@ -6,6 +6,8 @@ import {
   AddressRoutes,
   AuthRoutes,
   CartItemRoutes,
+  OrderItemRoutes,
+  OrderRoutes,
   ProductRoutes,
   TaxeRateRoutes,
   UserRoleRoutes,
@@ -27,6 +29,8 @@ export class RouteFactory {
     RouteFactory.registerProductRoutes();
     RouteFactory.registerCartItemRoutes();
     RouteFactory.registerAddressRoutes();
+    RouteFactory.registerOrderRoutes();
+    RouteFactory.registerOrderItemRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -76,6 +80,18 @@ export class RouteFactory {
     const addressController = ServiceFactory.getAddressController();
     const addressRoutes = new AddressRoutes(addressController);
     RouteFactory.router.use('/api/v1', addressRoutes.getRouter());
+  }
+
+  private static registerOrderRoutes(): void {
+    const orderController = ServiceFactory.getOrderController();
+    const orderRoutes = new OrderRoutes(orderController);
+    RouteFactory.router.use('/api/v1', orderRoutes.getRouter());
+  }
+
+  private static registerOrderItemRoutes(): void {
+    const orderItemController = ServiceFactory.getOrderItemController();
+    const orderItemRoutes = new OrderItemRoutes(orderItemController);
+    RouteFactory.router.use('/api/v1', orderItemRoutes.getRouter());
   }
 
   public static reset(): void {
