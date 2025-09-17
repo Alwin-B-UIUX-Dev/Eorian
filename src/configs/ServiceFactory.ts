@@ -2,6 +2,7 @@
 
 import { logger } from '@/configs';
 import {
+  AddressController,
   AuthController,
   CartItemController,
   ProductController,
@@ -10,6 +11,8 @@ import {
   UserRoleController
 } from '@/controllers';
 import type {
+  IAddressRepository,
+  IAddressService,
   IAuthService,
   ICartItemRepository,
   ICartItemService,
@@ -28,6 +31,7 @@ import type {
 } from '@/interfaces';
 import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleService';
 import {
+  PostgresAddressRepository,
   PostgresCartItemRepository,
   PostgresProductRepository,
   PostgresTaxeRateRepository,
@@ -36,6 +40,7 @@ import {
   PostgresUserSessionRepository
 } from '@/repositories';
 import {
+  AddressService,
   AuthService,
   CartItemService,
   ProductService,
@@ -58,12 +63,15 @@ export class ServiceFactory {
   private static authController: AuthController;
   private static userService: IUserService;
   private static userController: UserController;
+
   private static userRoleController: UserRoleController;
   private static userRoleRepository: IUserRoleRepository;
   private static userRoleService: IUserRoleService;
+
   private static taxeRateController: TaxeRateController;
   private static taxeRateRepository: ITaxeRateRepository;
   private static taxeRateService: ITaxeRateService;
+
   private static productController: ProductController;
   private static productRepository: IProductRepository;
   private static productService: IProductService;
@@ -71,6 +79,10 @@ export class ServiceFactory {
   private static cartItemController: CartItemController;
   private static cartItemRepository: ICartItemRepository;
   private static cartItemService: ICartItemService;
+
+  private static addressController: AddressController;
+  private static addressRepository: IAddressRepository;
+  private static addressService: IAddressService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -203,6 +215,28 @@ export class ServiceFactory {
     return ServiceFactory.cartItemController;
   }
 
+  // Addresses
+  public static getAddressRepository(): IAddressRepository {
+    if (!ServiceFactory.addressRepository) {
+      ServiceFactory.addressRepository = new PostgresAddressRepository();
+    }
+    return ServiceFactory.addressRepository;
+  }
+
+  public static getAddressService(): IAddressService {
+    if (!ServiceFactory.addressService) {
+      ServiceFactory.addressService = new AddressService(ServiceFactory.getAddressRepository());
+    }
+    return ServiceFactory.addressService;
+  }
+
+  public static getAddressController(): AddressController {
+    if (!ServiceFactory.addressController) {
+      ServiceFactory.addressController = new AddressController(ServiceFactory.getAddressService());
+    }
+    return ServiceFactory.addressController;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -299,5 +333,8 @@ export class ServiceFactory {
     ServiceFactory.cartItemController = undefined as unknown as CartItemController;
     ServiceFactory.cartItemRepository = undefined as unknown as ICartItemRepository;
     ServiceFactory.cartItemService = undefined as unknown as ICartItemService;
+    ServiceFactory.addressController = undefined as unknown as AddressController;
+    ServiceFactory.addressRepository = undefined as unknown as IAddressRepository;
+    ServiceFactory.addressService = undefined as unknown as IAddressService;
   }
 }
