@@ -1,11 +1,25 @@
 // src/services/user/UserProfileService.ts
 
 import { ConflictError, UserError } from '@/exceptions';
-import type { IUserProfile, IUserProfileRepository, IUserProfileService } from '@/interfaces';
+import type {
+  IUser,
+  IUserProfile,
+  IUserProfileRepository,
+  IUserProfileService,
+  IUserRepository
+} from '@/interfaces';
 import type { CreateUserProfileData, IUserProfileData, WithoutSystemFieldsType } from '@/types';
+import { PasswordHasher } from '@/utils';
 
 export class UserProfileService implements IUserProfileService {
-  constructor(private readonly userProfileRepository: IUserProfileRepository) {}
+  private readonly passwordHasher: PasswordHasher;
+
+  constructor(
+    private readonly userProfileRepository: IUserProfileRepository,
+    private readonly userRepository: IUserRepository
+  ) {
+    this.passwordHasher = new PasswordHasher();
+  }
 
   public async create(
     userId: string,
@@ -120,6 +134,152 @@ export class UserProfileService implements IUserProfileService {
       }
 
       throw UserError.profileDeleteFailed(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+
+  // ===================================
+  // GESTION DU COMPTE UTILISATEUR
+  // ===================================
+
+  public async changeEmail(
+    userId: string,
+    newEmail: string,
+    currentPassword: string
+  ): Promise<IUser> {
+    try {
+      // Vérifier que l'utilisateur existe
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        throw UserError.notFound(userId);
+      }
+
+      // Vérifier le mot de passe actuel
+      const isPasswordValid = await this.passwordHasher.verify(
+        user.getPasswordHash(),
+        currentPassword
+      );
+      if (!isPasswordValid) {
+        throw UserError.invalidCredentials();
+      }
+
+      // Vérifier que le nouvel email n'est pas déjà utilisé
+      const emailExists = await this.userRepository.emailExists(newEmail, userId);
+      if (emailExists) {
+        throw ConflictError.resourceExists('user', 'email', newEmail);
+      }
+
+      // Mettre à jour l'email
+      return await this.userRepository.update(userId, { email: newEmail });
+    } catch (error) {
+      if (error instanceof UserError || error instanceof ConflictError) {
+        throw error;
+      }
+
+      throw UserError.updateFailed(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+
+  public async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<IUser> {
+    try {
+      // Vérifier que l'utilisateur existe
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        throw UserError.notFound(userId);
+      }
+
+      // Vérifier le mot de passe actuel
+      const isPasswordValid = await this.passwordHasher.verify(
+        user.getPasswordHash(),
+        currentPassword
+      );
+      if (!isPasswordValid) {
+        throw UserError.invalidCredentials();
+      }
+
+      // Hasher le nouveau mot de passe
+      const hashedNewPassword = await this.passwordHasher.hash(newPassword);
+
+      // Mettre à jour le mot de passe
+      return await this.userRepository.update(userId, { password: hashedNewPassword });
+    } catch (error) {
+      if (error instanceof UserError) {
+        throw error;
+      }
+
+      throw UserError.updateFailed(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+
+  public async changeUsername(
+    userId: string,
+    newUsername: string,
+    currentPassword: string
+  ): Promise<IUser> {
+    try {
+      // Vérifier que l'utilisateur existe
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        throw UserError.notFound(userId);
+      }
+
+      // Vérifier le mot de passe actuel
+      const isPasswordValid = await this.passwordHasher.verify(
+        user.getPasswordHash(),
+        currentPassword
+      );
+      if (!isPasswordValid) {
+        throw UserError.invalidCredentials();
+      }
+
+      // Vérifier que le nouveau nom d'utilisateur n'est pas déjà utilisé
+      const usernameExists = await this.userRepository.usernameExists(newUsername, userId);
+      if (usernameExists) {
+        throw ConflictError.resourceExists('user', 'username', newUsername);
+      }
+
+      // Mettre à jour le nom d'utilisateur
+      return await this.userRepository.update(userId, { username: newUsername });
+    } catch (error) {
+      if (error instanceof UserError || error instanceof ConflictError) {
+        throw error;
+      }
+
+      throw UserError.updateFailed(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+
+  public async deleteAccount(userId: string, password: string): Promise<void> {
+    try {
+      // Vérifier que l'utilisateur existe
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        throw UserError.notFound(userId);
+      }
+
+      // Vérifier le mot de passe
+      const isPasswordValid = await this.passwordHasher.verify(user.getPasswordHash(), password);
+      if (!isPasswordValid) {
+        throw UserError.invalidCredentials();
+      }
+
+      // Supprimer le profil utilisateur s'il existe
+      const profile = await this.userProfileRepository.findByUserId(userId);
+      if (profile) {
+        await this.userProfileRepository.delete(profile.getId());
+      }
+
+      // Supprimer l'utilisateur
+      await this.userRepository.delete(userId);
+    } catch (error) {
+      if (error instanceof UserError) {
+        throw error;
+      }
+
+      throw UserError.deleteFailed(error instanceof Error ? error.message : 'Unknown error');
     }
   }
 }

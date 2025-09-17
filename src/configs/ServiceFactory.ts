@@ -137,7 +137,8 @@ export class ServiceFactory {
   public static getUserProfileService(): IUserProfileService {
     if (!ServiceFactory.userProfileService) {
       ServiceFactory.userProfileService = new UserProfileService(
-        ServiceFactory.getUserProfileRepository()
+        ServiceFactory.getUserProfileRepository(),
+        ServiceFactory.getUserRepository()
       );
     }
     return ServiceFactory.userProfileService;

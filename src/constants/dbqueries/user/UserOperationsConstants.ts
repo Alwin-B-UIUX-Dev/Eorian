@@ -9,4 +9,6 @@ export class UserOperationsConstants {
   public static readonly FIND_USER_BY_USERNAME: string = 'find_user_by_username';
   public static readonly FIND_ALL_USERS: string = 'find_all_user';
   public static readonly UPDATE_LOGIN_STATUS: string = 'update_login_status';
+  public static readonly CHECK_EMAIL_EXISTS: string = 'check_email_exists';
+  public static readonly CHECK_USERNAME_EXISTS: string = 'check_username_exists';
 }

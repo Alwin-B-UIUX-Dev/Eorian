@@ -6,4 +6,10 @@ export interface IUserProfileController {
   store(req: Request, res: Response, next: NextFunction): Promise<void>;
   update(req: Request, res: Response, next: NextFunction): Promise<void>;
   destroy(req: Request, res: Response, next: NextFunction): Promise<void>;
+
+  // Méthodes de gestion du compte utilisateur
+  changeEmail(req: Request, res: Response, next: NextFunction): Promise<void>;
+  changePassword(req: Request, res: Response, next: NextFunction): Promise<void>;
+  changeUsername(req: Request, res: Response, next: NextFunction): Promise<void>;
+  deleteAccount(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

@@ -25,4 +25,14 @@ export interface IUserProfileRepository extends IBaseRepository<IUserProfile, IU
    * @throws {DatabaseError} Si la requête échoue
    */
   phoneExists(phone: string, excludeUserId?: string): Promise<boolean>;
+
+  /**
+   * Rechercher un profil par l'ID de l'utilisateur
+   *
+   * @param userId - ID de l'utilisateur
+   * @returns Profil trouvé ou null si inexistant
+   *
+   * @throws {DatabaseError} Si la requête échoue
+   */
+  findByUserId(userId: string): Promise<IUserProfile | null>;
 }

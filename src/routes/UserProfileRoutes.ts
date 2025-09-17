@@ -55,32 +55,32 @@ export class UserProfileRoutes {
       this.userProfileController.destroy.bind(this.userProfileController)
     );
 
-    // Routes futures pour la gestion du compte utilisateur
-    // (décommenter si nécessaire)
+    // Routes pour la gestion du compte utilisateur
+    // Ces routes permettent aux utilisateurs de gérer leur propre compte
 
-    // this.router.put(
-    //   '/account/email',
-    //   AuthMiddleware.authenticate(this.tokenManager),
-    //   this.userProfileController.changeEmail.bind(this.userProfileController)
-    // );
+    this.router.put(
+      '/account/email',
+      AuthMiddleware.authenticate(this.tokenManager),
+      this.userProfileController.changeEmail.bind(this.userProfileController)
+    );
 
-    // this.router.put(
-    //   '/account/password',
-    //   AuthMiddleware.authenticate(this.tokenManager),
-    //   this.userProfileController.changePassword.bind(this.userProfileController)
-    // );
+    this.router.put(
+      '/account/password',
+      AuthMiddleware.authenticate(this.tokenManager),
+      this.userProfileController.changePassword.bind(this.userProfileController)
+    );
 
-    // this.router.put(
-    //   '/account/username',
-    //   AuthMiddleware.authenticate(this.tokenManager),
-    //   this.userProfileController.changeUsername.bind(this.userProfileController)
-    // );
+    this.router.put(
+      '/account/username',
+      AuthMiddleware.authenticate(this.tokenManager),
+      this.userProfileController.changeUsername.bind(this.userProfileController)
+    );
 
-    // this.router.delete(
-    //   '/account',
-    //   AuthMiddleware.authenticate(this.tokenManager),
-    //   this.userProfileController.deleteAccount.bind(this.userProfileController)
-    // );
+    this.router.delete(
+      '/account',
+      AuthMiddleware.authenticate(this.tokenManager),
+      this.userProfileController.deleteAccount.bind(this.userProfileController)
+    );
   }
 
   public getRouter(): Router {

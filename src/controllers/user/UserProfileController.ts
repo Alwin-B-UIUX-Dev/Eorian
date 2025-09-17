@@ -1,7 +1,16 @@
 // src/controllers/user/UserProfileController.ts
 
 import type { NextFunction, Request, Response } from 'express';
-import { CreateUserProfileDto, ResponseUserProfileDto, UpdateUserProfileDto } from '@/dtos';
+import {
+  ChangeEmailDto,
+  ChangePasswordDto,
+  ChangeUsernameDto,
+  CreateUserProfileDto,
+  DeleteAccountDto,
+  ResponseUserDto,
+  ResponseUserProfileDto,
+  UpdateUserProfileDto
+} from '@/dtos';
 import type { IUserProfileController, IUserProfileService } from '@/interfaces';
 import { ApiResponseFactory } from '@/utils';
 
@@ -80,6 +89,114 @@ export class UserProfileController implements IUserProfileController {
     try {
       await this.service.remove(req.params.id);
       res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // ===================================
+  // GESTION DU COMPTE UTILISATEUR
+  // ===================================
+
+  public async changeEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = new ChangeEmailDto(req.body);
+      const userId = req.user?.id; // Récupéré depuis le token JWT
+
+      if (!userId) {
+        res
+          .status(401)
+          .json(ApiResponseFactory.error('Utilisateur non authentifié', 'UNAUTHORIZED'));
+        return;
+      }
+
+      const updatedUser = await this.service.changeEmail(
+        userId,
+        dto.getNewEmail(),
+        dto.getCurrentPassword()
+      );
+
+      res.json(
+        ApiResponseFactory.success('Email modifié avec succès', new ResponseUserDto(updatedUser))
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = new ChangePasswordDto(req.body);
+      const userId = req.user?.id; // Récupéré depuis le token JWT
+
+      if (!userId) {
+        res
+          .status(401)
+          .json(ApiResponseFactory.error('Utilisateur non authentifié', 'UNAUTHORIZED'));
+        return;
+      }
+
+      const updatedUser = await this.service.changePassword(
+        userId,
+        dto.getCurrentPassword(),
+        dto.getNewPassword()
+      );
+
+      res.json(
+        ApiResponseFactory.success(
+          'Mot de passe modifié avec succès',
+          new ResponseUserDto(updatedUser)
+        )
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async changeUsername(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = new ChangeUsernameDto(req.body);
+      const userId = req.user?.id; // Récupéré depuis le token JWT
+
+      if (!userId) {
+        res
+          .status(401)
+          .json(ApiResponseFactory.error('Utilisateur non authentifié', 'UNAUTHORIZED'));
+        return;
+      }
+
+      const updatedUser = await this.service.changeUsername(
+        userId,
+        dto.getNewUsername(),
+        dto.getCurrentPassword()
+      );
+
+      res.json(
+        ApiResponseFactory.success(
+          "Nom d'utilisateur modifié avec succès",
+          new ResponseUserDto(updatedUser)
+        )
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async deleteAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = new DeleteAccountDto(req.body);
+      const userId = req.user?.id; // Récupéré depuis le token JWT
+
+      if (!userId) {
+        res
+          .status(401)
+          .json(ApiResponseFactory.error('Utilisateur non authentifié', 'UNAUTHORIZED'));
+        return;
+      }
+
+      await this.service.deleteAccount(userId, dto.getPassword());
+
+      res.json(ApiResponseFactory.success('Compte supprimé avec succès'));
     } catch (error) {
       next(error);
     }

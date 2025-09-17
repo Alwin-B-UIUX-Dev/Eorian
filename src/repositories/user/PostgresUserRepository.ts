@@ -329,4 +329,70 @@ export class PostgresUserRepository implements IUserRepository {
       throw DatabaseError.transactionFailed(UserLogOperations.UPDATE_LOGIN_STATUS);
     }
   }
+
+  public async emailExists(email: string, excludeUserId?: string): Promise<boolean> {
+    try {
+      this.logger.info('Checking if email exists', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        email: MaskerHelper.maskEmail(email),
+        excludeUserId
+      });
+
+      const result: { count: string } = await this.db.one(UserQueries.CHECK_EMAIL_EXISTS, [
+        email,
+        excludeUserId || null
+      ]);
+
+      const exists: boolean = parseInt(result.count) > 0;
+
+      this.logger.info('Email existence check completed', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        exists,
+        excludeUserId
+      });
+
+      return exists;
+    } catch (error) {
+      this.logger.error('Failed to check email existence', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        error: error instanceof Error ? error.message : 'unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_ID_FAILED);
+    }
+  }
+
+  public async usernameExists(username: string, excludeUserId?: string): Promise<boolean> {
+    try {
+      this.logger.info('Checking if username exists', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        username: MaskerHelper.maskUsername(username),
+        excludeUserId
+      });
+
+      const result: { count: string } = await this.db.one(UserQueries.CHECK_USERNAME_EXISTS, [
+        username,
+        excludeUserId || null
+      ]);
+
+      const exists: boolean = parseInt(result.count) > 0;
+
+      this.logger.info('Username existence check completed', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        exists,
+        excludeUserId
+      });
+
+      return exists;
+    } catch (error) {
+      this.logger.error('Failed to check username existence', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        error: error instanceof Error ? error.message : 'unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_ID_FAILED);
+    }
+  }
 }

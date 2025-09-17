@@ -259,4 +259,36 @@ export class PostgresUserProfileRepository implements IUserProfileRepository {
       throw DatabaseError.transactionFailed(UserProfileErrorMessages.FIND_USER_PROFILE_FAILED);
     }
   }
+
+  public async findByUserId(userId: string): Promise<IUserProfile | null> {
+    try {
+      this.logger.info('Attempting to find user profile by user id', {
+        operation: UserProfileLogOperations.FIND_USER_PROFILE_BY_USER_ID,
+        userId
+      });
+
+      const result: IUserProfileData | null = await this.db.oneOrNone(
+        UserProfileQueries.SELECT_USER_PROFILE_BY_USER_ID,
+        [userId]
+      );
+
+      const found: boolean = result !== null;
+      this.logger.info(`User profile search by user id completed`, {
+        operation: UserProfileLogOperations.FIND_USER_PROFILE_BY_USER_ID,
+        found,
+        userId: found ? result?.id : null
+      });
+
+      return result ? new UserProfile(DatabaseMapper.snakeToCamel<IUserProfileData>(result)) : null;
+    } catch (error) {
+      this.logger.error('Failed to find user profile by user id', {
+        operation: UserProfileLogOperations.FIND_USER_PROFILE_BY_USER_ID,
+        userId,
+        error: error instanceof Error ? error.message : 'unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      throw DatabaseError.transactionFailed(UserProfileErrorMessages.FIND_USER_PROFILE_FAILED);
+    }
+  }
 }

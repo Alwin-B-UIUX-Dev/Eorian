@@ -1,5 +1,6 @@
 // src/interfaces/services/user/IUserProfileService.ts
 
+import type { IUser } from '@/interfaces/entities/user/IUser';
 import type { IUserProfile } from '@/interfaces/entities/user/IUserProfile';
 import type { WithoutSystemFieldsType } from '@/types/entities/BaseType';
 import type { IUserProfileData } from '@/types/entities/user';
@@ -72,4 +73,57 @@ export interface IUserProfileService {
    * @throws {UserError} Si la suppression échoue
    */
   remove(id: string): Promise<void>;
+
+  // ===================================
+  // GESTION DU COMPTE UTILISATEUR
+  // ===================================
+
+  /**
+   * Changement d'email d'un utilisateur
+   *
+   * @param userId - ID de l'utilisateur
+   * @param newEmail - Nouvel email
+   * @param currentPassword - Mot de passe actuel pour vérification
+   *
+   * @returns Utilisateur mis à jour
+   *
+   * @throws {UserError} Si le changement échoue
+   */
+  changeEmail(userId: string, newEmail: string, currentPassword: string): Promise<IUser>;
+
+  /**
+   * Changement de mot de passe d'un utilisateur
+   *
+   * @param userId - ID de l'utilisateur
+   * @param currentPassword - Mot de passe actuel
+   * @param newPassword - Nouveau mot de passe
+   *
+   * @returns Utilisateur mis à jour
+   *
+   * @throws {UserError} Si le changement échoue
+   */
+  changePassword(userId: string, currentPassword: string, newPassword: string): Promise<IUser>;
+
+  /**
+   * Changement de nom d'utilisateur
+   *
+   * @param userId - ID de l'utilisateur
+   * @param newUsername - Nouveau nom d'utilisateur
+   * @param currentPassword - Mot de passe actuel pour vérification
+   *
+   * @returns Utilisateur mis à jour
+   *
+   * @throws {UserError} Si le changement échoue
+   */
+  changeUsername(userId: string, newUsername: string, currentPassword: string): Promise<IUser>;
+
+  /**
+   * Suppression du compte utilisateur
+   *
+   * @param userId - ID de l'utilisateur
+   * @param password - Mot de passe pour vérification
+   *
+   * @throws {UserError} Si la suppression échoue
+   */
+  deleteAccount(userId: string, password: string): Promise<void>;
 }
