@@ -12,6 +12,7 @@ import {
   UserController,
   UserRoleController
 } from '@/controllers';
+import { UserProfileController } from '@/controllers/user/UserProfileController';
 import type {
   IAddressRepository,
   IAddressService,
@@ -30,6 +31,8 @@ import type {
   ITaxeRateService,
   ITokenManager,
   ITokenService,
+  IUserProfileRepository,
+  IUserProfileService,
   IUserRepository,
   IUserRoleRepository,
   IUserService,
@@ -43,6 +46,7 @@ import {
   PostgresOrderRepository,
   PostgresProductRepository,
   PostgresTaxeRateRepository,
+  PostgresUserProfileRepository,
   PostgresUserRepository,
   PostgresUserRoleRepository,
   PostgresUserSessionRepository
@@ -56,6 +60,7 @@ import {
   ProductService,
   TaxeRateService,
   TokenService,
+  UserProfileService,
   UserService
 } from '@/services';
 import { UserRoleService } from '@/services/user/UserRoleService';
@@ -77,6 +82,10 @@ export class ServiceFactory {
   private static userRoleController: UserRoleController;
   private static userRoleRepository: IUserRoleRepository;
   private static userRoleService: IUserRoleService;
+
+  private static userProfileController: UserProfileController;
+  private static userProfileRepository: IUserProfileRepository;
+  private static userProfileService: IUserProfileService;
 
   private static taxeRateController: TaxeRateController;
   private static taxeRateRepository: ITaxeRateRepository;
@@ -115,6 +124,32 @@ export class ServiceFactory {
       ServiceFactory.sessionRepository = new PostgresUserSessionRepository();
     }
     return ServiceFactory.sessionRepository;
+  }
+
+  // User Profiles
+  public static getUserProfileRepository(): IUserProfileRepository {
+    if (!ServiceFactory.userProfileRepository) {
+      ServiceFactory.userProfileRepository = new PostgresUserProfileRepository();
+    }
+    return ServiceFactory.userProfileRepository;
+  }
+
+  public static getUserProfileService(): IUserProfileService {
+    if (!ServiceFactory.userProfileService) {
+      ServiceFactory.userProfileService = new UserProfileService(
+        ServiceFactory.getUserProfileRepository()
+      );
+    }
+    return ServiceFactory.userProfileService;
+  }
+
+  public static getUserProfileController(): UserProfileController {
+    if (!ServiceFactory.userProfileController) {
+      ServiceFactory.userProfileController = new UserProfileController(
+        ServiceFactory.getUserProfileService()
+      );
+    }
+    return ServiceFactory.userProfileController;
   }
 
   // User Roles
@@ -390,6 +425,9 @@ export class ServiceFactory {
     ServiceFactory.userRoleController = undefined as unknown as UserRoleController;
     ServiceFactory.userRoleRepository = undefined as unknown as IUserRoleRepository;
     ServiceFactory.userRoleService = undefined as unknown as IUserRoleService;
+    ServiceFactory.userProfileController = undefined as unknown as UserProfileController;
+    ServiceFactory.userProfileRepository = undefined as unknown as IUserProfileRepository;
+    ServiceFactory.userProfileService = undefined as unknown as IUserProfileService;
     ServiceFactory.taxeRateController = undefined as unknown as TaxeRateController;
     ServiceFactory.taxeRateRepository = undefined as unknown as ITaxeRateRepository;
     ServiceFactory.taxeRateService = undefined as unknown as ITaxeRateService;

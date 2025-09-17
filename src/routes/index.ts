@@ -5,5 +5,6 @@ export * from '@/routes/OrderItemRoutes';
 export * from '@/routes/OrderRoutes';
 export * from '@/routes/ProductRoutes';
 export * from '@/routes/TaxeRateRoutes';
+export * from '@/routes/UserProfileRoutes';
 export * from '@/routes/UserRoleRoutes';
 export * from '@/routes/UserRoutes';
