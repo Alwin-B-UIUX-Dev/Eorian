@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { logger, ServiceFactory } from '@/configs';
 import type { ITokenManager } from '@/interfaces';
 import {
+  AddressRoutes,
   AuthRoutes,
   CartItemRoutes,
   ProductRoutes,
@@ -25,6 +26,7 @@ export class RouteFactory {
     RouteFactory.registerTaxeRateRoutes();
     RouteFactory.registerProductRoutes();
     RouteFactory.registerCartItemRoutes();
+    RouteFactory.registerAddressRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -68,6 +70,12 @@ export class RouteFactory {
     const cartItemController = ServiceFactory.getCartItemController();
     const cartItemRoutes = new CartItemRoutes(cartItemController);
     RouteFactory.router.use('/api/v1', cartItemRoutes.getRouter());
+  }
+
+  private static registerAddressRoutes(): void {
+    const addressController = ServiceFactory.getAddressController();
+    const addressRoutes = new AddressRoutes(addressController);
+    RouteFactory.router.use('/api/v1', addressRoutes.getRouter());
   }
 
   public static reset(): void {
