@@ -1,6 +1,6 @@
-import { BaseEntity } from '@/entities';
 import type { IAddress } from '@/interfaces';
 import type { IAddressData } from '@/types';
+import { BaseEntity } from '../BaseEntity';
 
 export class Address extends BaseEntity implements IAddress {
   private userId: string;
