@@ -1,3 +1,4 @@
+export * from '@/entities/addresses/index';
 export * from '@/entities/BaseEntity';
 export * from '@/entities/cart-items/index';
 export * from '@/entities/products/index';
