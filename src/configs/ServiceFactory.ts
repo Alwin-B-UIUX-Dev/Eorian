@@ -5,6 +5,8 @@ import {
   AddressController,
   AuthController,
   CartItemController,
+  OrderController,
+  OrderItemController,
   ProductController,
   TaxeRateController,
   UserController,
@@ -17,6 +19,10 @@ import type {
   ICartItemRepository,
   ICartItemService,
   ICookieManager,
+  IOrderItemRepository,
+  IOrderItemService,
+  IOrderRepository,
+  IOrderService,
   IPasswordHasher,
   IProductRepository,
   IProductService,
@@ -33,6 +39,8 @@ import type { IUserRoleService } from '@/interfaces/services/user/IUserRoleServi
 import {
   PostgresAddressRepository,
   PostgresCartItemRepository,
+  PostgresOrderItemRepository,
+  PostgresOrderRepository,
   PostgresProductRepository,
   PostgresTaxeRateRepository,
   PostgresUserRepository,
@@ -43,6 +51,8 @@ import {
   AddressService,
   AuthService,
   CartItemService,
+  OrderItemService,
+  OrderService,
   ProductService,
   TaxeRateService,
   TokenService,
@@ -83,6 +93,14 @@ export class ServiceFactory {
   private static addressController: AddressController;
   private static addressRepository: IAddressRepository;
   private static addressService: IAddressService;
+
+  private static orderController: OrderController;
+  private static orderRepository: IOrderRepository;
+  private static orderService: IOrderService;
+
+  private static orderItemController: OrderItemController;
+  private static orderItemRepository: IOrderItemRepository;
+  private static orderItemService: IOrderItemService;
 
   // Repositories
   public static getUserRepository(): IUserRepository {
@@ -237,6 +255,54 @@ export class ServiceFactory {
     return ServiceFactory.addressController;
   }
 
+  // Orders
+  public static getOrderRepository(): IOrderRepository {
+    if (!ServiceFactory.orderRepository) {
+      ServiceFactory.orderRepository = new PostgresOrderRepository();
+    }
+    return ServiceFactory.orderRepository;
+  }
+
+  public static getOrderService(): IOrderService {
+    if (!ServiceFactory.orderService) {
+      ServiceFactory.orderService = new OrderService(ServiceFactory.getOrderRepository());
+    }
+    return ServiceFactory.orderService;
+  }
+
+  public static getOrderController(): OrderController {
+    if (!ServiceFactory.orderController) {
+      ServiceFactory.orderController = new OrderController(ServiceFactory.getOrderService());
+    }
+    return ServiceFactory.orderController;
+  }
+
+  // Order Items
+  public static getOrderItemRepository(): IOrderItemRepository {
+    if (!ServiceFactory.orderItemRepository) {
+      ServiceFactory.orderItemRepository = new PostgresOrderItemRepository();
+    }
+    return ServiceFactory.orderItemRepository;
+  }
+
+  public static getOrderItemService(): IOrderItemService {
+    if (!ServiceFactory.orderItemService) {
+      ServiceFactory.orderItemService = new OrderItemService(
+        ServiceFactory.getOrderItemRepository()
+      );
+    }
+    return ServiceFactory.orderItemService;
+  }
+
+  public static getOrderItemController(): OrderItemController {
+    if (!ServiceFactory.orderItemController) {
+      ServiceFactory.orderItemController = new OrderItemController(
+        ServiceFactory.getOrderItemService()
+      );
+    }
+    return ServiceFactory.orderItemController;
+  }
+
   // Services
   public static getAuthService(): IAuthService {
     if (!ServiceFactory.authService) {
@@ -336,5 +402,11 @@ export class ServiceFactory {
     ServiceFactory.addressController = undefined as unknown as AddressController;
     ServiceFactory.addressRepository = undefined as unknown as IAddressRepository;
     ServiceFactory.addressService = undefined as unknown as IAddressService;
+    ServiceFactory.orderController = undefined as unknown as OrderController;
+    ServiceFactory.orderRepository = undefined as unknown as IOrderRepository;
+    ServiceFactory.orderService = undefined as unknown as IOrderService;
+    ServiceFactory.orderItemController = undefined as unknown as OrderItemController;
+    ServiceFactory.orderItemRepository = undefined as unknown as IOrderItemRepository;
+    ServiceFactory.orderItemService = undefined as unknown as IOrderItemService;
   }
 }
