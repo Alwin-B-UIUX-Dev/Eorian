@@ -1,3 +1,4 @@
+export * from '@/routes/AddressRoutes';
 export * from '@/routes/AuthRoutes';
 export * from '@/routes/CartItemRoutes';
 export * from '@/routes/ProductRoutes';
