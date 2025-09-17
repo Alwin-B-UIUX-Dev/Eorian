@@ -1,3 +1,4 @@
+export type * from '@/types/entities/addresses/index';
 export type * from '@/types/entities/BaseType';
 export type * from '@/types/entities/cart-items/ICartItemData';
 export type * from '@/types/entities/IBaseEntityData';
