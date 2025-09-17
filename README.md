@@ -1,6 +1,6 @@
 # Eorian E-commerce API
 
-> API E-commerce Bookstore avec Node.js, Express et TypeScript
+> API E-commerce avec Node.js, Express et TypeScript
 
 
 ## 🔍 Description
