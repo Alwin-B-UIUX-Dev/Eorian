@@ -1,5 +1,5 @@
+import type { IEntity } from '@/interfaces';
 import type { IAddressData } from '@/types';
-import type { IEntity } from '../IEntity';
 
 export interface IAddress extends IEntity {
   getUserId(): string;

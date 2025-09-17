@@ -1,4 +1,4 @@
-import { BaseEntity } from '@/entities/BaseEntity';
+import { BaseEntity } from '@/entities';
 import type { IAddress } from '@/interfaces';
 import type { IAddressData } from '@/types';
 
