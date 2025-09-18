@@ -5,7 +5,7 @@
 
 ## 🔍 Description
 
-Cette API REST est construite pour gérer une librairie en ligne avec un système d'authentification robuste, de gestion des utilisateurs, des produits et des commandes. L'architecture suit les principes SOLID avec une approche en couches (Repository, Service, Controller).
+Cette API REST est construite pour gérer un E coomerce en ligne avec un système d'authentification robuste, de gestion des utilisateurs, des produits et des commandes. L'architecture suit les principes SOLID avec une approche en couches (Repository, Service, Controller).
 
 ## ⚡ Prérequis
 
