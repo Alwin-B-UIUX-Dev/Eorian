@@ -20,12 +20,11 @@ export default defineConfig({
         '**/*.config.ts',
         'src/database/migrations/**',
         'src/tests/**',
-        // Exclude des fichiers sans logique
-        'src/entities/**', // Pas de logique
-        'src/constants/**', // Pas de logique
-        'src/interfaces/**', // Pas de logique
-        'src/app.ts', // Juste Express setup
-        'src/server.ts' // Juste server start
+        'src/entities/**',
+        'src/constants/**',
+        'src/interfaces/**',
+        'src/app.ts',
+        'src/server.ts'
       ],
       include: ['src/**/*.ts'],
       all: true,

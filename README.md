@@ -1,50 +1,17 @@
-# E-Commerce API
+# Eorian E-commerce API
 
 > API E-commerce avec Node.js, Express et TypeScript
 
-## 📋 Table des matières
-
-- [Description](#description)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Utilisation](#utilisation)
-- [Scripts disponibles](#scripts-disponibles)
-- [Structure du projet](#structure-du-projet)
-- [Architecture](#architecture)
-- [Base de données](#base-de-données)
-- [Tests](#tests)
-- [Sécurité](#sécurité)
-- [Contribution](#contribution)
-- [Licence](#licence)
 
 ## 🔍 Description
 
-Cette API REST est construite pour gérer un E-Commerce en ligne avec un système d'authentification robuste, de gestion des utilisateurs, des produits et des commandes. L'architecture suit les principes SOLID avec une approche en couches (Repository, Service, Controller).
+Cette API REST est construite pour gérer une librairie en ligne avec un système d'authentification robuste, de gestion des utilisateurs, des produits et des commandes. L'architecture suit les principes SOLID avec une approche en couches (Repository, Service, Controller).
 
 ## ⚡ Prérequis
 
 - **Node.js** >= 22.0.0
 - **PostgreSQL** (base de données)
-- **npm** ou **yarn**
-
-## 🚀 Installation
-
-1. Clonez le repository :
-```bash
-git clone <url-du-repo>
-cd nom-du-projet
-```
-2. Installez les dépendances :
-npm install
-3. Configurez la base de données :
-Exécutez les scripts SQL dans database/setup/ et database/views/
-
-## ⚙️ Configuration
-
-Dupliquer le fichier `.env.exemple` à la racine du projet et renommer le `.env.development`
-
-## 📝 Utilisation
+- **npm**
 
 ### Démarrer le serveur de développement
 
@@ -107,21 +74,6 @@ L'API suit une architecture en couches :
 - Repository Pattern
 - DTO Pattern
 
-## 🗄️ Base de données
-
-### Configuration PostgreSQL
-
-Les scripts de configuration se trouvent dans `database/setup/` :
-
-- `00_create_eorian_database.sql` - Création de la base
-- `01_create_eorian_table.sql` - Création des tables
-
-### Vues disponibles
-
-- **Utilisateurs** : profils, adresses, sessions
-- **Produits** : catalogue, catégories, images
-- **Commandes** : résumés, détails, panier
-
 ## 🧪 Tests
 
 ### Lancer les tests
@@ -161,40 +113,9 @@ npm run test:coverage      # Avec couverture
 
 - **TypeScript** : Typage statique
 - **Biome** : Linting et formatage
-- **Husky** : Git hooks
 - **Commitlint** : Standardisation des commits
 - **Nodemon** : Hot-reload en développement
-
-## 📚 Documentation
-
-La documentation complète se trouve dans le dossier `docs/` :
-
-- Architecture générale
-- Diagrammes UML/PlantUML
-- Documentation de sécurité
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créez une branche (`git checkout -b feature/amazing-feature`)
-3. Commitez vos changements (`git commit -m 'feat: add amazing feature'`)
-4. Push sur la branche (`git push origin feature/amazing-feature`)
-5. Ouvrez une Pull Request
-
-### Standards de code
-
-- Utilisez les commits conventionnels
-- Respectez la configuration Biome
-- Ajoutez des tests pour les nouvelles fonctionnalités
 
 ## 📄 Licence
 
 ISC License - voir le fichier LICENSE pour plus de détails.
-
----
-
-**Développé par Wisepanda.fr**
-
-Pour plus d'informations, consultez la documentation complète.
-
-```

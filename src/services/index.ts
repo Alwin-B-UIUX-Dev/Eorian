@@ -1,8 +1,9 @@
-// Export des services metier de base
-
 export * from '@/services/addresses/index';
 export * from '@/services/auth/index';
+export * from '@/services/cart-items/index';
 export * from '@/services/http/index';
-export * from '@/services/product/index';
+export * from '@/services/orders/index';
+export * from '@/services/products/index';
 export * from '@/services/security/index';
+export * from '@/services/tax-rates/index';
 export * from '@/services/user/index';

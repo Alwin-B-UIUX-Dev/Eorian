@@ -5,8 +5,6 @@ export interface IUserProfile extends IEntity {
   getLastName(): string;
   getPhone(): string;
   getBirthDate(): Date;
-  getNewsletterConsent(): boolean;
-  getNewsletterConsentDate(): Date;
   getAvatarUrl(): string;
   getFullName(): string;
 
@@ -15,7 +13,5 @@ export interface IUserProfile extends IEntity {
   setLastName(lastName: string): this;
   setPhone(phone: string): this;
   setBirthDate(birthDate: Date): this;
-  setNewsletterConsent(newsletterConsent: boolean): this;
-  setNewsletterConsentDate(newsletterConsent_date: Date): this;
   setAvatarUrl(avatarUrl: string): this;
 }

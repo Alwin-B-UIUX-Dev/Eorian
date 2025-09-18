@@ -9,8 +9,14 @@ export class AuthMiddleware {
   public static authenticate(tokenManager: ITokenManager): RequestHandler {
     return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
       try {
-        const accessToken: string = req.cookies?.accessToken;
-        const refreshToken: string = req.cookies?.refreshToken;
+        const cookieAccess: string | undefined = req.cookies?.accessToken;
+        const cookieRefresh: string | undefined = req.cookies?.refreshToken;
+        const authHeader: string | undefined = req.headers?.authorization;
+        const headerAccess: string | undefined = authHeader?.startsWith('Bearer ')
+          ? authHeader.slice(7).trim()
+          : undefined;
+        const accessToken: string | undefined = cookieAccess ?? headerAccess;
+        const refreshToken: string | undefined = cookieRefresh;
         logger.error('🎯 MIDDLEWARE - tokens:', {
           accessToken: !!accessToken,
           refreshToken: !!refreshToken

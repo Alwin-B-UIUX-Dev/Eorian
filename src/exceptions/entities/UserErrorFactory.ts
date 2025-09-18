@@ -237,4 +237,81 @@ export class UserErrorFactory extends ApiError {
     });
     return error;
   }
+
+  // ===================================
+  // ERREURS PROFIL UTILISATEUR
+  // ===================================
+
+  /**
+   * Erreur profil utilisateur non trouvé
+   */
+  public static profileNotFound(profileId?: string): UserErrorFactory {
+    const message: string = 'User profile not found';
+    const error = new UserErrorFactory(message, 404, {
+      operation: 'user_profile_lookup',
+      profileId: profileId ?? 'unknown'
+    });
+    return error;
+  }
+
+  /**
+   * Erreur profil utilisateur déjà existant
+   */
+  public static profileExists(userId: string): UserErrorFactory {
+    const message: string = 'User profile already exists';
+    const error = new UserErrorFactory(message, 409, {
+      operation: 'user_profile_creation',
+      conflictField: 'userId',
+      userId
+    });
+    return error;
+  }
+
+  /**
+   * Erreur création profil utilisateur
+   */
+  public static profileCreation(originalError?: string): UserErrorFactory {
+    const message: string = 'User profile creation failed';
+    const error = new UserErrorFactory(message, 500, {
+      operation: 'user_profile_creation',
+      originalError: originalError ?? 'Unknown profile creation error'
+    });
+    return error;
+  }
+
+  /**
+   * Erreur mise à jour profil utilisateur
+   */
+  public static profileUpdateFailed(originalError?: string): UserErrorFactory {
+    const message: string = 'User profile update failed';
+    const error = new UserErrorFactory(message, 500, {
+      operation: 'user_profile_update',
+      originalError: originalError ?? 'Unknown profile update error'
+    });
+    return error;
+  }
+
+  /**
+   * Erreur suppression profil utilisateur
+   */
+  public static profileDeleteFailed(originalError?: string): UserErrorFactory {
+    const message: string = 'User profile delete failed';
+    const error = new UserErrorFactory(message, 500, {
+      operation: 'user_profile_delete',
+      originalError: originalError ?? 'Unknown profile delete error'
+    });
+    return error;
+  }
+
+  /**
+   * Erreur récupération profil utilisateur
+   */
+  public static profileFetchFailed(originalError?: string): UserErrorFactory {
+    const message: string = 'User profile fetch failed';
+    const error = new UserErrorFactory(message, 500, {
+      operation: 'user_profile_fetch',
+      originalError: originalError ?? 'Unknown profile fetch error'
+    });
+    return error;
+  }
 }

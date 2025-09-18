@@ -16,7 +16,8 @@ SELECT
     u.is_connected,
     u.role_id, -- FK pour les relations
     ur.role_name, -- Valeur pour la logique
-    u.last_login_at
+    u.last_login_at,
+    u.created_at
 FROM
     users u
     LEFT JOIN user_roles ur ON u.role_id = ur.id

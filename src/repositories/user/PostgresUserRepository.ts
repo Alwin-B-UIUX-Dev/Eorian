@@ -7,7 +7,7 @@ import { User } from '@/entities';
 import { DatabaseError } from '@/exceptions';
 import type { IUser, IUserRepository } from '@/interfaces';
 import type { CreateUserData, IUserData, UpdateUserData } from '@/types';
-import { DatabaseMapper, Masker } from '@/utils';
+import { DatabaseMapper, MaskerHelper } from '@/utils';
 
 export class PostgresUserRepository implements IUserRepository {
   private readonly db: IDatabase<Record<string, never>> = database.connect();
@@ -22,7 +22,7 @@ export class PostgresUserRepository implements IUserRepository {
       try {
         this.logger.info('Attempting to create new user', {
           operation: UserLogOperations.CREATE_USER,
-          email: Masker.maskEmail(email)
+          email: MaskerHelper.maskEmail(email)
         });
 
         const result: { id: string } = await t.one(UserQueries.INSERT_USER, [
@@ -44,7 +44,7 @@ export class PostgresUserRepository implements IUserRepository {
         this.logger.info('User created successfully', {
           operation: UserLogOperations.CREATE_USER,
           userId: result.id,
-          email: Masker.maskEmail(email)
+          email: MaskerHelper.maskEmail(email)
         });
 
         return new User(mappedProfile); // Toutes les données sont déjà mappées
@@ -140,7 +140,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by id', {
         operation: UserLogOperations.FIND_USER_BY_ID,
@@ -208,7 +208,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by email or username', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL_OR_USERNAME,
-        identifier: Masker.maskIdentifier(identifier)
+        identifier: MaskerHelper.maskIdentifier(identifier)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
@@ -240,7 +240,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by email', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL,
-        email: Masker.maskEmail(email)
+        email: MaskerHelper.maskEmail(email)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(UserQueries.SELECT_USER_BY_EMAIL, [
@@ -254,7 +254,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by email', {
         operation: UserLogOperations.FIND_USER_BY_EMAIL,
@@ -270,7 +270,7 @@ export class PostgresUserRepository implements IUserRepository {
     try {
       this.logger.info('Attempting to find user by username', {
         operation: UserLogOperations.FIND_USER_BY_USERNAME,
-        username: Masker.maskUsername(username)
+        username: MaskerHelper.maskUsername(username)
       });
 
       const result: IUserData | null = await this.db.oneOrNone(
@@ -285,7 +285,7 @@ export class PostgresUserRepository implements IUserRepository {
         userId: found ? result?.id : null
       });
 
-      return result ? new User(result) : null;
+      return result ? new User(DatabaseMapper.snakeToCamel<IUserData>(result)) : null;
     } catch (error) {
       this.logger.error('Failed to find user by username', {
         operation: UserLogOperations.FIND_USER_BY_USERNAME,
@@ -327,6 +327,72 @@ export class PostgresUserRepository implements IUserRepository {
       });
 
       throw DatabaseError.transactionFailed(UserLogOperations.UPDATE_LOGIN_STATUS);
+    }
+  }
+
+  public async emailExists(email: string, excludeUserId?: string): Promise<boolean> {
+    try {
+      this.logger.info('Checking if email exists', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        email: MaskerHelper.maskEmail(email),
+        excludeUserId
+      });
+
+      const result: { count: string } = await this.db.one(UserQueries.CHECK_EMAIL_EXISTS, [
+        email,
+        excludeUserId || null
+      ]);
+
+      const exists: boolean = parseInt(result.count) > 0;
+
+      this.logger.info('Email existence check completed', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        exists,
+        excludeUserId
+      });
+
+      return exists;
+    } catch (error) {
+      this.logger.error('Failed to check email existence', {
+        operation: UserLogOperations.CHECK_EMAIL_EXISTS,
+        error: error instanceof Error ? error.message : 'unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_ID_FAILED);
+    }
+  }
+
+  public async usernameExists(username: string, excludeUserId?: string): Promise<boolean> {
+    try {
+      this.logger.info('Checking if username exists', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        username: MaskerHelper.maskUsername(username),
+        excludeUserId
+      });
+
+      const result: { count: string } = await this.db.one(UserQueries.CHECK_USERNAME_EXISTS, [
+        username,
+        excludeUserId || null
+      ]);
+
+      const exists: boolean = parseInt(result.count) > 0;
+
+      this.logger.info('Username existence check completed', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        exists,
+        excludeUserId
+      });
+
+      return exists;
+    } catch (error) {
+      this.logger.error('Failed to check username existence', {
+        operation: UserLogOperations.CHECK_USERNAME_EXISTS,
+        error: error instanceof Error ? error.message : 'unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      throw DatabaseError.transactionFailed(UserErrorMessages.FIND_USER_BY_ID_FAILED);
     }
   }
 }

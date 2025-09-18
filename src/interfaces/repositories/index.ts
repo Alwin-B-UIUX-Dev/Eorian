@@ -1,4 +1,7 @@
 export * from '@/interfaces/repositories/addresses/index';
-export { IBaseRepository } from '@/interfaces/repositories/IBaseRepository';
-export * from '@/interfaces/repositories/product/index';
+export * from '@/interfaces/repositories/cart-items/index';
+export * from '@/interfaces/repositories/IBaseRepository';
+export * from '@/interfaces/repositories/orders/index';
+export * from '@/interfaces/repositories/products/index';
+export * from '@/interfaces/repositories/tax-rates/index';
 export * from '@/interfaces/repositories/user/index';

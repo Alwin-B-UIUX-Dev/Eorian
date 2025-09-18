@@ -1,9 +1,19 @@
 // src/configs/RouteFactory.ts
 import { Router } from 'express';
-import { logger } from '@/configs';
-import { ServiceFactory } from '@/configs/ServiceFactory';
+import { logger, ServiceFactory } from '@/configs';
 import type { ITokenManager } from '@/interfaces';
-import { AuthRoutes, ProductRoutes } from '@/routes';
+import {
+  AddressRoutes,
+  AuthRoutes,
+  CartItemRoutes,
+  OrderItemRoutes,
+  OrderRoutes,
+  ProductRoutes,
+  TaxeRateRoutes,
+  UserProfileRoutes,
+  UserRoleRoutes,
+  UserRoutes
+} from '@/routes';
 
 export class RouteFactory {
   private static router: Router;
@@ -13,10 +23,16 @@ export class RouteFactory {
 
     RouteFactory.router = Router();
 
-    // Enregistrement des routes
     RouteFactory.registerAuthRoutes();
-    // RouteFactory.registerUserRoutes();
+    RouteFactory.registerUserRoutes();
+    RouteFactory.registerUserProfileRoutes();
+    RouteFactory.registerUserRoleRoutes();
+    RouteFactory.registerTaxeRateRoutes();
     RouteFactory.registerProductRoutes();
+    RouteFactory.registerCartItemRoutes();
+    RouteFactory.registerAddressRoutes();
+    RouteFactory.registerOrderRoutes();
+    RouteFactory.registerOrderItemRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -30,20 +46,62 @@ export class RouteFactory {
     RouteFactory.router.use('/api/v1', authRoutes.getRouter());
   }
 
-  // private static registerUserRoutes(): void {
-  //   const userController = ServiceFactory.getUserController();
-  //   const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
-  //   const userRoutes = new UserRoutes(userController, tokenManager);
+  private static registerUserRoutes(): void {
+    const userController = ServiceFactory.getUserController();
+    const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
+    const userRoutes = new UserRoutes(userController, tokenManager);
 
-  //   RouteFactory.router.use('/api/v1', userRoutes.getRouter());
-  // }
+    RouteFactory.router.use('/api/v1', userRoutes.getRouter());
+  }
+
+  private static registerUserProfileRoutes(): void {
+    const userProfileController = ServiceFactory.getUserProfileController();
+    const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
+    const userProfileRoutes = new UserProfileRoutes(userProfileController, tokenManager);
+
+    RouteFactory.router.use('/api/v1', userProfileRoutes.getRouter());
+  }
+
+  private static registerUserRoleRoutes(): void {
+    const userRoleController = ServiceFactory.getUserRoleController();
+    const userRoleRoutes = new UserRoleRoutes(userRoleController);
+    RouteFactory.router.use('/api/v1', userRoleRoutes.getRouter());
+  }
+
+  private static registerTaxeRateRoutes(): void {
+    const taxeRateController = ServiceFactory.getTaxeRateController();
+    const taxeRateRoutes = new TaxeRateRoutes(taxeRateController);
+    RouteFactory.router.use('/api/v1', taxeRateRoutes.getRouter());
+  }
 
   private static registerProductRoutes(): void {
     const productController = ServiceFactory.getProductController();
-    // const tokenManager: ITokenManager = ServiceFactory.getTokenManager();
     const productRoutes = new ProductRoutes(productController);
-
     RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  }
+
+  private static registerCartItemRoutes(): void {
+    const cartItemController = ServiceFactory.getCartItemController();
+    const cartItemRoutes = new CartItemRoutes(cartItemController);
+    RouteFactory.router.use('/api/v1', cartItemRoutes.getRouter());
+  }
+
+  private static registerAddressRoutes(): void {
+    const addressController = ServiceFactory.getAddressController();
+    const addressRoutes = new AddressRoutes(addressController);
+    RouteFactory.router.use('/api/v1', addressRoutes.getRouter());
+  }
+
+  private static registerOrderRoutes(): void {
+    const orderController = ServiceFactory.getOrderController();
+    const orderRoutes = new OrderRoutes(orderController);
+    RouteFactory.router.use('/api/v1', orderRoutes.getRouter());
+  }
+
+  private static registerOrderItemRoutes(): void {
+    const orderItemController = ServiceFactory.getOrderItemController();
+    const orderItemRoutes = new OrderItemRoutes(orderItemController);
+    RouteFactory.router.use('/api/v1', orderItemRoutes.getRouter());
   }
 
   public static reset(): void {

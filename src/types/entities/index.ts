@@ -1,5 +1,8 @@
 export type * from '@/types/entities/addresses/index';
 export type * from '@/types/entities/BaseType';
-export type { IBaseEntityData } from '@/types/entities/IBaseEntityData';
-export * from '@/types/entities/product/index';
+export type * from '@/types/entities/cart-items/ICartItemData';
+export type * from '@/types/entities/IBaseEntityData';
+export type * from '@/types/entities/orders/index';
+export type * from '@/types/entities/products/index';
+export type * from '@/types/entities/tax-rates/index';
 export type * from '@/types/entities/user/index';

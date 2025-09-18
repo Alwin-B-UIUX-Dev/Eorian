@@ -71,4 +71,26 @@ export interface IUserRepository extends IBaseRepository<IUser, IUserData> {
    * @throws {DatabaseError} Si la mise à jour échoue
    */
   updateLoginStatus(userId: string, isConnected: boolean, lastLoginAt: Date): Promise<void>;
+
+  /**
+   * Vérifier si un email existe déjà
+   *
+   * @param email - Email à vérifier
+   * @param excludeUserId - ID utilisateur à exclure de la recherche
+   * @returns true si l'email existe, false sinon
+   *
+   * @throws {DatabaseError} Si la requête échoue
+   */
+  emailExists(email: string, excludeUserId?: string): Promise<boolean>;
+
+  /**
+   * Vérifier si un nom d'utilisateur existe déjà
+   *
+   * @param username - Nom d'utilisateur à vérifier
+   * @param excludeUserId - ID utilisateur à exclure de la recherche
+   * @returns true si le nom d'utilisateur existe, false sinon
+   *
+   * @throws {DatabaseError} Si la requête échoue
+   */
+  usernameExists(username: string, excludeUserId?: string): Promise<boolean>;
 }

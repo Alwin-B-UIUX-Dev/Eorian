@@ -12,7 +12,7 @@ export interface IUserController {
    * Afficher un utilisateur spécifique (Administration)
    * Endpoint: GET /api/v1/users/:id
    */
-  // show(req: Request, res: Response, next: NextFunction): Promise<void>;
+  show(req: Request, res: Response, next: NextFunction): Promise<void>;
 
   /**
    * Créer un nouvel utilisateur (Administration)
@@ -30,5 +30,5 @@ export interface IUserController {
    * Supprimer un utilisateur (Administration)
    * Endpoint: DELETE /api/v1/users/:id
    */
-  // destroy(req: Request, res: Response, next: NextFunction): Promise<void>;
+  destroy(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

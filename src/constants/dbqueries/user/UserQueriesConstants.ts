@@ -72,4 +72,19 @@ export class UserQueriesConstants {
     DELETE FROM users
     WHERE id = $1
   `;
+
+  // CHECK EXISTENCE
+  public static readonly CHECK_EMAIL_EXISTS: string = /*sql*/ `
+    SELECT COUNT(*) as count
+    FROM users
+    WHERE email = $1
+    AND ($2 IS NULL OR id != $2)
+  `;
+
+  public static readonly CHECK_USERNAME_EXISTS: string = /*sql*/ `
+    SELECT COUNT(*) as count
+    FROM users
+    WHERE username = $1
+    AND ($2 IS NULL OR id != $2)
+  `;
 }
