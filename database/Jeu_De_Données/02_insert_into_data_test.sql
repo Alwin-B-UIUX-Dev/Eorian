@@ -1,16 +1,3 @@
--- Active: 1757659359211@@127.0.0.1@5432@eorian_fr_db
--- =====================================================
--- JEU DE DONNÉES COMPLET POUR EORIAN - VERSION CORRIGÉE
--- =====================================================
--- Description: Données de test réalistes pour toutes les tables
--- Date: 2025-01-17
--- Auteur: Assistant IA
--- Version: 2.0 - Conforme aux contraintes de la base
--- =====================================================
-
--- Nettoyage des données existantes (optionnel - décommentez si nécessaire)
--- TRUNCATE TABLE order_items, orders, cart_items, addresses, product_images, products, user_payment_methods, user_profiles, user_sessions, users RESTART IDENTITY CASCADE;
-
 -- =====================================================
 -- 1. UTILISATEURS ET PROFILS
 -- =====================================================
@@ -40,49 +27,59 @@ INSERT INTO user_profiles (user_id, first_name, last_name, phone, birth_date, av
 (5, 'Claire', 'Roux', '+33333444555', '1987-09-12', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face'),
 (6, 'Thomas', 'Petit', '+33222333444', '1991-05-25', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face'),
 (7, 'Laura', 'Moreau', '+33111222333', '1989-12-03', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face'),
-(8, 'Alexandre', 'Simon', '+33999888777', '1993-08-17', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face')
+(8, 'Alexandre', 'Simon', '+33999888777', '1993-08-17', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face');
 
 -- =====================================================
--- 2. PRODUITS
+-- 2. ILLUSTRATIONS PAPIER
 -- =====================================================
 
 INSERT INTO products (name, slug, sku, short_description, description, price_cents, tax_rate_id, stock_quantity, low_stock_threshold, meta_title, meta_description, is_active, created_by) VALUES
-('Smartphone Galaxy S24', 'smartphone-galaxy-s24', 'GAL-S24-128', 'Smartphone Android haut de gamme avec écran 6.2"', 'Le Samsung Galaxy S24 offre des performances exceptionnelles avec son processeur Exynos 2400, un écran Dynamic AMOLED 2X de 6.2 pouces et un système de caméra triple professionnel. Parfait pour la photographie et les applications exigeantes.', 89900, 1, 25, 5, 'Samsung Galaxy S24 - Smartphone Android Premium', 'Découvrez le Samsung Galaxy S24 avec écran 6.2", triple caméra et processeur Exynos 2400. Livraison gratuite.', true, 1),
-('iPhone 15 Pro', 'iphone-15-pro', 'APP-IP15P-256', 'iPhone 15 Pro avec puce A17 Pro et caméra 48MP', 'L''iPhone 15 Pro révolutionne la photographie mobile avec sa caméra principale 48MP et son système de zoom optique 3x. La puce A17 Pro offre des performances inégalées pour le gaming et la création de contenu.', 119900, 1, 15, 3, 'iPhone 15 Pro - Smartphone Apple Premium', 'iPhone 15 Pro avec puce A17 Pro, caméra 48MP et design en titane. Disponible en plusieurs couleurs.', true, 1),
-('MacBook Air M3', 'macbook-air-m3', 'APP-MBA-M3-256', 'MacBook Air 13" avec puce M3 et 8GB RAM', 'Le MacBook Air M3 allie performance et portabilité avec sa puce Apple M3, 8GB de mémoire unifiée et un écran Liquid Retina 13.6 pouces. Autonomie jusqu''à 18 heures pour une productivité sans limites.', 129900, 1, 12, 2, 'MacBook Air M3 - Ordinateur portable Apple', 'MacBook Air 13" avec puce M3, 8GB RAM et autonomie 18h. Design ultra-fin et silencieux.', true, 1),
-('AirPods Pro 2', 'airpods-pro-2', 'APP-APP2-GEN2', 'Écouteurs sans fil avec réduction de bruit active', 'Les AirPods Pro de 2ème génération offrent une réduction de bruit active améliorée, un son spatial personnalisé et une autonomie jusqu''à 6 heures. Compatible avec tous les appareils Apple.', 27900, 1, 50, 10, 'AirPods Pro 2 - Écouteurs sans fil Apple', 'AirPods Pro 2ème génération avec réduction de bruit active et son spatial. Livraison rapide.', true, 1),
-('Samsung 4K TV 55"', 'samsung-4k-tv-55', 'SAM-TV55-4K', 'Téléviseur 4K UHD 55 pouces avec Smart TV', 'Téléviseur Samsung 55 pouces 4K UHD avec technologie QLED, Smart TV intégrée et compatibilité HDR10+. Parfait pour le home cinéma avec un son Dolby Atmos.', 69900, 1, 8, 2, 'Samsung TV 4K 55" - Téléviseur QLED Smart TV', 'Téléviseur Samsung 55" 4K QLED avec Smart TV et son Dolby Atmos. Installation incluse.', true, 1),
-('PlayStation 5', 'playstation-5', 'SONY-PS5-STD', 'Console de jeu PlayStation 5 avec disque', 'La PlayStation 5 révolutionne le gaming avec son processeur AMD Zen 2, son SSD ultra-rapide et ses graphismes 4K. Compatible avec tous les jeux PS4 et les nouveaux titres PS5.', 49900, 1, 6, 1, 'PlayStation 5 - Console de jeu Sony', 'PlayStation 5 avec disque, SSD ultra-rapide et graphismes 4K. Jeux PS4 et PS5 compatibles.', true, 1),
-('Nintendo Switch OLED', 'nintendo-switch-oled', 'NIN-SW-OLED', 'Console portable Nintendo Switch avec écran OLED', 'La Nintendo Switch OLED offre un écran OLED 7 pouces vibrant, 64GB de stockage et une autonomie améliorée. Parfaite pour jouer en mode portable ou sur TV.', 34900, 1, 20, 5, 'Nintendo Switch OLED - Console portable', 'Nintendo Switch OLED avec écran 7" et 64GB. Jeu portable et sur TV. Livraison gratuite.', true, 1),
-('iPad Air M2', 'ipad-air-m2', 'APP-IPA-M2-256', 'Tablette iPad Air avec puce M2 et 10.9"', 'L''iPad Air M2 combine la puissance de la puce M2 avec un écran Liquid Retina 10.9 pouces. Parfait pour la créativité, le travail et les loisirs avec Apple Pencil et Magic Keyboard.', 69900, 1, 18, 4, 'iPad Air M2 - Tablette Apple 10.9"', 'iPad Air avec puce M2, écran 10.9" et compatibilité Apple Pencil. Design ultra-fin.', true, 1),
-('Casque Sony WH-1000XM5', 'casque-sony-wh1000xm5', 'SONY-WH1000XM5', 'Casque sans fil avec réduction de bruit', 'Le Sony WH-1000XM5 offre la meilleure réduction de bruit du marché, un son haute qualité et une autonomie de 30 heures. Parfait pour les voyages et le télétravail.', 39900, 1, 15, 3, 'Sony WH-1000XM5 - Casque sans fil premium', 'Casque Sony WH-1000XM5 avec réduction de bruit exceptionnelle et son haute qualité.', true, 1),
-('Apple Watch Series 9', 'apple-watch-series-9', 'APP-AW9-45MM', 'Montre connectée Apple Watch Series 9 45mm', 'L''Apple Watch Series 9 45mm avec puce S9, écran Always-On Retina et détection de chute. Suivi santé avancé, GPS et résistance à l''eau jusqu''à 50m.', 44900, 1, 30, 6, 'Apple Watch Series 9 - Montre connectée 45mm', 'Apple Watch Series 9 45mm avec puce S9 et suivi santé avancé. GPS et résistance eau.', true, 1);
+('Aquarelle "Paysage Provençal"', 'aquarelle-paysage-provencal', 'AQ-PROV-001', 'Aquarelle originale 30x40cm représentant un paysage de Provence', 'Cette magnifique aquarelle originale capture l''essence de la Provence avec ses champs de lavande et ses cyprès. Réalisée sur papier Canson 300g/m², cette œuvre unique mesure 30x40cm et est signée par l''artiste. Parfaite pour décorer un salon ou un bureau.', 45000, 1, 1, 1, 'Aquarelle Paysage Provençal - Œuvre d''art originale', 'Aquarelle originale 30x40cm représentant un paysage de Provence. Œuvre unique signée par l''artiste.', true, 1),
+
+('Dessin au Fusain "Portrait de Femme"', 'dessin-fusain-portrait-femme', 'FUS-PORT-002', 'Dessin au fusain sur papier 25x35cm, portrait réaliste', 'Portrait au fusain d''une grande finesse, réalisé sur papier Canson blanc 180g/m². Ce dessin de 25x35cm capture l''émotion et la profondeur du regard. Technique maîtrisée avec des dégradés subtils et des contrastes saisissants. Œuvre encadrée disponible.', 32000, 1, 1, 1, 'Dessin au Fusain Portrait de Femme - Art original', 'Portrait au fusain 25x35cm sur papier Canson. Dessin réaliste avec technique maîtrisée.', true, 1),
+
+('Illustration Botanique "Fleurs des Champs"', 'illustration-botanique-fleurs-champs', 'BOT-FLEUR-003', 'Illustration botanique aquarelle 20x30cm, étude de fleurs', 'Illustration botanique détaillée réalisée à l''aquarelle sur papier Arches 300g/m². Cette étude de 20x30cm présente diverses fleurs des champs avec une précision scientifique et une beauté artistique. Parfaite pour les amateurs de botanique et d''art naturaliste.', 28000, 1, 2, 1, 'Illustration Botanique Fleurs des Champs - Aquarelle', 'Illustration botanique aquarelle 20x30cm. Étude détaillée de fleurs des champs sur papier Arches.', true, 1),
+
+('Croquis Urbain "Paris Montmartre"', 'croquis-urbain-paris-montmartre', 'CROQ-PARIS-004', 'Croquis à l''encre de Chine 18x25cm, scène de rue parisienne', 'Croquis urbain capturant l''ambiance de Montmartre, réalisé à l''encre de Chine sur papier Bristol. Format 18x25cm, ce dessin saisit l''instant avec des traits vifs et expressifs. L''artiste a su restituer l''âme de ce quartier parisien emblématique.', 22000, 1, 3, 1, 'Croquis Urbain Paris Montmartre - Dessin à l''encre', 'Croquis à l''encre de Chine 18x25cm. Scène de rue parisienne à Montmartre, traits expressifs.', true, 1),
+
+('Pastel "Coucher de Soleil Maritime"', 'pastel-coucher-soleil-maritime', 'PAS-MER-005', 'Pastel sec sur papier 35x50cm, paysage maritime', 'Magnifique pastel sec sur papier Canson Mi-Teintes 35x50cm. Cette œuvre capture la magie d''un coucher de soleil sur la mer avec des couleurs chaudes et des dégradés subtils. Technique maîtrisée pour un rendu lumineux et poétique.', 55000, 1, 1, 1, 'Pastel Coucher de Soleil Maritime - Art original', 'Pastel sec 35x50cm sur papier Canson. Coucher de soleil maritime aux couleurs chaudes.', true, 1),
+
+('Encre de Chine "Architecture Gothique"', 'encre-chine-architecture-gothique', 'ENC-GOTH-006', 'Dessin à l''encre de Chine 40x60cm, architecture gothique', 'Dessin architectural à l''encre de Chine sur papier aquarelle 40x60cm. Cette œuvre détaillée représente une cathédrale gothique avec une précision remarquable. Jeu d''ombres et de lumières pour créer une atmosphère mystique et majestueuse.', 48000, 1, 1, 1, 'Encre de Chine Architecture Gothique - Dessin original', 'Dessin à l''encre 40x60cm. Architecture gothique avec jeux d''ombres et de lumières.', true, 1),
+
+('Crayon de Couleur "Nature Morte"', 'crayon-couleur-nature-morte', 'CC-NAT-007', 'Dessin aux crayons de couleur 25x35cm, nature morte', 'Nature morte aux crayons de couleur sur papier Canson 25x35cm. Composition harmonieuse avec des fruits et des objets du quotidien. Technique de superposition des couleurs pour un rendu réaliste et vibrant. Œuvre encadrée sur demande.', 35000, 1, 2, 1, 'Crayon de Couleur Nature Morte - Dessin original', 'Nature morte aux crayons de couleur 25x35cm. Technique de superposition pour rendu réaliste.', true, 1),
+
+('Aquarelle "Forêt Automnale"', 'aquarelle-foret-automnale', 'AQ-FORET-008', 'Aquarelle 30x45cm, paysage de forêt en automne', 'Aquarelle sur papier Arches 30x45cm capturant la beauté d''une forêt en automne. Palette de couleurs chaudes avec des rouges, oranges et jaunes éclatants. Technique humide sur humide pour des effets de transparence et de fluidité remarquables.', 42000, 1, 1, 1, 'Aquarelle Forêt Automnale - Paysage original', 'Aquarelle 30x45cm sur papier Arches. Forêt automnale aux couleurs chaudes et éclatantes.', true, 1),
+
+('Sanguine "Étude de Nu"', 'sanguine-etude-nu', 'SANG-NU-009', 'Dessin à la sanguine 20x30cm, étude académique', 'Étude académique à la sanguine sur papier Ingres 20x30cm. Ce dessin de nu démontre une maîtrise parfaite de l''anatomie et des proportions. Technique traditionnelle avec des dégradés subtils et une ligne expressive. Œuvre d''art classique.', 38000, 1, 1, 1, 'Sanguine Étude de Nu - Dessin académique original', 'Étude de nu à la sanguine 20x30cm. Technique académique avec maîtrise de l''anatomie.', true, 1),
+
+('Gouache "Village de Montagne"', 'gouache-village-montagne', 'GOU-MONT-010', 'Peinture à la gouache 25x40cm, village alpin', 'Peinture à la gouache sur papier 25x40cm représentant un charmant village de montagne. Couleurs vives et contrastées typiques de cette technique. Architecture traditionnelle alpine avec des toits enneigés et une atmosphère chaleureuse.', 33000, 1, 2, 1, 'Gouache Village de Montagne - Peinture originale', 'Peinture à la gouache 25x40cm. Village alpin aux couleurs vives et architecture traditionnelle.', true, 1);
 
 -- =====================================================
--- 3. IMAGES DE PRODUITS
+-- 3. IMAGES DES ILLUSTRATIONS
 -- =====================================================
 
 INSERT INTO product_images (product_id, image_url, alt_text, is_primary, sort_order, uploaded_by) VALUES
-(1, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop', 'Samsung Galaxy S24 - Vue avant', true, 1, 9),
-(1, 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=600&fit=crop', 'Samsung Galaxy S24 - Vue arrière', false, 2, 9),
-(1, 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&h=600&fit=crop', 'Samsung Galaxy S24 - Détail caméra', false, 3, 9),
-(2, 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&h=600&fit=crop', 'iPhone 15 Pro - Vue avant', true, 1, 9),
-(2, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop', 'iPhone 15 Pro - Vue arrière', false, 2, 9),
-(3, 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=600&fit=crop', 'MacBook Air M3 - Vue ouverte', true, 1, 9),
-(3, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=600&fit=crop', 'MacBook Air M3 - Vue fermée', false, 2, 9),
-(4, 'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=800&h=600&fit=crop', 'AirPods Pro 2 - Boîtier et écouteurs', true, 1, 9),
-(5, 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&h=600&fit=crop', 'Samsung TV 4K 55 pouces', true, 1, 9),
-(5, 'https://images.unsplash.com/photo-1461151304267-b35e2241aad8?w=800&h=600&fit=crop', 'Samsung TV - Interface Smart TV', false, 2, 9),
-(6, 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=800&h=600&fit=crop', 'PlayStation 5 - Console principale', true, 1, 9),
-(6, 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=800&h=600&fit=crop', 'PlayStation 5 - Manette DualSense', false, 2, 9),
-(7, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Nintendo Switch OLED - Mode portable', true, 1, 9),
-(7, 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=800&h=600&fit=crop', 'Nintendo Switch OLED - Mode TV', false, 2, 9),
-(8, 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=600&fit=crop', 'iPad Air M2 - Vue avant', true, 1, 9),
-(8, 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=600&fit=crop', 'iPad Air M2 - Avec Apple Pencil', false, 2, 9),
-(9, 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=600&fit=crop', 'Sony WH-1000XM5 - Casque fermé', true, 1, 9),
-(9, 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=600&fit=crop', 'Sony WH-1000XM5 - Détail écouteurs', false, 2, 9),
-(10, 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=800&h=600&fit=crop', 'Apple Watch Series 9 - Vue face', true, 1, 9),
-(10, 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=600&fit=crop', 'Apple Watch Series 9 - Sur poignet', false, 2, 9);
+(1, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop', 'Aquarelle Paysage Provençal - Vue d''ensemble', true, 1, 9),
+(1, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Aquarelle Paysage Provençal - Détail lavande', false, 2, 9),
+(1, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop', 'Aquarelle Paysage Provençal - Signature artiste', false, 3, 9),
+(2, 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop', 'Dessin au Fusain Portrait de Femme - Vue principale', true, 1, 9),
+(2, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop', 'Dessin au Fusain Portrait de Femme - Détail visage', false, 2, 9),
+(3, 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop', 'Illustration Botanique Fleurs des Champs - Vue générale', true, 1, 9),
+(3, 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop', 'Illustration Botanique Fleurs des Champs - Détail fleurs', false, 2, 9),
+(4, 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop', 'Croquis Urbain Paris Montmartre - Scène de rue', true, 1, 9),
+(4, 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop', 'Croquis Urbain Paris Montmartre - Détail architecture', false, 2, 9),
+(5, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Pastel Coucher de Soleil Maritime - Vue d''ensemble', true, 1, 9),
+(5, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Pastel Coucher de Soleil Maritime - Détail couleurs', false, 2, 9),
+(6, 'https://images.unsplash.com/photo-1539650116574-75c0c6d73c6e?w=800&h=600&fit=crop', 'Encre de Chine Architecture Gothique - Vue principale', true, 1, 9),
+(6, 'https://images.unsplash.com/photo-1539650116574-75c0c6d73c6e?w=800&h=600&fit=crop', 'Encre de Chine Architecture Gothique - Détail façade', false, 2, 9),
+(7, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Crayon de Couleur Nature Morte - Composition', true, 1, 9),
+(7, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Crayon de Couleur Nature Morte - Détail fruits', false, 2, 9),
+(8, 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop', 'Aquarelle Forêt Automnale - Paysage complet', true, 1, 9),
+(8, 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop', 'Aquarelle Forêt Automnale - Détail feuillage', false, 2, 9),
+(9, 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop', 'Sanguine Étude de Nu - Dessin principal', true, 1, 9),
+(9, 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop', 'Sanguine Étude de Nu - Détail anatomie', false, 2, 9),
+(10, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Gouache Village de Montagne - Vue d''ensemble', true, 1, 9),
+(10, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Gouache Village de Montagne - Détail architecture', false, 2, 9);
 
 -- =====================================================
 -- 4. ADRESSES UTILISATEURS
@@ -134,99 +131,78 @@ INSERT INTO user_payment_methods (user_id, card_token, card_last4, card_brand, c
 -- =====================================================
 
 INSERT INTO cart_items (user_id, product_id, quantity, added_at) VALUES
-(1, 1, 1, '2025-01-15 10:30:00'),  -- Marie veut un Galaxy S24
-(1, 4, 1, '2025-01-15 10:35:00'),  -- Marie veut aussi des AirPods Pro
+(1, 1, 1, '2025-01-15 10:30:00'),  -- Marie veut l'aquarelle provençale
+(1, 3, 1, '2025-01-15 10:35:00'),  -- Marie veut aussi l'illustration botanique
 
-(2, 2, 1, '2025-01-16 14:20:00'),  -- Pierre veut un iPhone 15 Pro
-(2, 10, 1, '2025-01-16 14:25:00'), -- Pierre veut aussi une Apple Watch
+(2, 2, 1, '2025-01-16 14:20:00'),  -- Pierre veut le portrait au fusain
+(2, 9, 1, '2025-01-16 14:25:00'), -- Pierre veut aussi l'étude de nu
 
-(3, 3, 1, '2025-01-17 09:15:00'),  -- Sophie veut un MacBook Air M3
+(3, 5, 1, '2025-01-17 09:15:00'),  -- Sophie veut le pastel maritime
 
-(4, 6, 1, '2025-01-18 16:45:00'),  -- Jean veut une PlayStation 5
-(4, 7, 1, '2025-01-18 16:50:00'),  -- Jean veut aussi une Nintendo Switch
+(4, 6, 1, '2025-01-18 16:45:00'),  -- Jean veut l'architecture gothique
+(4, 10, 1, '2025-01-18 16:50:00'),  -- Jean veut aussi le village de montagne
 
-(5, 5, 1, '2025-01-19 11:30:00'),  -- Claire veut une TV Samsung
+(5, 8, 1, '2025-01-19 11:30:00'),  -- Claire veut la forêt automnale
 
-(6, 8, 1, '2025-01-20 13:20:00'),  -- Thomas veut un iPad Air
+(6, 7, 1, '2025-01-20 13:20:00'),  -- Thomas veut la nature morte
 
-(7, 9, 1, '2025-01-21 15:10:00'),  -- Laura veut un casque Sony
+(7, 4, 1, '2025-01-21 15:10:00'),  -- Laura veut le croquis de Montmartre
 
-(8, 1, 2, '2025-01-22 08:45:00');  -- Alexandre veut 2 Galaxy S24
+(8, 1, 1, '2025-01-22 08:45:00');  -- Alexandre veut l'aquarelle provençale
 
 -- =====================================================
 -- 7. COMMANDES
 -- =====================================================
 
 INSERT INTO orders (order_number, user_id, shipping_address_id, billing_address_id, status, subtotal_cents, tax_amount_cents, shipping_cents, total_cents, payment_status, payment_method, payment_reference, shipping_method, tracking_number, customer_notes, created_at, shipped_at, delivered_at) VALUES
--- Commande de Marie Dupont (livrée)
-('EOR-20250101-001', 1, 1, 2, 'delivered', 117800, 23560, 0, 141360, 'paid', 'card', 'pi_1234567890', 'Colissimo', '1A234567890FR', 'Livraison en point relais si possible', '2025-01-01 10:30:00', '2025-01-02 14:20:00', '2025-01-04 16:45:00'),
-
--- Commande de Pierre Martin (expédiée)
-('EOR-20250102-002', 2, 3, 4, 'shipped', 164800, 32960, 0, 197760, 'paid', 'card', 'pi_2345678901', 'Chronopost', '2B345678901FR', NULL, '2025-01-02 14:20:00', '2025-01-03 09:15:00', NULL),
-
--- Commande de Sophie Bernard (en cours de traitement)
-('EOR-20250103-003', 3, 5, 6, 'processing', 129900, 25980, 0, 155880, 'paid', 'card', 'pi_3456789012', 'Colissimo', NULL, 'Livraison en entreprise', '2025-01-03 09:15:00', NULL, NULL),
-
--- Commande de Jean Durand (en attente)
-('EOR-20250104-004', 4, 7, 8, 'pending', 84800, 16960, 0, 101760, 'pending', 'card', NULL, 'Colissimo', NULL, NULL, '2025-01-04 16:45:00', NULL, NULL),
-
--- Commande de Claire Roux (annulée)
-('EOR-20250105-005', 5, 9, 10, 'cancelled', 69900, 13980, 0, 83880, 'refunded', 'card', 'pi_4567890123', 'Colissimo', NULL, 'Commande annulée par le client', '2025-01-05 11:30:00', NULL, NULL),
-
--- Commande de Thomas Petit (livrée)
-('EOR-20250106-006', 6, 11, 12, 'delivered', 69900, 13980, 0, 83880, 'paid', 'card', 'pi_5678901234', 'Chronopost', '3C456789012FR', NULL, '2025-01-06 13:20:00', '2025-01-07 10:30:00', '2025-01-09 14:15:00'),
-
--- Commande de Laura Moreau (expédiée)
-('EOR-20250107-007', 7, 13, 14, 'shipped', 39900, 7980, 0, 47880, 'paid', 'card', 'pi_6789012345', 'Colissimo', '4D567890123FR', NULL, '2025-01-07 15:10:00', '2025-01-08 11:45:00', NULL),
-
--- Commande d'Alexandre Simon (en cours de traitement)
-('EOR-20250108-008', 8, 15, 16, 'processing', 179800, 35960, 0, 215760, 'paid', 'card', 'pi_7890123456', 'Chronopost', NULL, 'Livraison urgente demandée', '2025-01-08 08:45:00', NULL, NULL);
+('EOR-20250101-001', 1, 1, 2, 'delivered', 73000, 14600, 0, 87600, 'paid', 'card', 'pi_1234567890', 'Colissimo', '1A234567890FR', 'Livraison en point relais si possible', '2025-01-01 10:30:00', '2025-01-02 14:20:00', '2025-01-04 16:45:00'),
+('EOR-20250102-002', 2, 3, 4, 'shipped', 70000, 14000, 0, 84000, 'paid', 'card', 'pi_2345678901', 'Chronopost', '2B345678901FR', NULL, '2025-01-02 14:20:00', '2025-01-03 09:15:00', NULL),
+('EOR-20250103-003', 3, 5, 6, 'processing', 55000, 11000, 0, 66000, 'paid', 'card', 'pi_3456789012', 'Colissimo', NULL, 'Livraison en entreprise', '2025-01-03 09:15:00', NULL, NULL),
+('EOR-20250104-004', 4, 7, 8, 'pending', 81000, 16200, 0, 97200, 'pending', 'card', NULL, 'Colissimo', NULL, NULL, '2025-01-04 16:45:00', NULL, NULL),
+('EOR-20250105-005', 5, 9, 10, 'cancelled', 42000, 8400, 0, 50400, 'refunded', 'card', 'pi_4567890123', 'Colissimo', NULL, 'Commande annulée par le client', '2025-01-05 11:30:00', NULL, NULL),
+('EOR-20250106-006', 6, 11, 12, 'delivered', 35000, 7000, 0, 42000, 'paid', 'card', 'pi_5678901234', 'Chronopost', '3C456789012FR', NULL, '2025-01-06 13:20:00', '2025-01-07 10:30:00', '2025-01-09 14:15:00'),
+('EOR-20250107-007', 7, 13, 14, 'shipped', 22000, 4400, 0, 26400, 'paid', 'card', 'pi_6789012345', 'Colissimo', '4D567890123FR', NULL, '2025-01-07 15:10:00', '2025-01-08 11:45:00', NULL),
+('EOR-20250108-008', 8, 15, 16, 'processing', 45000, 9000, 0, 54000, 'paid', 'card', 'pi_7890123456', 'Chronopost', NULL, 'Livraison urgente demandée', '2025-01-08 08:45:00', NULL, NULL);
 
 -- =====================================================
 -- 8. ARTICLES DE COMMANDES
 -- =====================================================
 
 INSERT INTO order_items (order_id, product_id, product_name, product_sku, unit_price_cents, tax_rate, quantity, line_subtotal_cents, line_tax_cents, line_total_cents) VALUES
--- Commande EOR-20250101-001 (Marie Dupont)
-(1, 1, 'Smartphone Galaxy S24', 'GAL-S24-128', 89900, 0.2000, 1, 89900, 17980, 107880),
-(1, 4, 'AirPods Pro 2', 'APP-APP2-GEN2', 27900, 0.2000, 1, 27900, 5580, 33480),
-(2, 2, 'iPhone 15 Pro', 'APP-IP15P-256', 119900, 0.2000, 1, 119900, 23980, 143880),
-(2, 10, 'Apple Watch Series 9', 'APP-AW9-45MM', 44900, 0.2000, 1, 44900, 8980, 53880),
-(3, 3, 'MacBook Air M3', 'APP-MBA-M3-256', 129900, 0.2000, 1, 129900, 25980, 155880),
-(4, 6, 'PlayStation 5', 'SONY-PS5-STD', 49900, 0.2000, 1, 49900, 9980, 59880),
-(4, 7, 'Nintendo Switch OLED', 'NIN-SW-OLED', 34900, 0.2000, 1, 34900, 6980, 41880),
-(5, 5, 'Samsung 4K TV 55"', 'SAM-TV55-4K', 69900, 0.2000, 1, 69900, 13980, 83880),
-(6, 8, 'iPad Air M2', 'APP-IPA-M2-256', 69900, 0.2000, 1, 69900, 13980, 83880),
-(7, 9, 'Casque Sony WH-1000XM5', 'SONY-WH1000XM5', 39900, 0.2000, 1, 39900, 7980, 47880),
-(8, 1, 'Smartphone Galaxy S24', 'GAL-S24-128', 89900, 0.2000, 2, 179800, 35960, 215760);
+(1, 1, 'Aquarelle "Paysage Provençal"', 'AQ-PROV-001', 45000, 0.2000, 1, 45000, 9000, 54000),
+(1, 3, 'Illustration Botanique "Fleurs des Champs"', 'BOT-FLEUR-003', 28000, 0.2000, 1, 28000, 5600, 33600),
+(2, 2, 'Dessin au Fusain "Portrait de Femme"', 'FUS-PORT-002', 32000, 0.2000, 1, 32000, 6400, 38400),
+(2, 9, 'Sanguine "Étude de Nu"', 'SANG-NU-009', 38000, 0.2000, 1, 38000, 7600, 45600),
+(3, 5, 'Pastel "Coucher de Soleil Maritime"', 'PAS-MER-005', 55000, 0.2000, 1, 55000, 11000, 66000),
+(4, 6, 'Encre de Chine "Architecture Gothique"', 'ENC-GOTH-006', 48000, 0.2000, 1, 48000, 9600, 57600),
+(4, 10, 'Gouache "Village de Montagne"', 'GOU-MONT-010', 33000, 0.2000, 1, 33000, 6600, 39600),
+(5, 8, 'Aquarelle "Forêt Automnale"', 'AQ-FORET-008', 42000, 0.2000, 1, 42000, 8400, 50400),
+(6, 7, 'Crayon de Couleur "Nature Morte"', 'CC-NAT-007', 35000, 0.2000, 1, 35000, 7000, 42000),
+(7, 4, 'Croquis Urbain "Paris Montmartre"', 'CROQ-PARIS-004', 22000, 0.2000, 1, 22000, 4400, 26400),
+(8, 1, 'Aquarelle "Paysage Provençal"', 'AQ-PROV-001', 45000, 0.2000, 1, 45000, 9000, 54000);
 
 -- =====================================================
 -- 9. SESSIONS UTILISATEURS (exemples)
 -- =====================================================
 
 INSERT INTO user_sessions (user_id, refresh_token, device_info, ip_address, expires_at, is_active) VALUES
-(1, 'rt_marie_dupont_20250117_001', '{"type": "desktop", "name": "Chrome on Windows", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "screen": "1920x1080", "custom_name": "Ordinateur de bureau"}', '192.168.1.100', '2025-02-17 10:30:00', true),
-(1, 'rt_marie_dupont_20250117_002', '{"type": "mobile", "name": "Safari on iPhone", "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)", "screen": "390x844", "custom_name": "iPhone de Marie"}', '192.168.1.101', '2025-02-17 15:45:00', true),
-
-(2, 'rt_pierre_martin_20250117_001', '{"type": "desktop", "name": "Firefox on macOS", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0", "screen": "2560x1440", "custom_name": "MacBook Pro"}', '192.168.1.102', '2025-02-17 14:20:00', true),
-
-(3, 'rt_sophie_bernard_20250117_001', '{"type": "tablet", "name": "Safari on iPad", "user_agent": "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)", "screen": "1024x1366", "custom_name": "iPad de Sophie"}', '192.168.1.103', '2025-02-17 09:15:00', true),
-
-(9, 'rt_admin_eorian_20250117_001', '{"type": "desktop", "name": "Chrome on Windows", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "screen": "1920x1080", "custom_name": "Poste Admin Principal"}', '192.168.1.200', '2025-02-17 08:00:00', true);
+(1, 'rt_marie_dupont_20250117_001', '{"type": "desktop", "name": "Chrome on Windows", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "screen": "1920x1080", "custom_name": "Ordinateur de bureau"}', '192.168.1.100', '2026-02-17 10:30:00', true),
+(1, 'rt_marie_dupont_20250117_002', '{"type": "mobile", "name": "Safari on iPhone", "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)", "screen": "390x844", "custom_name": "iPhone de Marie"}', '192.168.1.101', '2026-02-17 15:45:00', true),
+(2, 'rt_pierre_martin_20250117_001', '{"type": "desktop", "name": "Firefox on macOS", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0", "screen": "2560x1440", "custom_name": "MacBook Pro"}', '192.168.1.102', '2026-02-17 14:20:00', true),
+(3, 'rt_sophie_bernard_20250117_001', '{"type": "tablet", "name": "Safari on iPad", "user_agent": "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)", "screen": "1024x1366", "custom_name": "iPad de Sophie"}', '192.168.1.103', '2026-02-17 09:15:00', true),
+(9, 'rt_admin_eorian_20250117_001', '{"type": "desktop", "name": "Chrome on Windows", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "screen": "1920x1080", "custom_name": "Poste Admin Principal"}', '192.168.1.200', '2026-02-17 08:00:00', true);
 
 -- =====================================================
--- FIN DU JEU DE DONNÉES
+-- FIN DU JEU DE DONNÉES ILLUSTRATIONS PAPIER
 -- =====================================================
 
 -- Vérification des données insérées
 SELECT 'Utilisateurs créés:' as info, COUNT(*) as count FROM users;
-SELECT 'Produits créés:' as info, COUNT(*) as count FROM products;
-SELECT 'Images produits:' as info, COUNT(*) as count FROM product_images;
+SELECT 'Illustrations créées:' as info, COUNT(*) as count FROM products;
+SELECT 'Images illustrations:' as info, COUNT(*) as count FROM product_images;
 SELECT 'Adresses créées:' as info, COUNT(*) as count FROM addresses;
 SELECT 'Méthodes de paiement:' as info, COUNT(*) as count FROM user_payment_methods;
 SELECT 'Articles de panier:' as info, COUNT(*) as count FROM cart_items;
 SELECT 'Commandes créées:' as info, COUNT(*) as count FROM orders;
 SELECT 'Articles de commandes:' as info, COUNT(*) as count FROM order_items;
 SELECT 'Sessions actives:' as info, COUNT(*) as count FROM user_sessions WHERE is_active = true;
-
-
