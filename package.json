@@ -1,7 +1,7 @@
 {
-  "name": "bookstore-api",
+  "name": "Eorian-api",
   "version": "1.0.0",
-  "description": "Api E-commerce Bookstore with Node.js, Express and TypeScript",
+  "description": "Api E-commerce with Node.js, Express and TypeScript",
   "main": "dist/server.js",
   "type": "module",
   "private": true,

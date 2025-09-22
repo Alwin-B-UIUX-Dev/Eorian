@@ -21,8 +21,8 @@ export class TokenManager implements ITokenManager {
     this.accessTokenExpiresIn = process.env.JWT_EXPIRES_IN ?? '15m';
     this.refreshTokenExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN ?? '7d';
 
-    this.issuer = process.env.JWT_ISSUER ?? 'bookstore-api-dev';
-    this.audience = process.env.JWT_AUDIENCE ?? 'bookstore-users-dev';
+    this.issuer = process.env.JWT_ISSUER ?? 'Eorian-api-dev';
+    this.audience = process.env.JWT_AUDIENCE ?? 'Eorian-users-dev';
   }
 
   public async generateAccessToken(payload: ITokenPayloadData): Promise<string> {
