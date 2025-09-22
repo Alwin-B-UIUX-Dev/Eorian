@@ -17,6 +17,8 @@ export class Product extends BaseEntity implements IProduct {
   private metaDescription: string | null;
   private active: boolean;
   private createdBy: number;
+  private primaryImageUrl: string | null;
+  private primaryImageAlt: string | null;
 
   constructor(data: IProductData) {
     super(data);
@@ -34,6 +36,8 @@ export class Product extends BaseEntity implements IProduct {
     this.metaDescription = data.metaDescription;
     this.active = data.isActive;
     this.createdBy = data.createdBy;
+    this.primaryImageUrl = data.primaryImageUrl || null;
+    this.primaryImageAlt = data.primaryImageAlt || null;
   }
 
   public getName(): string {
@@ -91,6 +95,15 @@ export class Product extends BaseEntity implements IProduct {
   public getCreatedBy(): number {
     return this.createdBy;
   }
+
+  public getPrimaryImageUrl(): string | null {
+    return this.primaryImageUrl;
+  }
+
+  public getPrimaryImageAlt(): string | null {
+    return this.primaryImageAlt;
+  }
+
 
   public setName(name: string): this {
     this.name = name;
@@ -212,7 +225,10 @@ export class Product extends BaseEntity implements IProduct {
       isActive: this.active,
       createdBy: this.createdBy,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      // Ajout des images manquantes 
+      primaryImageUrl: this.primaryImageUrl,
+      primaryImageAlt: this.primaryImageAlt
     };
   }
 }

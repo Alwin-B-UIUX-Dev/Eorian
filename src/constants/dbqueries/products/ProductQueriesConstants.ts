@@ -38,14 +38,19 @@ export class ProductQueriesConstants {
   `;
 
   public static readonly SELECT_ALL_PRODUCTS: string = /*sql*/ `
-    SELECT 
-      id, name, slug, sku, short_description, description, price_cents,
-      tax_rate_id, stock_quantity, low_stock_threshold, manage_stock,
-      meta_title, meta_description, is_active, created_by, created_at, updated_at
-    FROM products
-    ORDER BY name ASC
-    LIMIT $1 OFFSET $2
-  `;
+  SELECT 
+    product_id AS id,
+    name, slug, sku, short_description, description, price_cents,
+    stock_quantity, low_stock_threshold, 
+    primary_image_url, primary_image_alt,
+    is_active, meta_title, meta_description, created_at, updated_at,
+    1 AS tax_rate_id,
+    true AS manage_stock,
+    1 AS created_by
+  FROM v_products_catalog
+  ORDER BY created_at DESC
+  LIMIT $1 OFFSET $2
+`;
 
   public static readonly UPDATE_PRODUCT: string = /*sql*/ `
     UPDATE products

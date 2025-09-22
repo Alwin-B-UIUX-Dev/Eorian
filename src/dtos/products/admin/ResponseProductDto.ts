@@ -18,6 +18,9 @@ export class ResponseProductDto {
   public readonly createdBy: number;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
+  // fix: Ajout des images manquantes
+  public readonly imageUrl: string | null;
+  public readonly imageAlt: string | null;
 
   constructor(data: IProductData) {
     this.productId = data.id;
@@ -37,5 +40,8 @@ export class ResponseProductDto {
     this.createdBy = data.createdBy;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
+    // fix: Ajout des images manquantes
+    this.imageUrl = data.primaryImageUrl || null;
+    this.imageAlt = data.primaryImageAlt || null;
   }
 }
