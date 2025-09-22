@@ -1,5 +1,5 @@
 {
-  "name": "Eorian-api",
+  "name": "eorian-api",
   "version": "1.0.0",
   "description": "Api E-commerce with Node.js, Express and TypeScript",
   "main": "dist/server.js",
@@ -30,7 +30,7 @@
     "express",
     "typescript"
   ],
-  "author": "Wisepanda.fr",
+  "author": "Alwin Bolzon",
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
