@@ -6,6 +6,7 @@ import {
   AddressRoutes,
   AuthRoutes,
   CartItemRoutes,
+  ContactRoutes,
   OrderItemRoutes,
   OrderRoutes,
   ProductRoutes,
@@ -33,6 +34,7 @@ export class RouteFactory {
     RouteFactory.registerAddressRoutes();
     RouteFactory.registerOrderRoutes();
     RouteFactory.registerOrderItemRoutes();
+    RouteFactory.registerContactRoutes();
 
     logger.info('🛣️ Routes configured');
     return RouteFactory.router;
@@ -102,6 +104,11 @@ export class RouteFactory {
     const orderItemController = ServiceFactory.getOrderItemController();
     const orderItemRoutes = new OrderItemRoutes(orderItemController);
     RouteFactory.router.use('/api/v1', orderItemRoutes.getRouter());
+  }
+
+  private static registerContactRoutes(): void {
+    const contactRoutes = new ContactRoutes();
+    RouteFactory.router.use('/api/v1', contactRoutes.getRouter());
   }
 
   public static reset(): void {

@@ -1,6 +1,7 @@
 export * from '@/constants/zod/AddressConstants';
 export * from '@/constants/zod/AuthConstants';
 export * from '@/constants/zod/CartItemConstants';
+export * from '@/constants/zod/ContactConstants';
 export * from '@/constants/zod/OrderConstants';
 export * from '@/constants/zod/OrderItemConstants';
 export * from '@/constants/zod/ProductConstants';

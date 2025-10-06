@@ -16,7 +16,7 @@ export class ContactConstants {
 
   public static readonly SUBJECT_SCHEMA = z
     .enum(['Tatouage', 'Illustration', 'Joaillerie', 'Autres'], {
-      errorMap: () => ({ message: 'Le sujet doit être l\'un des suivants : Tatouage, Illustration, Joaillerie, Autres' })
+      message: 'Le sujet doit être l\'un des suivants : Tatouage, Illustration, Joaillerie, Autres'
     });
 
   public static readonly MESSAGE_SCHEMA = z

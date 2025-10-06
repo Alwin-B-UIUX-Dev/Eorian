@@ -54,6 +54,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@types/nodemailer": "^7.0.2",
     "argon2": "^0.43.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -62,6 +63,7 @@
     "helmet": "^8.1.0",
     "isomorphic-dompurify": "^2.26.0",
     "jose": "^6.0.11",
+    "nodemailer": "^7.0.7",
     "pg-promise": "^11.15.0",
     "ua-parser-js": "^2.0.4",
     "winston": "^3.17.0",
