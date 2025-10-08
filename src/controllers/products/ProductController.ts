@@ -4,10 +4,14 @@ import type { NextFunction, Request, Response } from 'express';
 import { CreateProductDto, ResponseProductDto } from '@/dtos/products';
 import type { IProductController } from '@/interfaces/controllers/products';
 import type { IProductService } from '@/interfaces/services/products';
+import type { IProductImageService } from '@/interfaces/services/product-images';
 import { ApiResponseFactory } from '@/utils';
 
 export class ProductController implements IProductController {
-  constructor(private readonly service: IProductService) {}
+  constructor(
+    private readonly service: IProductService,
+    private readonly imageService: IProductImageService
+  ) {}
 
   public async index(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -63,6 +67,19 @@ export class ProductController implements IProductController {
         isActive: dto.isActive,
         createdBy: dto.createdBy
       });
+
+      // Gérer l'image principale si fournie
+      if (req.body.primaryImageUrl) {
+        await this.imageService.create({
+          productId: parseInt(product.getId()),
+          imageUrl: req.body.primaryImageUrl,
+          altText: req.body.primaryImageAlt || null,
+          isPrimary: true,
+          sortOrder: 1,
+          uploadedBy: dto.createdBy
+        });
+      }
+
       res
         .status(201)
         .json(

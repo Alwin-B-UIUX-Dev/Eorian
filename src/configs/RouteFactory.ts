@@ -10,6 +10,7 @@ import {
   OrderItemRoutes,
   OrderRoutes,
   ProductRoutes,
+  ProductImageRoutes,
   TaxeRateRoutes,
   UserProfileRoutes,
   UserRoleRoutes,
@@ -30,6 +31,7 @@ export class RouteFactory {
     RouteFactory.registerUserRoleRoutes();
     RouteFactory.registerTaxeRateRoutes();
     RouteFactory.registerProductRoutes();
+    RouteFactory.registerProductImageRoutes();
     RouteFactory.registerCartItemRoutes();
     RouteFactory.registerAddressRoutes();
     RouteFactory.registerOrderRoutes();
@@ -80,6 +82,12 @@ export class RouteFactory {
     const productController = ServiceFactory.getProductController();
     const productRoutes = new ProductRoutes(productController);
     RouteFactory.router.use('/api/v1', productRoutes.getRouter());
+  }
+
+  private static registerProductImageRoutes(): void {
+    const productImageController = ServiceFactory.getProductImageController();
+    const productImageRoutes = new ProductImageRoutes(productImageController);
+    RouteFactory.router.use('/api/v1', productImageRoutes.getRouter());
   }
 
   private static registerCartItemRoutes(): void {

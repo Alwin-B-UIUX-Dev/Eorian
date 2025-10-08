@@ -8,6 +8,7 @@ import {
   OrderController,
   OrderItemController,
   ProductController,
+  ProductImageController,
   TaxeRateController,
   UserController,
   UserProfileController,
@@ -27,6 +28,8 @@ import type {
   IPasswordHasher,
   IProductRepository,
   IProductService,
+  IProductImageRepository,
+  IProductImageService,
   ITaxeRateRepository,
   ITaxeRateService,
   ITokenManager,
@@ -45,6 +48,7 @@ import {
   PostgresOrderItemRepository,
   PostgresOrderRepository,
   PostgresProductRepository,
+  PostgresProductImageRepository,
   PostgresTaxeRateRepository,
   PostgresUserProfileRepository,
   PostgresUserRepository,
@@ -58,6 +62,7 @@ import {
   OrderItemService,
   OrderService,
   ProductService,
+  ProductImageService,
   TaxeRateService,
   TokenService,
   UserService
@@ -94,6 +99,10 @@ export class ServiceFactory {
   private static productController: ProductController;
   private static productRepository: IProductRepository;
   private static productService: IProductService;
+
+  private static productImageController: ProductImageController;
+  private static productImageRepository: IProductImageRepository;
+  private static productImageService: IProductImageService;
 
   private static cartItemController: CartItemController;
   private static cartItemRepository: ICartItemRepository;
@@ -240,9 +249,34 @@ export class ServiceFactory {
 
   public static getProductController(): ProductController {
     if (!ServiceFactory.productController) {
-      ServiceFactory.productController = new ProductController(ServiceFactory.getProductService());
+      ServiceFactory.productController = new ProductController(
+        ServiceFactory.getProductService(),
+        ServiceFactory.getProductImageService()
+      );
     }
     return ServiceFactory.productController;
+  }
+
+  // Product Images
+  public static getProductImageRepository(): IProductImageRepository {
+    if (!ServiceFactory.productImageRepository) {
+      ServiceFactory.productImageRepository = new PostgresProductImageRepository();
+    }
+    return ServiceFactory.productImageRepository;
+  }
+
+  public static getProductImageService(): IProductImageService {
+    if (!ServiceFactory.productImageService) {
+      ServiceFactory.productImageService = new ProductImageService(ServiceFactory.getProductImageRepository());
+    }
+    return ServiceFactory.productImageService;
+  }
+
+  public static getProductImageController(): ProductImageController {
+    if (!ServiceFactory.productImageController) {
+      ServiceFactory.productImageController = new ProductImageController(ServiceFactory.getProductImageService());
+    }
+    return ServiceFactory.productImageController;
   }
 
   // Cart Items
@@ -435,6 +469,9 @@ export class ServiceFactory {
     ServiceFactory.productController = undefined as unknown as ProductController;
     ServiceFactory.productRepository = undefined as unknown as IProductRepository;
     ServiceFactory.productService = undefined as unknown as IProductService;
+    ServiceFactory.productImageController = undefined as unknown as ProductImageController;
+    ServiceFactory.productImageRepository = undefined as unknown as IProductImageRepository;
+    ServiceFactory.productImageService = undefined as unknown as IProductImageService;
     ServiceFactory.cartItemController = undefined as unknown as CartItemController;
     ServiceFactory.cartItemRepository = undefined as unknown as ICartItemRepository;
     ServiceFactory.cartItemService = undefined as unknown as ICartItemService;
