@@ -1,0 +1,103 @@
+@startuml Authentication_Flow
+!theme plain
+title Diagramme de Séquence - Authentification Eorian
+
+actor Client
+participant Frontend
+participant AuthController
+participant AuthService
+participant UserRepository
+participant PasswordHasher
+participant TokenManager
+database Database
+
+== Processus de Connexion ==
+
+Client -> Frontend: POST /auth/login {email/username, password}
+Frontend -> AuthController: login(loginDto)
+
+AuthController -> AuthService: login(loginDto)
+AuthService -> UserRepository: findByEmailOrUsername(identifier)
+UserRepository -> Database: SELECT * FROM users WHERE email=? OR username=?
+Database --> UserRepository: User data
+UserRepository --> AuthService: User | null
+
+alt User not found
+    AuthService --> AuthController: UserError.invalidCredentials()
+    AuthController --> Frontend: 401 Unauthorized
+    Frontend --> Client: Error: Identifiants invalides
+else User found
+    AuthService -> PasswordHasher: verify(passwordHash, password)
+    PasswordHasher --> AuthService: Boolean
+    
+    alt Password invalid
+        AuthService --> AuthController: UserError.invalidCredentials()
+        AuthController --> Frontend: 401 Unauthorized
+        Frontend --> Client: Error: Identifiants invalides
+    else Password valid
+        alt User not active
+            AuthService --> AuthController: UserError.accountDeactivated()
+            AuthController --> Frontend: 403 Forbidden
+            Frontend --> Client: Error: Compte désactivé
+        else User not verified
+            AuthService --> AuthController: UserError.emailNotVerified()
+            AuthController --> Frontend: 403 Forbidden
+            Frontend --> Client: Error: Email non vérifié
+        else User valid
+            AuthService -> UserRepository: updateLoginStatus(userId, true, now)
+            UserRepository -> Database: UPDATE users SET isConnected=true, lastLoginAt=?
+            Database --> UserRepository: Success
+            UserRepository --> AuthService: Success
+            
+            AuthService -> TokenManager: generateTokens(user)
+            TokenManager --> AuthService: {accessToken, refreshToken}
+            
+            AuthService --> AuthController: User + tokens
+            AuthController -> Frontend: Set-Cookie: refreshToken
+            AuthController --> Frontend: 200 OK {user, accessToken}
+            Frontend --> Client: Login successful
+        end
+    end
+end
+
+== Processus d'Inscription ==
+
+Client -> Frontend: POST /auth/register {email, username, password}
+Frontend -> AuthController: register(registerDto)
+
+AuthController -> AuthService: register(registerDto)
+AuthService -> UserRepository: findByEmailOrUsername(email)
+UserRepository -> Database: SELECT * FROM users WHERE email=?
+Database --> UserRepository: User | null
+
+alt User already exists
+    UserRepository --> AuthService: User exists
+    AuthService --> AuthController: ConflictError.emailExists()
+    AuthController --> Frontend: 409 Conflict
+    Frontend --> Client: Error: Email déjà utilisé
+else User doesn't exist
+    AuthService -> UserRepository: findByEmailOrUsername(username)
+    UserRepository -> Database: SELECT * FROM users WHERE username=?
+    Database --> UserRepository: User | null
+    
+    alt Username already exists
+        UserRepository --> AuthService: User exists
+        AuthService --> AuthController: ConflictError.usernameExists()
+        AuthController --> Frontend: 409 Conflict
+        Frontend --> Client: Error: Nom d'utilisateur déjà utilisé
+    else Username available
+        AuthService -> PasswordHasher: hash(password)
+        PasswordHasher --> AuthService: passwordHash
+        
+        AuthService -> UserRepository: create(userData)
+        UserRepository -> Database: INSERT INTO users (email, username, passwordHash, ...)
+        Database --> UserRepository: New user ID
+        UserRepository --> AuthService: New User entity
+        
+        AuthService --> AuthController: User created
+        AuthController --> Frontend: 201 Created {user}
+        Frontend --> Client: Inscription réussie
+    end
+end
+
+@enduml

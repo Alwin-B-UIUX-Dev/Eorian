@@ -1,0 +1,162 @@
+@startuml Eorian_Architecture
+!theme plain
+title Diagramme de Composants - Architecture Eorian
+
+package "Frontend (Vue.js)" {
+    component [Vue.js Application] as VUE
+    component [Vue Router] as ROUTER
+    component [Vuex Store] as STORE
+    component [Components] as COMPONENTS
+    component [Pages] as PAGES
+}
+
+package "Backend API (Node.js + Express)" {
+    package "Routes Layer" {
+        component [AuthRoutes] as AUTH_ROUTES
+        component [UserRoutes] as USER_ROUTES
+        component [ProductRoutes] as PRODUCT_ROUTES
+        component [OrderRoutes] as ORDER_ROUTES
+        component [CartItemRoutes] as CART_ROUTES
+        component [AddressRoutes] as ADDRESS_ROUTES
+        component [TaxeRateRoutes] as TAX_ROUTES
+        component [ContactRoutes] as CONTACT_ROUTES
+    }
+    
+    package "Controllers Layer" {
+        component [AuthController] as AUTH_CTRL
+        component [UserController] as USER_CTRL
+        component [ProductController] as PRODUCT_CTRL
+        component [OrderController] as ORDER_CTRL
+        component [CartItemController] as CART_CTRL
+        component [AddressController] as ADDRESS_CTRL
+        component [TaxeRateController] as TAX_CTRL
+        component [ContactController] as CONTACT_CTRL
+    }
+    
+    package "Services Layer" {
+        component [AuthService] as AUTH_SVC
+        component [UserService] as USER_SVC
+        component [ProductService] as PRODUCT_SVC
+        component [OrderService] as ORDER_SVC
+        component [CartItemService] as CART_SVC
+        component [AddressService] as ADDRESS_SVC
+        component [TaxeRateService] as TAX_SVC
+        component [EmailService] as EMAIL_SVC
+        component [SecurityService] as SECURITY_SVC
+    }
+    
+    package "Repositories Layer" {
+        component [UserRepository] as USER_REPO
+        component [ProductRepository] as PRODUCT_REPO
+        component [OrderRepository] as ORDER_REPO
+        component [CartItemRepository] as CART_REPO
+        component [AddressRepository] as ADDRESS_REPO
+        component [TaxeRateRepository] as TAX_REPO
+    }
+    
+    package "Entities Layer" {
+        component [User Entity] as USER_ENT
+        component [Product Entity] as PRODUCT_ENT
+        component [Order Entity] as ORDER_ENT
+        component [CartItem Entity] as CART_ENT
+        component [Address Entity] as ADDRESS_ENT
+        component [TaxeRate Entity] as TAX_ENT
+    }
+}
+
+package "Middleware Layer" {
+    component [AuthMiddleware] as AUTH_MW
+    component [ErrorMiddleware] as ERROR_MW
+    component [CORS Middleware] as CORS_MW
+    component [Helmet Middleware] as HELMET_MW
+    component [Cookie Parser] as COOKIE_MW
+}
+
+package "Utilities Layer" {
+    component [TokenManager] as TOKEN_MGR
+    component [PasswordHasher] as PASSWORD_HASHER
+    component [Logger] as LOGGER
+    component [Validator] as VALIDATOR
+    component [ApiResponseFactory] as RESPONSE_FACTORY
+    component [CookieManager] as COOKIE_MGR
+    component [DeviceInfoHelper] as DEVICE_HELPER
+    component [MaskerHelper] as MASKER
+    component [RequestIdGenerator] as REQUEST_ID
+}
+
+package "Configuration Layer" {
+    component [DatabaseConnectionSingleton] as DB_CONFIG
+    component [LoggerSingleton] as LOGGER_CONFIG
+    component [RouteFactory] as ROUTE_FACTORY
+    component [ServiceFactory] as SERVICE_FACTORY
+}
+
+package "Data Layer" {
+    database "MySQL Database" as DATABASE
+    component [File System] as FILESYSTEM
+    component [Log Files] as LOGS
+}
+
+package "External Services" {
+    component [Email Service] as EMAIL_SERVICE
+    component [File Storage] as FILE_STORAGE
+    component [Payment Gateway] as PAYMENT_GATEWAY
+}
+
+' Connections
+VUE --> AUTH_ROUTES
+VUE --> USER_ROUTES
+VUE --> PRODUCT_ROUTES
+VUE --> ORDER_ROUTES
+VUE --> CART_ROUTES
+VUE --> ADDRESS_ROUTES
+
+AUTH_ROUTES --> AUTH_CTRL
+USER_ROUTES --> USER_CTRL
+PRODUCT_ROUTES --> PRODUCT_CTRL
+ORDER_ROUTES --> ORDER_CTRL
+CART_ROUTES --> CART_CTRL
+ADDRESS_ROUTES --> ADDRESS_CTRL
+TAX_ROUTES --> TAX_CTRL
+CONTACT_ROUTES --> CONTACT_CTRL
+
+AUTH_CTRL --> AUTH_SVC
+USER_CTRL --> USER_SVC
+PRODUCT_CTRL --> PRODUCT_SVC
+ORDER_CTRL --> ORDER_SVC
+CART_CTRL --> CART_SVC
+ADDRESS_CTRL --> ADDRESS_SVC
+TAX_CTRL --> TAX_SVC
+CONTACT_CTRL --> EMAIL_SVC
+
+AUTH_SVC --> USER_REPO
+USER_SVC --> USER_REPO
+PRODUCT_SVC --> PRODUCT_REPO
+ORDER_SVC --> ORDER_REPO
+CART_SVC --> CART_REPO
+ADDRESS_SVC --> ADDRESS_REPO
+TAX_SVC --> TAX_REPO
+
+USER_REPO --> USER_ENT
+PRODUCT_REPO --> PRODUCT_ENT
+ORDER_REPO --> ORDER_ENT
+CART_REPO --> CART_ENT
+ADDRESS_REPO --> ADDRESS_ENT
+TAX_REPO --> TAX_ENT
+
+USER_ENT --> DATABASE
+PRODUCT_ENT --> DATABASE
+ORDER_ENT --> DATABASE
+CART_ENT --> DATABASE
+ADDRESS_ENT --> DATABASE
+TAX_ENT --> DATABASE
+
+AUTH_MW --> TOKEN_MGR
+ERROR_MW --> LOGGER
+AUTH_SVC --> PASSWORD_HASHER
+AUTH_SVC --> TOKEN_MGR
+EMAIL_SVC --> EMAIL_SERVICE
+PRODUCT_SVC --> FILESYSTEM
+LOGGER --> LOGS
+
+@enduml

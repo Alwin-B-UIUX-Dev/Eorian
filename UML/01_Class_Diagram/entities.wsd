@@ -1,0 +1,185 @@
+@startuml Eorian_Entities
+!theme plain
+title Diagramme de Classes - Entités Eorian
+
+' === ENTITÉS DE BASE ===
+abstract class BaseEntity {
+    # id: String
+    # createdAt: Date
+    # updatedAt: Date
+    + getId(): String
+    + getCreatedAt(): Date
+    + getUpdatedAt(): Date
+    + updateTimestamp(): void
+    # getEntityData(): Record<string, unknown>
+}
+
+' === GESTION DES UTILISATEURS ===
+class User {
+    - email: String
+    - username: String
+    - roleId: String
+    - roleName: String
+    - passwordHash: String
+    - isActive: Boolean
+    - isConnected: Boolean
+    - emailVerified: Boolean
+    - gdprConsent: Boolean
+    - gdprConsentDate: Date
+    - lastLoginAt: Date
+    + getEmail(): String
+    + getUsername(): String
+    + getRoleId(): String
+    + getRoleName(): String
+    + isActive(): Boolean
+    + isConnected(): Boolean
+    + isEmailVerified(): Boolean
+    + getGdprConsent(): Boolean
+    + getLastLoginAt(): Date
+    + setEmail(email: String): User
+    + setUsername(username: String): User
+    + setIsActive(active: Boolean): User
+    + setIsConnected(connected: Boolean): User
+    + setEmailVerified(verified: Boolean): User
+    + setGdprConsent(consent: Boolean): User
+    + setLastLoginAt(date: Date): User
+}
+
+class UserRole {
+    - roleName: String
+    - description: String
+    + getRoleName(): String
+    + getDescription(): String
+    + isAdmin(): Boolean
+    + isCustomer(): Boolean
+    + setRoleName(roleName: String): UserRole
+    + setDescription(description: String): UserRole
+}
+
+class UserProfile {
+    - userId: String
+    - firstName: String
+    - lastName: String
+    - phone: String
+    - birthDate: Date
+    - avatarUrl: String
+    + getUserId(): String
+    + getFirstName(): String
+    + getLastName(): String
+    + getPhone(): String
+    + getBirthDate(): Date
+    + getAvatarUrl(): String
+    + getFullName(): String
+    + setFirstName(firstName: String): UserProfile
+    + setLastName(lastName: String): UserProfile
+    + setPhone(phone: String): UserProfile
+    + setBirthDate(birthDate: Date): UserProfile
+    + setAvatarUrl(avatarUrl: String): UserProfile
+}
+
+class UserSession {
+    - userId: String
+    - refreshToken: String
+    - deviceInfo: IDeviceInfoData
+    - expiresAt: Date
+    - isActive: Boolean
+    + getUserId(): String
+    + getRefreshToken(): String
+    + getDeviceInfo(): IDeviceInfoData
+    + getExpiresAt(): Date
+    + getIsActive(): Boolean
+    + setUserId(userId: String): UserSession
+    + setRefreshToken(token: String): UserSession
+    + setDeviceInfo(info: IDeviceInfoData): UserSession
+    + setExpiresAt(date: Date): UserSession
+    + setIsActive(active: Boolean): UserSession
+}
+
+' === GESTION DES PRODUITS ===
+class Product {
+    - name: String
+    - slug: String
+    - sku: String
+    - shortDescription: String
+    - description: String
+    - priceCents: Number
+    - taxRateId: Number
+    - stockQuantity: Number
+    - lowStockThreshold: Number
+    - manageStock: Boolean
+    - metaTitle: String
+    - metaDescription: String
+    - active: Boolean
+    - createdBy: Number
+    - primaryImageUrl: String
+    - primaryImageAlt: String
+    + getName(): String
+    + getSlug(): String
+    + getSku(): String
+    + getShortDescription(): String
+    + getDescription(): String
+    + getPriceCents(): Number
+    + getTaxRateId(): Number
+    + getStockQuantity(): Number
+    + getLowStockThreshold(): Number
+    + getManageStock(): Boolean
+    + getMetaTitle(): String
+    + getMetaDescription(): String
+    + isActive(): Boolean
+    + getCreatedBy(): Number
+    + getPrimaryImageUrl(): String
+    + getPrimaryImageAlt(): String
+    + setName(name: String): Product
+    + setSlug(slug: String): Product
+    + setSku(sku: String): Product
+    + setPriceCents(price: Number): Product
+    + setStockQuantity(quantity: Number): Product
+    + setActive(active: Boolean): Product
+}
+
+class ProductImage {
+    - productId: Number
+    - imageUrl: String
+    - altText: String
+    - primary: Boolean
+    - sortOrder: Number
+    - uploadedBy: Number
+    + getProductId(): Number
+    + getImageUrl(): String
+    + getAltText(): String
+    + isPrimary(): Boolean
+    + getSortOrder(): Number
+    + getUploadedBy(): Number
+    + setProductId(productId: Number): ProductImage
+    + setImageUrl(url: String): ProductImage
+    + setAltText(alt: String): ProductImage
+    + setPrimary(primary: Boolean): ProductImage
+    + setSortOrder(order: Number): ProductImage
+    + setUploadedBy(userId: Number): ProductImage
+}
+
+class TaxeRate {
+    - name: String
+    - rate: Number
+    - description: String
+    - active: Boolean
+    + getName(): String
+    + getRate(): Number
+    + getDescription(): String
+    + isActive(): Boolean
+    + setName(name: String): TaxeRate
+    + setRate(rate: Number): TaxeRate
+    + setDescription(description: String): TaxeRate
+    + setActive(active: Boolean): TaxeRate
+}
+
+' === RELATIONS D'HÉRITAGE ===
+BaseEntity <|-- User
+BaseEntity <|-- UserRole
+BaseEntity <|-- UserProfile
+BaseEntity <|-- UserSession
+BaseEntity <|-- Product
+BaseEntity <|-- ProductImage
+BaseEntity <|-- TaxeRate
+
+@enduml

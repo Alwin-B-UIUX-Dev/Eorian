@@ -1,0 +1,161 @@
+@startuml Eorian_Orders
+!theme plain
+title Diagramme de Classes - Commandes et Panier Eorian
+
+' === ENTITÉS DE BASE ===
+abstract class BaseEntity {
+    # id: String
+    # createdAt: Date
+    # updatedAt: Date
+    + getId(): String
+    + updateTimestamp(): void
+}
+
+' === GESTION DES COMMANDES ===
+class Order {
+    - orderNumber: String
+    - userId: Number
+    - shippingAddressId: Number
+    - billingAddressId: Number
+    - status: String
+    - subtotalCents: Number
+    - taxAmountCents: Number
+    - shippingCents: Number
+    - totalCents: Number
+    - paymentStatus: String
+    - paymentMethod: String
+    - paymentReference: String
+    - shippingMethod: String
+    - trackingNumber: String
+    - customerNotes: String
+    - adminNotes: String
+    - shippedAt: Date
+    - deliveredAt: Date
+    + getOrderNumber(): String
+    + getUserId(): Number
+    + getShippingAddressId(): Number
+    + getBillingAddressId(): Number
+    + getStatus(): String
+    + getSubtotalCents(): Number
+    + getTaxAmountCents(): Number
+    + getShippingCents(): Number
+    + getTotalCents(): Number
+    + getPaymentStatus(): String
+    + getPaymentMethod(): String
+    + getPaymentReference(): String
+    + getShippingMethod(): String
+    + getTrackingNumber(): String
+    + getCustomerNotes(): String
+    + getAdminNotes(): String
+    + getShippedAt(): Date
+    + getDeliveredAt(): Date
+    + setStatus(status: String): Order
+    + setPaymentStatus(status: String): Order
+    + setTrackingNumber(number: String): Order
+    + setShippedAt(date: Date): Order
+    + setDeliveredAt(date: Date): Order
+}
+
+class OrderItem {
+    - orderId: Number
+    - productId: Number
+    - productName: String
+    - productSku: String
+    - unitPriceCents: Number
+    - taxRate: Number
+    - quantity: Number
+    - lineSubtotalCents: Number
+    - lineTaxCents: Number
+    - lineTotalCents: Number
+    + getOrderId(): Number
+    + getProductId(): Number
+    + getProductName(): String
+    + getProductSku(): String
+    + getUnitPriceCents(): Number
+    + getTaxRate(): Number
+    + getQuantity(): Number
+    + getLineSubtotalCents(): Number
+    + getLineTaxCents(): Number
+    + getLineTotalCents(): Number
+    + setProductName(name: String): OrderItem
+    + setProductSku(sku: String): OrderItem
+    + setUnitPriceCents(price: Number): OrderItem
+    + setTaxRate(rate: Number): OrderItem
+    + setQuantity(quantity: Number): OrderItem
+    + setLineSubtotalCents(amount: Number): OrderItem
+    + setLineTaxCents(amount: Number): OrderItem
+    + setLineTotalCents(amount: Number): OrderItem
+}
+
+' === GESTION DU PANIER ===
+class CartItem {
+    - userId: Number
+    - productId: Number
+    - quantity: Number
+    - addedAt: Date
+    + getUserId(): Number
+    + getProductId(): Number
+    + getQuantity(): Number
+    + getAddedAt(): Date
+    + setUserId(userId: Number): CartItem
+    + setProductId(productId: Number): CartItem
+    + setQuantity(quantity: Number): CartItem
+    + setAddedAt(date: Date): CartItem
+}
+
+' === GESTION DES ADRESSES ===
+class Address {
+    - userId: String
+    - type: String
+    - firstName: String
+    - lastName: String
+    - company: String
+    - phone: String
+    - addressLine1: String
+    - addressLine2: String
+    - city: String
+    - postalCode: String
+    - stateRegion: String
+    - country: String
+    - isDefault: Boolean
+    + getUserId(): String
+    + getType(): String
+    + getFirstName(): String
+    + getLastName(): String
+    + getCompany(): String
+    + getPhone(): String
+    + getAddressLine1(): String
+    + getAddressLine2(): String
+    + getCity(): String
+    + getPostalCode(): String
+    + getStateRegion(): String
+    + getCountry(): String
+    + getIsDefault(): Boolean
+    + getFullName(): String
+    + setUserId(userId: String): Address
+    + setType(type: String): Address
+    + setFirstName(firstName: String): Address
+    + setLastName(lastName: String): Address
+    + setCompany(company: String): Address
+    + setPhone(phone: String): Address
+    + setAddressLine1(line1: String): Address
+    + setAddressLine2(line2: String): Address
+    + setCity(city: String): Address
+    + setPostalCode(code: String): Address
+    + setStateRegion(region: String): Address
+    + setCountry(country: String): Address
+    + setIsDefault(default: Boolean): Address
+}
+
+' === RELATIONS D'HÉRITAGE ===
+BaseEntity <|-- Order
+BaseEntity <|-- OrderItem
+BaseEntity <|-- CartItem
+BaseEntity <|-- Address
+
+' === RELATIONS MÉTIER ===
+Order ||--o{ OrderItem : "contains items"
+Order }o--|| Address : "shipping address"
+Order }o--|| Address : "billing address"
+
+@enduml

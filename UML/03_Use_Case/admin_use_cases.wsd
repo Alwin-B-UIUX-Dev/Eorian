@@ -1,0 +1,45 @@
+@startuml Admin_Use_Cases
+!theme plain
+title Diagramme de Cas d'Usage - Administrateur Eorian
+
+actor Admin as "👨‍💼 Administrateur"
+
+package "Fonctionnalités Administrateur" {
+    usecase UC16 as "Gérer les utilisateurs"
+    usecase UC17 as "Créer un produit"
+    usecase UC18 as "Modifier un produit"
+    usecase UC19 as "Supprimer un produit"
+    usecase UC20 as "Gérer les images de produits"
+    usecase UC21 as "Gérer les taxes"
+    usecase UC22 as "Gérer les commandes"
+    usecase UC23 as "Suivre les commandes"
+    usecase UC24 as "Gérer les adresses"
+    usecase UC25 as "Consulter les statistiques"
+    usecase UC26 as "Gérer les rôles utilisateurs"
+    usecase UC27 as "Activer/Désactiver des comptes"
+    usecase UC28 as "Gérer les sessions utilisateurs"
+}
+
+' Relations Admin
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+Admin --> UC25
+Admin --> UC26
+Admin --> UC27
+Admin --> UC28
+
+' Relations d'inclusion
+UC17 ..> UC20 : include
+UC18 ..> UC20 : include
+UC22 ..> UC23 : include
+UC16 ..> UC27 : include
+UC16 ..> UC28 : include
+
+@enduml

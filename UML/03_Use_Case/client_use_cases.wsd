@@ -1,0 +1,48 @@
+@startuml Client_Use_Cases
+!theme plain
+title Diagramme de Cas d'Usage - Client Eorian
+
+actor Client as "👤 Client"
+
+package "Fonctionnalités Client" {
+    usecase UC1 as "Consulter le catalogue"
+    usecase UC2 as "Rechercher des produits"
+    usecase UC3 as "Voir les détails d'un produit"
+    usecase UC4 as "Ajouter au panier"
+    usecase UC5 as "Modifier le panier"
+    usecase UC6 as "Supprimer du panier"
+    usecase UC7 as "Passer commande"
+    usecase UC8 as "Gérer son profil"
+    usecase UC9 as "Gérer ses adresses"
+    usecase UC10 as "Consulter ses commandes"
+    usecase UC11 as "Se connecter"
+    usecase UC12 as "S'inscrire"
+    usecase UC13 as "Se déconnecter"
+    usecase UC14 as "Demander un nouveau mot de passe"
+    usecase UC15 as "Vérifier son email"
+}
+
+' Relations Client
+Client --> UC1
+Client --> UC2
+Client --> UC3
+Client --> UC4
+Client --> UC5
+Client --> UC6
+Client --> UC7
+Client --> UC8
+Client --> UC9
+Client --> UC10
+Client --> UC11
+Client --> UC12
+Client --> UC13
+Client --> UC14
+Client --> UC15
+
+' Relations d'inclusion
+UC7 ..> UC4 : include
+UC7 ..> UC9 : include
+UC12 ..> UC15 : include
+UC11 ..> UC14 : extend
+
+@enduml

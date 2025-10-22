@@ -1,0 +1,43 @@
+@startuml System_Use_Cases
+!theme plain
+title Diagramme de Cas d'Usage - Système Eorian
+
+actor System as "🤖 Système"
+
+package "Fonctionnalités Système" {
+    usecase UC29 as "Calculer les taxes"
+    usecase UC30 as "Générer les numéros de commande"
+    usecase UC31 as "Gérer les sessions"
+    usecase UC32 as "Envoyer des emails"
+    usecase UC33 as "Générer des tokens JWT"
+    usecase UC34 as "Valider les données"
+    usecase UC35 as "Logger les activités"
+    usecase UC36 as "Gérer les erreurs"
+    usecase UC37 as "Sauvegarder les fichiers"
+    usecase UC38 as "Optimiser les performances"
+}
+
+' Relations Système
+System --> UC29
+System --> UC30
+System --> UC31
+System --> UC32
+System --> UC33
+System --> UC34
+System --> UC35
+System --> UC36
+System --> UC37
+System --> UC38
+
+' Relations d'inclusion
+UC29 ..> UC35 : include
+UC30 ..> UC35 : include
+UC31 ..> UC35 : include
+UC32 ..> UC35 : include
+UC33 ..> UC35 : include
+UC34 ..> UC35 : include
+UC36 ..> UC35 : include
+UC37 ..> UC35 : include
+UC38 ..> UC35 : include
+
+@enduml

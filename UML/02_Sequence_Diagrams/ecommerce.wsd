@@ -1,0 +1,82 @@
+@startuml Ecommerce_Flow
+!theme plain
+title Diagramme de Séquence - E-commerce Eorian
+
+actor Client
+participant Frontend
+participant CartController
+participant CartItemService
+participant CartItemRepository
+participant ProductRepository
+participant OrderController
+participant OrderService
+participant OrderItemService
+database Database
+
+== Processus d'Ajout au Panier ==
+
+Client -> Frontend: POST /cart-items/user/:userId/add {productId, quantity}
+Frontend -> CartController: addToCart(userId, productId, quantity)
+
+CartController -> CartItemService: addOrUpdateProduct(userId, productId, quantity)
+CartItemService -> CartItemRepository: findByUserAndProduct(userId, productId)
+CartItemRepository -> Database: SELECT * FROM cart_items WHERE userId=? AND productId=?
+Database --> CartItemRepository: CartItem | null
+
+alt Item already in cart
+    CartItemRepository --> CartItemService: Existing CartItem
+    CartItemService -> CartItemService: update(existingId, {quantity})
+    CartItemService -> CartItemRepository: update(id, data)
+    CartItemRepository -> Database: UPDATE cart_items SET quantity=?, updatedAt=?
+    Database --> CartItemRepository: Success
+    CartItemRepository --> CartItemService: Updated CartItem
+else Item not in cart
+    CartItemRepository --> CartItemService: null
+    CartItemService -> CartItemRepository: create({userId, productId, quantity, addedAt})
+    CartItemRepository -> Database: INSERT INTO cart_items (userId, productId, quantity, addedAt, ...)
+    Database --> CartItemRepository: New cart item ID
+    CartItemRepository --> CartItemService: New CartItem
+end
+
+CartItemService --> CartController: CartItem
+CartController --> Frontend: 200 OK {cartItem}
+Frontend --> Client: Produit ajouté au panier
+
+== Processus de Création de Commande ==
+
+Client -> Frontend: POST /orders {userId, shippingAddressId, billingAddressId}
+Frontend -> OrderController: create(orderData)
+
+OrderController -> OrderService: create(orderData)
+OrderService -> OrderRepository: create(orderData)
+OrderRepository -> Database: INSERT INTO orders (orderNumber, userId, ...)
+Database --> OrderRepository: New order ID
+OrderRepository --> OrderService: New Order
+
+OrderService -> CartItemService: findByUserId(userId)
+CartItemService -> CartItemRepository: findByUserId(userId)
+CartItemRepository -> Database: SELECT * FROM cart_items WHERE userId=?
+Database --> CartItemRepository: CartItem[]
+CartItemRepository --> CartItemService: CartItem[]
+CartItemService --> OrderService: CartItem[]
+
+loop For each cart item
+    OrderService -> OrderItemService: create({orderId, productId, productName, quantity, unitPrice, ...})
+    OrderItemService -> OrderItemRepository: create(orderItemData)
+    OrderItemRepository -> Database: INSERT INTO order_items (orderId, productId, ...)
+    Database --> OrderItemRepository: New order item ID
+    OrderItemRepository --> OrderItemService: New OrderItem
+end
+
+OrderService -> CartItemService: removeByUserId(userId)
+CartItemService -> CartItemRepository: deleteByUserId(userId)
+CartItemRepository -> Database: DELETE FROM cart_items WHERE userId=?
+Database --> CartItemRepository: Success
+CartItemRepository --> CartItemService: Success
+CartItemService --> OrderService: Success
+
+OrderService --> OrderController: Order created
+OrderController --> Frontend: 201 Created {order}
+Frontend --> Client: Commande créée
+
+@enduml
