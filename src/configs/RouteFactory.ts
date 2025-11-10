@@ -38,7 +38,7 @@ export class RouteFactory {
     RouteFactory.registerOrderItemRoutes();
     RouteFactory.registerContactRoutes();
 
-    logger.info('🛣️ Routes configured');
+    logger.info('Routes configured');
     return RouteFactory.router;
   }
 

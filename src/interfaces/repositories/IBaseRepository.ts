@@ -23,8 +23,8 @@ export interface IBaseRepository<T extends IEntity, TData = unknown> {
   /**
    * Rechercher une entité par son ID
    *
-   * @param id - Identifiant unique de l'entité
-   * @returns Entité trouvée ou null si inexistante
+   * @param id
+   * @returns
    *
    * @throws {DatabaseError} Si la requête échoue
    */

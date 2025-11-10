@@ -40,7 +40,7 @@ if (environment === 'development') {
     console.log(`   • API Base: http://${HOST}:${PORT}/api/v1`);
   });
 } else {
-  // 🔓 HTTP en production (proxy reverse handle SSL)
+  // HTTP en production (proxy reverse handle SSL)
   app.listen(PORT, HOST, (): void => {
     logger.info('🎯 HTTP Server started successfully', {
       port: PORT,
@@ -64,3 +64,4 @@ process.on('SIGTERM', () => {
   logger.info('👋 Server terminated gracefully...');
   process.exit(0);
 });
+

@@ -2,7 +2,7 @@
 !theme plain
 title Diagramme de Cas d'Usage - Administrateur Eorian
 
-actor Admin as "👨‍💼 Administrateur"
+actor Admin as "Administrateur"
 
 package "Fonctionnalités Administrateur" {
     usecase UC16 as "Gérer les utilisateurs"

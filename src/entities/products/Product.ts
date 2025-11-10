@@ -226,7 +226,6 @@ export class Product extends BaseEntity implements IProduct {
       createdBy: this.createdBy,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      // Ajout des images manquantes 
       primaryImageUrl: this.primaryImageUrl,
       primaryImageAlt: this.primaryImageAlt
     };
