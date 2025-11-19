@@ -59,26 +59,26 @@ INSERT INTO products (name, slug, sku, short_description, description, price_cen
 -- =====================================================
 
 INSERT INTO product_images (product_id, image_url, alt_text, is_primary, sort_order, uploaded_by) VALUES
-(1, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_10_1x.webp', 'Aquarelle Paysage Provençal - Vue d''ensemble', true, 1, 9),
-(1, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Aquarelle Paysage Provençal - Détail lavande', false, 2, 9),
+(1, 'https://eorian.fr/wp-content/uploads/2025/10/image-11.png', 'Aquarelle Paysage Provençal - Vue d''ensemble', true, 1, 9),
+(1, 'https://eorian.fr/wp-content/uploads/2025/10/image-10.png', 'Aquarelle Paysage Provençal - Détail lavande', false, 2, 9),
 (1, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop', 'Aquarelle Paysage Provençal - Signature artiste', false, 3, 9),
-(2, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_9_1x.webp', 'Dessin au Fusain Portrait de Femme - Vue principale', true, 1, 9),
+(2, 'https://eorian.fr/wp-content/uploads/2025/10/image-9.png', 'Dessin au Fusain Portrait de Femme - Vue principale', true, 1, 9),
 (2, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop', 'Dessin au Fusain Portrait de Femme - Détail visage', false, 2, 9),
-(3, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_8_1x.webp', 'Illustration Botanique Fleurs des Champs - Vue générale', true, 1, 9),
+(3, 'https://eorian.fr/wp-content/uploads/2025/10/image-10.png', 'Illustration Botanique Fleurs des Champs - Vue générale', true, 1, 9),
 (3, 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop', 'Illustration Botanique Fleurs des Champs - Détail fleurs', false, 2, 9),
-(4, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_7_1x.webp', 'Croquis Urbain Paris Montmartre - Scène de rue', true, 1, 9),
+(4, 'https://eorian.fr/wp-content/uploads/2025/10/image-7.png', 'Croquis Urbain Paris Montmartre - Scène de rue', true, 1, 9),
 (4, 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop', 'Croquis Urbain Paris Montmartre - Détail architecture', false, 2, 9),
-(5, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_6_1x.webp', 'Pastel Coucher de Soleil Maritime - Vue d''ensemble', true, 1, 9),
+(5, 'https://eorian.fr/wp-content/uploads/2025/10/image-6.png', 'Pastel Coucher de Soleil Maritime - Vue d''ensemble', true, 1, 9),
 (5, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Pastel Coucher de Soleil Maritime - Détail couleurs', false, 2, 9),
-(6, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_5_1x.webp', 'Encre de Chine Architecture Gothique - Vue principale', true, 1, 9),
+(6, 'https://eorian.fr/wp-content/uploads/2025/10/image-4.png', 'Encre de Chine Architecture Gothique - Vue principale', true, 1, 9),
 (6, 'https://images.unsplash.com/photo-1539650116574-75c0c6d73c6e?w=800&h=600&fit=crop', 'Encre de Chine Architecture Gothique - Détail façade', false, 2, 9),
-(7, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_4_1x.webp', 'Crayon de Couleur Nature Morte - Composition', true, 1, 9),
+(7, 'https://eorian.fr/wp-content/uploads/2025/10/image-3.png', 'Crayon de Couleur Nature Morte - Composition', true, 1, 9),
 (7, 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop', 'Crayon de Couleur Nature Morte - Détail fruits', false, 2, 9),
-(8, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_3_1x.webp', 'Aquarelle Forêt Automnale - Paysage complet', true, 1, 9),
+(8, 'https://eorian.fr/wp-content/uploads/2025/10/illustration_eorian_8_1x.webp', 'Aquarelle Forêt Automnale - Paysage complet', true, 1, 9),
 (8, 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop', 'Aquarelle Forêt Automnale - Détail feuillage', false, 2, 9),
-(9, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_2_1x.webp', 'Sanguine Étude de Nu - Dessin principal', true, 1, 9),
+(9, 'https://eorian.fr/wp-content/uploads/2025/10/illustration_eorian_7_1x.webp', 'Sanguine Étude de Nu - Dessin principal', true, 1, 9),
 (9, 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop', 'Sanguine Étude de Nu - Détail anatomie', false, 2, 9),
-(10, 'https://eorian.alwinbolzon.fr/wp-content/uploads/2025/09/illustration_eorian_1_1x.webp', 'Gouache Village de Montagne - Vue d''ensemble', true, 1, 9),
+(10, 'https://eorian.fr/wp-content/uploads/2025/10/illustration_eorian_5_1x.webp', 'Gouache Village de Montagne - Vue d''ensemble', true, 1, 9),
 (10, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop', 'Gouache Village de Montagne - Détail architecture', false, 2, 9);
 
 -- =====================================================
