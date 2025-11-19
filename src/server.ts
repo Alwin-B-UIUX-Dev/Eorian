@@ -1,6 +1,6 @@
 // src/server.ts
 import dotenv from 'dotenv';
-import { App } from '@/app';
+import { App } from '@/app.js';
 import { logger } from '@/configs';
 
 /**
