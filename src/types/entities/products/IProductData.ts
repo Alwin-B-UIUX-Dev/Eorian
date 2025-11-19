@@ -19,8 +19,6 @@ export interface IProductData extends IBaseEntityData {
   metaDescription: string | null;
   isActive: boolean;
   createdBy: number;
-
-  // fix: Ajout des images manquantes
   primaryImageUrl?: string | null;
   primaryImageAlt?: string | null;
 }

@@ -27,7 +27,7 @@ const app = application.getApp();
  */
 if (environment === 'development') {
   app.listen(PORT, HOST, (): void => {
-    logger.info('🎯 HTTP Server started successfully', {
+    logger.info(' HTTP Server started successfully', {
       port: PORT,
       host: HOST,
       environment,
@@ -36,13 +36,13 @@ if (environment === 'development') {
       timestamp: new Date().toISOString()
     });
 
-    console.log(`\n🔗 Quick links (HTTP):`);
+    console.log(`\n Quick links (HTTP):`);
     console.log(`   • API Base: http://${HOST}:${PORT}/api/v1`);
   });
 } else {
   // HTTP en production (proxy reverse handle SSL)
   app.listen(PORT, HOST, (): void => {
-    logger.info('🎯 HTTP Server started successfully', {
+    logger.info('HTTP Server started successfully', {
       port: PORT,
       host: HOST,
       environment,
@@ -56,12 +56,11 @@ if (environment === 'development') {
  * Gestion propre de l'arrêt
  */
 process.on('SIGINT', () => {
-  logger.info('👋 Server shutting down gracefully...');
+  logger.info('Server shutting down gracefully...');
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-  logger.info('👋 Server terminated gracefully...');
+  logger.info('Server terminated gracefully...');
   process.exit(0);
 });
-

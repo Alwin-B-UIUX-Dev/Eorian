@@ -2,6 +2,11 @@ import { BaseEntity } from '@/entities';
 import type { IProduct } from '@/interfaces';
 import type { IProductData } from '@/types';
 
+/**
+ * Représente un produit métier complet avec toutes les informations
+ * nécessaires à l'affichage et à la gestion du catalogue.
+ * Étend `BaseEntity` pour bénéficier des métadonnées communes (id, dates).
+ */
 export class Product extends BaseEntity implements IProduct {
   private name: string;
   private slug: string;
@@ -20,6 +25,10 @@ export class Product extends BaseEntity implements IProduct {
   private primaryImageUrl: string | null;
   private primaryImageAlt: string | null;
 
+  /**
+   * Hydrate l'entité à partir des données brutes récupérées
+   * (depuis une API, un mapper de base de données, etc.).
+   */
   constructor(data: IProductData) {
     super(data);
     this.name = data.name;
@@ -40,6 +49,11 @@ export class Product extends BaseEntity implements IProduct {
     this.primaryImageAlt = data.primaryImageAlt || null;
   }
 
+  /**
+   * --- Accesseurs (lecture seule) ---
+   * Chaque méthode expose une propriété privée pour faciliter
+   * l'encapsulation et garder la logique métier centralisée.
+   */
   public getName(): string {
     return this.name;
   }
@@ -104,7 +118,11 @@ export class Product extends BaseEntity implements IProduct {
     return this.primaryImageAlt;
   }
 
-
+  /**
+   * --- Mutateurs (écriture) ---
+   * Chaque setter met à jour la propriété ciblée puis
+   * appelle `updateTimestamp()` pour refléter la modification.
+   */
   public setName(name: string): this {
     this.name = name;
     this.updateTimestamp();
@@ -183,6 +201,10 @@ export class Product extends BaseEntity implements IProduct {
     return this;
   }
 
+  /**
+   * Prépare un objet générique prêt à être persisté ou sérialisé.
+   * Utile pour les repositories qui n'ont pas besoin des méthodes de l'entité.
+   */
   protected getEntityData(): Record<string, unknown> {
     return {
       productId: this.id,

@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+/**
+ * Ensemble de règles Zod réutilisables pour valider les objets produit.
+ * Les validations primitives sont regroupées puis combinées dans les schémas complets.
+ */
 export class ProductConstants {
   public static readonly NAME = z
     .string()
@@ -75,6 +79,9 @@ export class ProductConstants {
     .int("L'ID du créateur doit être un nombre entier")
     .min(1, "L'ID du créateur doit être positif");
 
+  /**
+   * Schéma complet pour la création : toutes les contraintes obligatoires sont appliquées.
+   */
   public static readonly CREATE_PRODUCT_SCHEMA = z.object({
     name: ProductConstants.NAME,
     slug: ProductConstants.SLUG,
@@ -91,6 +98,11 @@ export class ProductConstants {
     isActive: ProductConstants.IS_ACTIVE,
     createdBy: ProductConstants.CREATED_BY
   });
+
+  /**
+   * Schéma pour la mise à jour partielle : la plupart des champs sont optionnels,
+   * et une contrainte globale vérifie qu'au moins une propriété est fournie.
+   */
 
   public static readonly UPDATE_PRODUCT_SCHEMA = z
     .object({
@@ -112,10 +124,16 @@ export class ProductConstants {
       message: 'Aucune donnée fournie pour la mise à jour'
     });
 
+  /**
+   * sert à vérifier que les données envoyées lors de la création.
+   */
   public static validateCreateProduct(data: unknown): CreateProductSchemaType {
     return ProductConstants.CREATE_PRODUCT_SCHEMA.parse(data);
   }
 
+  /**
+   * sert à vérifier que les données envoyées lors de la mise à jour partielle.
+   */
   public static validateUpdateProduct(data: unknown): UpdateProductSchemaType {
     return ProductConstants.UPDATE_PRODUCT_SCHEMA.parse(data);
   }

@@ -14,7 +14,7 @@ export class ProductImageConstants {
 
   public static readonly ALT_TEXT = z
     .string()
-    .max(200, "Le texte alternatif ne peut pas dépasser 200 caractères")
+    .max(200, 'Le texte alternatif ne peut pas dépasser 200 caractères')
     .optional()
     .nullable();
 
@@ -58,5 +58,9 @@ export class ProductImageConstants {
   }
 }
 
-export type CreateProductImageSchemaType = z.infer<typeof ProductImageConstants.CREATE_PRODUCT_IMAGE_SCHEMA>;
-export type UpdateProductImageSchemaType = z.infer<typeof ProductImageConstants.UPDATE_PRODUCT_IMAGE_SCHEMA>;
+export type CreateProductImageSchemaType = z.infer<
+  typeof ProductImageConstants.CREATE_PRODUCT_IMAGE_SCHEMA
+>;
+export type UpdateProductImageSchemaType = z.infer<
+  typeof ProductImageConstants.UPDATE_PRODUCT_IMAGE_SCHEMA
+>;

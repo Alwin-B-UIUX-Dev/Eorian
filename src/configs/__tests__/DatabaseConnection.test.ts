@@ -36,7 +36,7 @@ describe('DatabaseConnection', () => {
     `);
 
     logger.info(
-      '📋 Tables:',
+      'Tables:',
       tables.map((t: { table_name: string }): string => t.table_name)
     );
     expect(tables).toBeInstanceOf(Array);
@@ -54,10 +54,10 @@ describe('DatabaseConnection', () => {
 
     if (firstTable) {
       const data = await db.query(`SELECT * FROM ${firstTable.table_name} LIMIT 3`);
-      logger.info(`📊 Échantillon de ${firstTable.table_name}:`, data);
+      logger.info(`Échantillon de ${firstTable.table_name}:`, data);
       expect(data).toBeInstanceOf(Array);
     } else {
-      logger.warn('ℹ️  Aucune table utilisateur trouvée');
+      logger.warn('ℹAucune table utilisateur trouvée');
     }
   });
 
